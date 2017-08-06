@@ -1,16 +1,29 @@
-const {User} = require('models')
+const Joi = require('joi')
 const jwt = require('lib/jwt')
+
+const {User} = require('models')
 
 module.exports = {
   method: 'post',
   path: '/',
-  handler: async function () {
-    const { screenName, displayName, email, password } = this.request.body
+  validator: Joi.object().keys({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    screenName: Joi.string().required(),
+    displayName: Joi.string()
+  }),
+  handler: async function (ctx) {
+    const { screenName, displayName, email, password } = ctx.request.body
+    const user = await User.register({
+      screenName,
+      displayName,
+      email,
+      password
+    })
 
-    const user = await User.register(screenName, displayName, email, password)
-    await user.sendValidationEmail()
+    // await user.sendValidationEmail()
 
-    this.body = {
+    ctx.body = {
       user: user.format(),
       jwt: jwt.sign({
         uuid: user.uuid,

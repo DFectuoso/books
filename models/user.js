@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt')
 const dataTables = require('mongoose-datatables')
 const assert = require('http-assert')
 
+const jwt = require('lib/jwt')
+
 const SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR)
 
 const userSchema = new Schema({
@@ -48,6 +50,7 @@ userSchema.pre('save', function (next) {
   return next()
 })
 
+// Methods
 userSchema.methods.format = function () {
   return {
     uuid: this.uuid,
@@ -57,11 +60,25 @@ userSchema.methods.format = function () {
   }
 }
 
-userSchema.statics.auth = async function (email, password) {
-  const User = this
+userSchema.methods.getJwt = function () {
+  return jwt.sign({
+    uuid: this.uuid,
+    apiToken: this.apiToken
+  })
+}
 
+userSchema.methods.toPublic = function () {
+  return {
+    uuid: this.uuid,
+    name: this.name,
+    validEmail: this.validEmail
+  }
+}
+
+// Statics
+userSchema.statics.auth = async function (email, password) {
   const userEmail = email.toLowerCase()
-  const user = await User.findOne({email: userEmail})
+  const user = await this.findOne({email: userEmail})
   assert(user, 401, 'Invalid email/password')
 
   const isValid = await new Promise((resolve, reject) => {
@@ -72,6 +89,21 @@ userSchema.statics.auth = async function (email, password) {
   assert(isValid, 401, 'Invalid email/password')
 
   return user
+}
+
+userSchema.statics.register = async function (options) {
+  const {screenName, displayName, email, password} = options
+
+  const emailTaken = await this.findOne({ email })
+  assert(!emailTaken, 401, 'Email already in use')
+
+  const screenTaken = await this.findOne({ screenName })
+  assert(!screenTaken, 401, 'Username already taken')
+
+  // create in mongoose
+  const createdUser = await this.create({ screenName: screenName, displayName: displayName, email: email, password: password })
+
+  return createdUser
 }
 
 userSchema.plugin(dataTables)

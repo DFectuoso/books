@@ -8,3 +8,6 @@ help:
 
 api-server:
 	@$(BIN_DIR)/nodemon api/runner.js
+
+run-test:
+	@$(BIN_DIR)/mocha

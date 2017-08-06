@@ -1,3 +1,4 @@
+const Joi = require('joi')
 const requireindex = require('es6-requireindex')
 const path = require('path')
 const debug = require('debug')
@@ -20,7 +21,17 @@ module.exports = function api (app) {
     forEach(routes, route => {
       debug('api')(`Added new route [${route.method}]${pfix}${route.path}`)
 
-      rtr[route.method](route.path, route.handler)
+      rtr[route.method](route.path, async function (ctx) {
+        if (route.validator) {
+          const result = Joi.validate(ctx.request.body, route.validator)
+
+          if (result.error) {
+            return ctx.throw(422, result.error.message)
+          }
+        }
+
+        await route.handler(ctx)
+      })
     })
 
     app.use(rtr.middleware())
