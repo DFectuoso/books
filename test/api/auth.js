@@ -1,6 +1,5 @@
 /* global describe, beforeEach, it */
 require('co-mocha')
-require('co-supertest')
 
 const { expect } = require('chai')
 const http = require('http')
@@ -15,31 +14,29 @@ function test () {
 describe('/user', () => {
   const password = '1234'
 
-  beforeEach(function * () {
-    yield clearDatabase()
+  beforeEach(async function () {
+    await clearDatabase()
   })
 
   describe('post', () => {
-    it('should return a error', function * () {
-      const user = yield createUser({ password })
+    it('should return a error', async function () {
+      const user = await createUser({ password })
 
-      yield test()
+      await test()
         .post('/api/user/login')
         .send({ password: '4321', email: user.email })
         .set('Accept', 'application/json')
         .expect(401)
-        .end()
     })
 
-    it('should create a session', function * () {
-      const user = yield createUser({ password })
+    it('should create a session', async function () {
+      const user = await createUser({ password })
 
-      const res = yield test()
+      const res = await test()
         .post('/api/user/login')
-        .send({ password, email: user.email })
         .set('Accept', 'application/json')
+        .send({ password, email: user.email })
         .expect(200)
-        .end()
 
       expect(res.body.user.email).equal(user.email)
     })
