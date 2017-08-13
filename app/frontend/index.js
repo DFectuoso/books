@@ -1,16 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import App from './App'
+import Router from './Router'
 
 const render = (Root) => {
   ReactDOM.render(Root, document.getElementById('root'))
 }
 
 if (module.hot) {
-  module.hot.accept('./App.js', function (Root) {
-    const App = require('./App')
-    render(<App.default />)
+  module.hot.accept('./Router.js', function (Root) {
+    const Router = require('./Router')
+    render(<Router.default />)
   })
 }
 
-render(<App />)
+render(<Router />)
