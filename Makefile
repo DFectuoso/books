@@ -1,3 +1,4 @@
+-include ./.env
 include ./.env.default
 
 BIN_DIR ?= ./node_modules/.bin
@@ -8,6 +9,9 @@ help:
 
 api-server:
 	@$(BIN_DIR)/nodemon api/runner.js
+
+app-server:
+	@$(BIN_DIR)/nodemon --ignore app/frontend app/runner.js	
 
 run-test:
 	@$(BIN_DIR)/mocha
