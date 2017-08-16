@@ -1,4 +1,6 @@
-var webpack = require('webpack')
+const path = require('path')
+const webpack = require('webpack')
+const config = require('config')
 
 module.exports = {
   context: __dirname,
@@ -16,7 +18,6 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        // use: 'babel-loader',
         exclude: /node_modules/,
         loader: 'babel-loader',
         query: {
@@ -32,6 +33,15 @@ module.exports = {
   devtool: '#source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  ]
+    new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'ENV': JSON.stringify(config.env),
+      'API_HOST': JSON.stringify(config.server.apiHost)
+    })
+  ],
+  resolve: {
+    alias: {
+      '~core': path.resolve('./app/frontend/core')
+    }
+  }
 }

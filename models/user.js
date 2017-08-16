@@ -54,7 +54,8 @@ userSchema.pre('save', function (next) {
 userSchema.methods.format = function () {
   return {
     uuid: this.uuid,
-    name: this.name,
+    screenName: this.screenName,
+    displayName: this.displayName,
     email: this.email,
     validEmail: this.validEmail
   }
@@ -70,6 +71,8 @@ userSchema.methods.getJwt = function () {
 userSchema.methods.toPublic = function () {
   return {
     uuid: this.uuid,
+    screenName: this.screenName,
+    displayName: this.displayName,
     name: this.name,
     validEmail: this.validEmail
   }
