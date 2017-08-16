@@ -1,7 +1,8 @@
-import request from 'superagent'
 import qs from 'qs'
 
-const timeout = 5 * 60 * 1000 // 5 minutes
+import request from './request'
+import envVars from './env-variables'
+import tree from './tree'
 
 export default {
   get (endpoint, data) {
@@ -21,33 +22,21 @@ export default {
   },
 
   request (method, endpoint, data) {
-    let url = `${endpoint}`
+    let url = `${envVars.API_HOST}/api${endpoint}`
 
-    if (method === 'get' && data) {
-      url += `?${qs.stringify(data)}`
+    const headers = {
+      'Accept': 'application/json'
     }
 
-    return new Promise((resolve, reject) => {
-      const req = request[method](url)
+    if (tree.get('jwt')) {
+      headers['Authorization'] = `Bearer ${tree.get('jwt')}`
+    }
 
-      if (method === 'post' || method === 'put') {
-        req.send(data)
-      }
-
-      req.timeout(timeout)
-
-      req.end((err, res) => {
-        if (!err && res.status === 200) {
-          return resolve(res.body)
-        }
-
-        const e = {
-          error: res ? res.status : 500,
-          message: res ? res.text : err.message
-        }
-
-        return reject(e)
-      })
-    })
+    if (method === 'get') {
+      url += `?${qs.stringify(data)}`
+      return request('get', headers, url)
+    } else {
+      return request(method, headers, url, data)
+    }
   }
 }
