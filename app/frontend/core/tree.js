@@ -4,7 +4,6 @@ const initialState = {
   jwt: window.localStorage.getItem('jwt')
 }
 
-console.log('=>', initialState)
 const tree = new Baobab(initialState, {
   autoCommit: false,
   asynchronous: true,

@@ -13,5 +13,4 @@ if (module.hot) {
   })
 }
 
-console.log('=>', process)
 render(<Router />)
