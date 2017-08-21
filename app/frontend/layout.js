@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { root } from 'baobab-react/higher-order'
+
 import tree from '~core/tree'
 import api from '~core/api'
 
-import { root } from 'baobab-react/higher-order'
+import NavBar from '~components/navbar'
 
 class Layout extends Component {
   constructor (props) {
@@ -45,15 +47,8 @@ class Layout extends Component {
     }
 
     return <div>
+      <NavBar />
       {userData}
-      <ul>
-        <li><Link to='/'>Home</Link></li>
-        <li><Link to='/about'>About</Link></li>
-        <li><Link to='/sign-up'>Sign up</Link></li>
-        <li><Link to='/log-in'>Log in</Link></li>
-        <li><Link to='/app'>App</Link></li>
-      </ul>
-
       {this.props.children}
     </div>
   }

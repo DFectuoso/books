@@ -7,3 +7,14 @@ body {
   margin: 0;
   height: 100%;
 }
+
+.label {
+  color: #363636;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.label:not(:last-child) {
+  margin-bottom: 0.5em;
+}
