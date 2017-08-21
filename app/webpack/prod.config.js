@@ -57,7 +57,8 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-      '~core': path.resolve('./app/frontend/core')
+      '~core': path.resolve('./app/frontend/core'),
+      '~components': path.resolve('./app/frontend/components')
     }
   }
 }
