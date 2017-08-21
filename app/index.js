@@ -2,15 +2,21 @@ const path = require('path')
 const express = require('express')
 const webpack = require('webpack')
 const config = require('config')
-
-const app = express()
+const expressNunjucks = require('express-nunjucks')
 
 const webpackConfig = require('./webpack/dev.config')
 
-const compiler = webpack(webpackConfig)
+const app = express()
+app.set('views', path.resolve('./app/views'))
+
+expressNunjucks(app, {
+  noCache: false
+})
 
 if (config.env === 'development') {
   console.log('Starting server in development with webpack hot reload')
+
+  const compiler = webpack(webpackConfig)
   app.use(require('webpack-dev-middleware')(compiler, {
     noInfo: true, publicPath: webpackConfig.output.publicPath
   }))
@@ -26,7 +32,7 @@ if (config.env === 'development') {
 }
 
 app.get('*', function (req, res) {
-  res.sendFile(path.resolve('./app/views/index.html'))
+  res.render('index', {env: config.env})
 })
 
 module.exports = app

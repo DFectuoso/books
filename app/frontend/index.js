@@ -2,6 +2,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Router from './router'
 
+import './styles/index.scss'
+
 const render = (Root) => {
   ReactDOM.render(Root, document.getElementById('root'))
 }

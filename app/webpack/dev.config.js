@@ -25,8 +25,12 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.scss$/,
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' },
+          { loader: 'sass-loader' }
+        ]
       }
     ]
   },
@@ -40,6 +44,7 @@ module.exports = {
     })
   ],
   resolve: {
+    modules: ['node_modules'],
     alias: {
       '~core': path.resolve('./app/frontend/core')
     }

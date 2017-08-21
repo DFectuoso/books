@@ -1,3 +1,5 @@
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
+
 const config = require('../../config')
 
 const path = require('path')
@@ -27,16 +29,33 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: ['css-loader', 'sass-loader']
+        })
       }
     ]
   },
   plugins: [
+    new ExtractTextPlugin({
+      filename: 'bundle.css'
+    }),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
       'API_HOST': JSON.stringify(config.server.apiHost)
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      compress: {
+        warnings: false
+      }
     })
   ],
   resolve: {
+    modules: ['node_modules'],
     alias: {
       '~core': path.resolve('./app/frontend/core')
     }
