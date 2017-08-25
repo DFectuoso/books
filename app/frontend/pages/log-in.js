@@ -69,7 +69,11 @@ class LogIn extends Component {
               <BaseForm schema={schema}
                 uiSchema={uiSchema}
                 onSubmit={(e) => { this.submitHandler(e) }}
-                onError={(e) => { this.errorHandler(e) }} />
+                onError={(e) => { this.errorHandler(e) }}>
+                <div>
+                  <button className='button is-primary is-fullwidth' type='submit'>Log in</button>
+                </div>
+              </BaseForm>
             </div>
           </div>
         </div>
