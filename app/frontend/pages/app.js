@@ -8,8 +8,7 @@ class App extends Component {
     super(props)
     this.state = {
       posts: [],
-      loading: true,
-      redirect: false
+      loading: true
     }
   }
 
@@ -24,16 +23,6 @@ class App extends Component {
       loading: false,
       posts: body.data.children.map(item => item.data)
     })
-  }
-
-  handleLogout () {
-    window.localStorage.removeItem('jwt')
-    tree.set('jwt', null)
-    tree.set('user', null)
-    tree.set('loggedIn', false)
-    tree.commit()
-
-    this.setState({redirect: true})
   }
 
   render () {
@@ -57,8 +46,7 @@ class App extends Component {
     return (
       <div className='App'>
         <div className='App-header'>
-          <h2>Welcome</h2>
-          <button onClick={() => this.handleLogout()}>Log out</button>
+          <h2>Post list</h2>
         </div>
         {postsList}
       </div>
