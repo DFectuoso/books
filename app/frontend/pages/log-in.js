@@ -1,27 +1,23 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form'
 import { Redirect } from 'react-router-dom'
-import tree from '~core/tree'
 
+import tree from '~core/tree'
 import api from '~core/api'
 
+import {BaseForm, PasswordWidget, EmailWidget} from '~components/base-form'
+
 const schema = {
-  title: 'Create user',
   type: 'object',
   required: ['email', 'password'],
   properties: {
-    email: {type: 'string', title: 'email'},
-    password: {type: 'string', title: 'password'}
+    email: {type: 'string', title: 'Email'},
+    password: {type: 'string', title: 'Password'}
   }
 }
 
 const uiSchema = {
-  'password': {
-    'ui:widget': 'password'
-  },
-  email: {
-    'ui:widget': 'email'
-  }
+  password: {'ui:widget': PasswordWidget},
+  email: {'ui:widget': EmailWidget}
 }
 
 class LogIn extends Component {
@@ -56,12 +52,27 @@ class LogIn extends Component {
     }
 
     return (
-      <div className='LogIn'>
-        <h2>LogIn</h2>
-        <Form schema={schema}
-          uiSchema={uiSchema}
-          onSubmit={(e) => { this.submitHandler(e) }}
-          onError={(e) => { this.errorHandler(e) }} />
+      <div className='LogIn single-form'>
+        <div className='card'>
+          <header className='card-header'>
+            <p className='card-header-title'>
+              Log in
+            </p>
+            <a className='card-header-icon'>
+              <span className='icon'>
+                <i className='fa fa-angle-down' />
+              </span>
+            </a>
+          </header>
+          <div className='card-content'>
+            <div className='content'>
+              <BaseForm schema={schema}
+                uiSchema={uiSchema}
+                onSubmit={(e) => { this.submitHandler(e) }}
+                onError={(e) => { this.errorHandler(e) }} />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
