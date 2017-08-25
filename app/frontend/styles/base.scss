@@ -18,3 +18,12 @@ body {
 .label:not(:last-child) {
   margin-bottom: 0.5em;
 }
+
+.form-group > fieldset {
+  border: 0;
+}
+
+.single-form {
+  max-width: 400px;
+  margin: 100px auto;
+}

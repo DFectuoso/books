@@ -4,25 +4,24 @@ import api from '~core/api'
 import tree from '~core/tree'
 import { Redirect } from 'react-router-dom'
 
+import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/base-form'
+
 const schema = {
-  title: 'Create user',
   type: 'object',
   required: ['email', 'password', 'screenName', 'displayName'],
   properties: {
-    email: {type: 'string', title: 'email'},
-    password: {type: 'string', title: 'password'},
-    screenName: {type: 'string', title: 'screenName'},
-    displayName: {type: 'string', title: 'displayName'}
+    email: {type: 'string', title: 'Email'},
+    password: {type: 'string', title: 'Password'},
+    screenName: {type: 'string', title: 'ScreenName'},
+    displayName: {type: 'string', title: 'DisplayName'}
   }
 }
 
 const uiSchema = {
-  'password': {
-    'ui:widget': 'password'
-  },
-  email: {
-    'ui:widget': 'email'
-  }
+  password: { 'ui:widget': PasswordWidget },
+  email: { 'ui:widget': EmailWidget },
+  screenName: { 'ui:widget': TextWidget },
+  displayName: { 'ui:widget': TextWidget }
 }
 
 class SignUp extends Component {
@@ -56,13 +55,27 @@ class SignUp extends Component {
     }
 
     return (
-      <div className='SignUp'>
-        <h2>SignUp</h2>
-        <Form schema={schema}
-          uiSchema={uiSchema}
-          formData={this.state.formData}
-          onSubmit={(e) => { this.submitHandler(e) }}
-          onError={(e) => { this.errorHandler(e) }} />
+      <div className='SignUp single-form'>
+        <div className='card'>
+          <header className='card-header'>
+            <p className='card-header-title'>
+              SignUp
+            </p>
+            <a className='card-header-icon'>
+              <span className='icon'>
+                <i className='fa fa-angle-down' />
+              </span>
+            </a>
+          </header>
+          <div className='card-content'>
+            <div className='content'>
+              <BaseForm schema={schema}
+                uiSchema={uiSchema}
+                onSubmit={(e) => { this.submitHandler(e) }}
+                onError={(e) => { this.errorHandler(e) }} />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
