@@ -24,8 +24,20 @@ class Layout extends Component {
       this.setState({user})
     })
 
+    var me
     if (tree.get('jwt')) {
-      const me = await api.get('/user/me')
+      try {
+        me = await api.get('/user/me')
+      } catch (err) {
+        if (err.status === 401) {
+          window.localStorage.removeItem('jwt')
+          tree.set('jwt', null)
+          tree.commit()
+        }
+
+        this.setState({loaded: true})
+        return
+      }
 
       tree.set('user', me.user)
       tree.set('loggedIn', me.loggedIn)

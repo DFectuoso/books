@@ -23,8 +23,8 @@ export default function (method, headers = {}, url, data) {
       }
 
       const e = {
-        error: res ? res.status : 500,
-        message: res ? res.text : err.message
+        status: err.status,
+        message: err.message
       }
 
       return reject(e)

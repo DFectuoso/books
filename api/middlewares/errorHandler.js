@@ -1,4 +1,6 @@
 module.exports = async function (ctx, next) {
+  ctx.type = 'application/json'
+
   try {
     await next()
   } catch (err) {

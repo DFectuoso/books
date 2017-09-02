@@ -33,7 +33,7 @@ class LogIn extends Component {
     try {
       data = await api.post('/user/login', formData)
     } catch (e) {
-      this.setState({error: e.message})
+      return this.setState({error: e.message})
     }
 
     window.localStorage.setItem('jwt', data.jwt)

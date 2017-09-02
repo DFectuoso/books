@@ -6,8 +6,7 @@ import {
 } from 'react-router-dom'
 
 import tree from '~core/tree'
-
-import Layout from './layout'
+import Layout from '~components/layout'
 
 import Home from './pages/home'
 import About from './pages/about'
