@@ -20,7 +20,6 @@ class Layout extends Component {
     const userCursor = tree.select('user')
 
     userCursor.on('update', ({data}) => {
-      console.log('Cursor data =>', data)
       const user = data.currentData
       this.setState({user})
     })
@@ -46,11 +45,11 @@ class Layout extends Component {
       userData = (<h1>Welcome {this.state.user.screenName}</h1>)
     }
 
-    return <div>
+    return (<div>
       <NavBar />
       {userData}
       {this.props.children}
-    </div>
+    </div>)
   }
 }
 

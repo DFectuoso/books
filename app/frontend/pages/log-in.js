@@ -29,8 +29,6 @@ class LogIn extends Component {
   errorHandler (e) {}
 
   async submitHandler ({formData}) {
-    console.log('=>', formData)
-
     var data
     try {
       data = await api.post('/user/login', formData)
@@ -43,14 +41,11 @@ class LogIn extends Component {
     tree.set('user', data.user)
     tree.set('loggedIn', true)
     tree.commit()
-    this.setState({redirect: true})
+
+    this.props.history.push('/app', {})
   }
 
   render () {
-    if (this.state.redirect) {
-      return <Redirect to='/app' />
-    }
-
     return (
       <div className='LogIn single-form'>
         <div className='card'>

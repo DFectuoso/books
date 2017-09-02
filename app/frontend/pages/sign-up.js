@@ -43,17 +43,13 @@ class SignUp extends Component {
     tree.set('loggedIn', true)
     tree.commit()
 
+    this.props.history.push('/app', {})
     this.setState({
-      formData: {},
-      redirect: true
+      formData: {}
     })
   }
 
   render () {
-    if (this.state.redirect) {
-      return <Redirect to='/app' />
-    }
-
     return (
       <div className='SignUp single-form'>
         <div className='card'>
