@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import { branch } from 'baobab-react/higher-order'
+import { withRouter } from 'react-router'
 
 import tree from '~core/tree'
 
@@ -14,13 +15,15 @@ class NavBar extends Component {
   }
 
   handleLogout () {
-    this.setState({redirect: true})
+    const {history} = this.props
 
     window.localStorage.removeItem('jwt')
     tree.set('jwt', null)
     tree.set('user', null)
     tree.set('loggedIn', false)
     tree.commit()
+
+    history.push('/')
   }
 
   handleNavbarBurgerClick () {
@@ -32,11 +35,6 @@ class NavBar extends Component {
   }
 
   render () {
-    if (this.state.redirect) {
-      this.setState({redirect: false})
-      return <Redirect to='/log-in' />
-    }
-
     var navbarMenuClassName = 'navbar-menu'
     if (this.state.mobileMenu === 'open') {
       navbarMenuClassName = 'navbar-menu is-active'
@@ -90,6 +88,6 @@ class NavBar extends Component {
   }
 }
 
-export default branch({
+export default withRouter(branch({
   loggedIn: 'loggedIn'
-}, NavBar)
+}, NavBar))
