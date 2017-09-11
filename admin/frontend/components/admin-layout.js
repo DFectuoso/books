@@ -55,7 +55,7 @@ class AdminLayout extends Component {
     }
 
     if (!_.isEmpty(this.state.user)) {
-      return (<div>
+      return (<div className='full-height'>
         <AdminNavBar />
         <div className='is-flex c-flex-1 c-content'>
           <Sidebar />

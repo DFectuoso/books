@@ -5,4 +5,4 @@ const { adminPort } = require('config/server')
 const admin = require('./')
 
 admin.listen(adminPort)
-console.log(`App started on port ${adminPort}`)
+console.log(`Admin started on port ${adminPort}`)

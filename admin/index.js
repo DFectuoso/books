@@ -7,11 +7,13 @@ const expressNunjucks = require('express-nunjucks')
 const webpackConfig = require('./webpack/dev.config')
 
 const app = express()
-app.set('views', path.resolve('./app/views'))
+app.set('views', path.resolve('./admin/views'))
 
 expressNunjucks(app, {
   noCache: false
 })
+
+app.use('/public', express.static('admin/public'))
 
 if (config.env === 'development') {
   console.log('Starting server in development with webpack hot reload')
