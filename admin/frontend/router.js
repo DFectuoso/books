@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom'
 
 import tree from '~core/tree'
-import Layout from '~components/layout'
+import AdminLayout from '~components/admin-layout'
 
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
@@ -37,12 +37,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 
 const AppRouter = () => {
   return (<Router>
-    <Layout>
+    <AdminLayout>
       <div>
         <LoginRoute exact path='/' component={LogIn} />
         <PrivateRoute path='/app' component={Dashboard} />
       </div>
-    </Layout>
+    </AdminLayout>
   </Router>)
 }
 

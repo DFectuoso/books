@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
+import FontAwesome from 'react-fontawesome'
 
 import tree from '~core/tree'
 
-class AdminNavBar extends Component {
+class NavBar extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -58,32 +59,49 @@ class AdminNavBar extends Component {
       </div>)
     }
 
-    return (
-      <nav className='navbar'>
-        <div className='navbar-brand'>
-          <Link className='navbar-item' to='/'>
-            <h1>Marble Seeds</h1>
-          </Link>
-
-          <div className='navbar-burger burger' onClick={(e) => this.handleNavbarBurgerClick(e)}>
-            <span />
-            <span />
-            <span />
+    return (<nav className='c-topbar navbar c-fixed'>
+      <div className='c-topbar__aside navbar-brand'>
+        <a href='#' className='navbar-item'>
+          <img className='is-flex' src='http://bulma.io/images/bulma-logo.png' />
+        </a>
+      </div>
+      <div className='c-topbar__main'>
+        <div className='navbar-menu'>
+          <div className='navbar-start'>
+            <div className='navbar-burger burger-desktop'>
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
-        </div>
-        <div className={navbarMenuClassName}>
-          <div className='navbar-start' />
           <div className='navbar-end'>
-            <div className='navbar-item'>
-              {navButtons}
+            <div className='dropdown is-right'>
+              <div className='dropdown-trigger'>
+                <a href='#' className='navbar-item'>
+                  <span className='icon'>
+                    <i className='fa fa-cog' />
+                  </span>
+                </a>
+              </div>
+              <div className='dropdown-menu' id='dropdown-menu' role='menu'>
+                <div className='dropdown-content'>
+                  <a href='#' className='dropdown-item'>
+                    Profile
+                  </a>
+                  <hr className='dropdown-divider' />
+                  <a href='#' className='dropdown-item'>
+                      Log out
+                    </a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </nav>
-    )
+      </div>
+    </nav>)
   }
 }
 
 export default withRouter(branch({
   loggedIn: 'loggedIn'
-}, AdminNavBar))
+}, NavBar))

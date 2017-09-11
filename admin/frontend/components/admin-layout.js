@@ -5,9 +5,11 @@ import { root } from 'baobab-react/higher-order'
 import api from '~base/api'
 import tree from '~core/tree'
 
-import NavBar from '~components/navbar'
+import Sidebar from '~components/sidebar'
+import Footer from '~components/footer'
+import AdminNavBar from '~components/admin-navbar'
 
-class Layout extends Component {
+class AdminLayout extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -54,8 +56,16 @@ class Layout extends Component {
 
     if (!_.isEmpty(this.state.user)) {
       return (<div>
-        <NavBar />
-        {this.props.children}
+        <AdminNavBar />
+        <div className='is-flex c-flex-1 c-content'>
+          <Sidebar />
+          <div className='wrapper'>
+            <section className='section c-flex-1'>
+              {this.props.children}
+            </section>
+            <Footer />
+          </div>
+        </div>
       </div>)
     } else {
       return (<div>
@@ -65,4 +75,4 @@ class Layout extends Component {
   }
 }
 
-export default root(tree, Layout)
+export default root(tree, AdminLayout)

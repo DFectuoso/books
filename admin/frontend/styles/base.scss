@@ -27,3 +27,120 @@ body {
   max-width: 400px;
   margin: 100px auto;
 }
+
+html, body {
+    height: 100%;
+}
+
+.c-fixed {
+  position: fixed;
+}
+
+.navbar-menu {
+    background-color: whitesmoke;
+}
+
+.c-topbar {
+    position: relative;
+    z-index: 200;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: #fff;
+}
+
+.c-topbar__aside {
+  width: 250px;
+  display: block;
+  flex: 0 0 auto;
+  box-sizing: inherit;
+  background-color: #000000;
+}
+
+.c-topbar__main {
+  flex: 1 1 0%;
+  max-width: 100%;
+}
+
+.offcanvas {
+  width: 250px;
+  display: block;
+  flex: 0 0 auto;
+  box-sizing: inherit;
+  background-color: #5d5d5d;
+}
+
+.burger-desktop {
+    cursor: pointer;
+    display: block;
+    height: 3.25rem;
+    position: relative;
+    width: 3.25rem;
+    margin-left: auto;
+}
+
+.main {
+  flex: 1 1 0%;
+  max-width: 100%;
+}
+
+
+.c-stack {
+    box-sizing: border-box;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -webkit-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-flow: row wrap;
+    flex-flow: row wrap;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+
+a .navbar-item:hover {
+  background-color: transparent;
+}
+
+.menu li {
+    background-color: #f1f1f1;
+}
+
+.menu li ul {
+    margin: 0.75em 0px 0px 0.75em;
+}
+
+footer {
+  padding: 20px;
+  height: 60px;
+  width: 100%;
+}
+
+footer.footer {
+    padding:1rem 1.5rem 2rem;
+}
+
+.c-content {
+    min-height: calc(100% - 52px);
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.c-flex-1 {
+    flex: 1;
+}
+
+.wrapper {
+  display: flex;
+}
