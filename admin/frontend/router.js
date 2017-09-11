@@ -10,6 +10,7 @@ import AdminLayout from '~components/admin-layout'
 
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
+import Users from './pages/users'
 
 const LoginRoute = ({ component: Component, ...rest }) => {
   return <Route {...rest} render={props => {
@@ -41,6 +42,7 @@ const AppRouter = () => {
       <div>
         <LoginRoute exact path='/' component={LogIn} />
         <PrivateRoute path='/app' component={Dashboard} />
+        <PrivateRoute path='/users' component={Users} />
       </div>
     </AdminLayout>
   </Router>)

@@ -15,6 +15,14 @@ class Sidebar extends Component {
             </a>
           </li>
           <li>
+            <Link className='' to='/users'>
+              <span className='icon'>
+                <i className='fa fa-users' />
+              </span>
+              <span>Users</span>
+            </Link>
+          </li>
+          <li>
             <a>
               <span className='icon'>
                 <i className='fa fa-address-book' />
