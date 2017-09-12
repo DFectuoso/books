@@ -10,6 +10,7 @@ module.exports = {
 
     ctx.body = {
       user: user.format(),
+      isAdmin: user.isAdmin,
       jwt: jwt.sign({
         uuid: user.uuid,
         apiToken: user.apiToken

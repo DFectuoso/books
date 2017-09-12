@@ -74,6 +74,7 @@ userSchema.methods.toPublic = function () {
     screenName: this.screenName,
     displayName: this.displayName,
     name: this.name,
+    email: this.email,
     validEmail: this.validEmail
   }
 }
