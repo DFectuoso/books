@@ -85,7 +85,22 @@ html, body {
 }
 
 .full-height {
-  height: 100%
+  min-height: 100%;
+}
+
+.full-viewport-height {
+  min-height: 100vh;
+}
+
+.is-test {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  flex: 1;
+}
+
+.is-flex-column {
+  flex-direction: column;
 }
 
 .c-stack {
@@ -113,17 +128,21 @@ a .navbar-item:hover {
   background-color: transparent;
 }
 
+.menu {
+  width: 250px;
+  height: 100%;
+}
+
 .menu li {
-    background-color: #f1f1f1;
+  background-color: #f1f1f1;
 }
 
 .menu li ul {
-    margin: 0.75em 0px 0px 0.75em;
+  margin: 0.75em 0px 0px 0.75em;
 }
 
 footer {
   padding: 20px;
-  height: 60px;
   width: 100%;
 }
 

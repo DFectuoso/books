@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 class Sidebar extends Component {
   render () {
-    return (<div className='offcanvas'>
+    return (<div className='offcanvas column is-narrow'>
       <aside className='menu'>
         <ul className='menu-list'>
           <li>

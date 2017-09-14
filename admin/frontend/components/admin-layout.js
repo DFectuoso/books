@@ -55,11 +55,11 @@ class AdminLayout extends Component {
     }
 
     if (!_.isEmpty(this.state.user)) {
-      return (<div className='full-height'>
+      return (<div className='is-test'>
         <AdminNavBar />
-        <div className='is-flex c-flex-1 c-content'>
+        <div className='is-flex c-flex-1 columns is-gapless'>
           <Sidebar />
-          <div className='wrapper'>
+          <div className='column is-flex is-flex-column'>
             <section className='section c-flex-1'>
               {this.props.children}
             </section>
