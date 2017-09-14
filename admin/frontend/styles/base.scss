@@ -63,10 +63,6 @@ html, body {
 }
 
 .offcanvas {
-  width: 250px;
-  display: block;
-  flex: 0 0 auto;
-  box-sizing: inherit;
   background-color: #5d5d5d;
 }
 
@@ -92,7 +88,7 @@ html, body {
   min-height: 100vh;
 }
 
-.is-test {
+.is-wrapper {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -154,15 +150,6 @@ footer.footer {
     min-height: calc(100% - 52px);
 }
 
-.wrapper {
-  display: flex;
-  flex-direction: column;
-}
-
 .c-flex-1 {
     flex: 1;
-}
-
-.wrapper {
-  display: flex;
 }
