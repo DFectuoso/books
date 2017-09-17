@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
-import FontAwesome from 'react-fontawesome'
 
 import tree from '~core/tree'
 
