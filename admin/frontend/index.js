@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import Router from './router'
 
+import 'font-awesome/css/font-awesome.css'
 import './styles/index.scss'
 
 const render = (Root) => {
