@@ -44,6 +44,7 @@ module.exports = {
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
+      'PREFIX': JSON.stringify(config.server.adminPrefix),
       'API_HOST': JSON.stringify(config.server.apiHost)
     })
   ],

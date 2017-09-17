@@ -33,6 +33,12 @@ if (config.env === 'development') {
   app.use('/assets', express.static('app/dist'))
 }
 
+if (config.server.adminPrefix) {
+  app.get('/', function (req, res) {
+    res.redirect(config.server.adminPrefix)
+  })
+}
+
 app.get('*', function (req, res) {
   res.render('index', {env: config.env})
 })

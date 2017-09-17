@@ -13,7 +13,7 @@ module.exports = {
     '../frontend/index.js'
   ],
   output: {
-    path: path.resolve('./app/dist'),
+    path: path.resolve('./admin/dist'),
     filename: 'bundle.js'
   },
   module: {
@@ -45,6 +45,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
+      'PREFIX': JSON.stringify(config.server.adminPrefix),
       'API_HOST': JSON.stringify(config.server.apiHost)
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -57,8 +58,9 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-      '~core': path.resolve('./app/frontend/core'),
-      '~components': path.resolve('./app/frontend/components')
+      '~base': path.resolve('./lib/frontend/'),
+      '~core': path.resolve('./admin/frontend/core'),
+      '~components': path.resolve('./admin/frontend/components')
     }
   }
 }

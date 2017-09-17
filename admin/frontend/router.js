@@ -1,3 +1,4 @@
+import env from '~base/env-variables'
 import React from 'react'
 import {
   BrowserRouter as Router,
@@ -16,7 +17,7 @@ const LoginRoute = ({ component: Component, ...rest }) => {
   return <Route {...rest} render={props => {
     if (tree.get('loggedIn')) {
       return <Redirect to={{
-        pathname: '/app'
+        pathname: env.PREFIX + 'app'
       }} />
     } else {
       return <Component {...props} />
@@ -28,7 +29,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   return <Route {...rest} render={props => {
     if (!tree.get('loggedIn')) {
       return <Redirect to={{
-        pathname: '/log-in'
+        pathname: env.PREFIX + ''
       }} />
     } else {
       return <Component {...props} />
@@ -36,13 +37,15 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }} />
 }
 
+console.log('=>', env, env.PREFIX + '')
+
 const AppRouter = () => {
   return (<Router>
     <AdminLayout>
       <div>
-        <LoginRoute exact path='/' component={LogIn} />
-        <PrivateRoute path='/app' component={Dashboard} />
-        <PrivateRoute path='/users' component={Users} />
+        <LoginRoute exact path={env.PREFIX + '/'} component={LogIn} />
+        <PrivateRoute path={env.PREFIX + '/app'} component={Dashboard} />
+        <PrivateRoute path={env.PREFIX + '/users'} component={Users} />
       </div>
     </AdminLayout>
   </Router>)

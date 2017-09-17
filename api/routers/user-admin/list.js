@@ -8,14 +8,11 @@ module.exports = {
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,
       find: {},
-      // populate: 'url tags user',
       sort: '-email'
     })
 
     users.data = users.data.map((user) => { return user.toPublic() })
 
-    ctx.body = {
-      ...users
-    }
+    ctx.body = users
   }
 }

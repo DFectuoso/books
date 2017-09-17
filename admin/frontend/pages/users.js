@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
+import Link from '~base/router/link'
 
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 
@@ -51,9 +52,9 @@ class Users extends Component {
       for (var col of cols) {
         if (col.title === 'Actions') {
           row.push(
-            <a className='button' href={'/user/detail/' + item.uuid} disabled>
+            <Link className='button' to={'/user/detail/' + item.uuid} disabled>
               Detalle
-            </a>
+            </Link>
           )
 
           continue
@@ -87,7 +88,7 @@ class Users extends Component {
               <div className='column'>
                 <BranchedPaginatedTable
                   branchName='users'
-                  baseUrl='/user'
+                  baseUrl='/admin/user'
                   columns={this.getColumns()}
                   getData={this.getData.bind(this)}
                  />
