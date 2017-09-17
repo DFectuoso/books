@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 
 import api from '~base/api'
+import env from '~base/env-variables'
 import tree from '~core/tree'
 
 import {BaseForm, PasswordWidget, EmailWidget} from '~components/base-form'
@@ -57,7 +58,7 @@ class LogIn extends Component {
       tree.set('loggedIn', true)
       tree.commit()
 
-      this.props.history.push('/app', {})
+      this.props.history.push(env.PREFIX + '/app', {})
     } else {
       this.setState({
         error: 'Invalid user',
