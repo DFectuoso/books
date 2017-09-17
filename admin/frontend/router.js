@@ -1,4 +1,3 @@
-import env from '~base/env-variables'
 import React from 'react'
 import {
   BrowserRouter as Router
