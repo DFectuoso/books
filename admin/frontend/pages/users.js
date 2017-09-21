@@ -3,6 +3,7 @@ import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
+import FontAwesome from 'react-fontawesome'
 
 class Users extends Component {
   componentWillMount () {
@@ -75,7 +76,12 @@ class Users extends Component {
 
   render () {
     return (
-      <section className='section c-flex-1'>
+      <section className='section c-flex-1 is-paddingless'>
+
+        <div className="searchbox">
+          <FontAwesome name='search' />
+        </div> 
+
         <div className='card'>
           <header className='card-header'>
             <p className='card-header-title'>
