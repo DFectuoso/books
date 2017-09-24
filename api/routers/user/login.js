@@ -1,7 +1,8 @@
+const Route = require('lib/router/route')
 const {User} = require('models')
 const jwt = require('lib/jwt')
 
-module.exports = {
+module.exports = new Route({
   method: 'post',
   path: '/login',
   handler: async function (ctx) {
@@ -17,4 +18,4 @@ module.exports = {
       })
     }
   }
-}
+})
