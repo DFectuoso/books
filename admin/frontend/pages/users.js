@@ -34,44 +34,14 @@ class Users extends Component {
         'default': 'N/A'
       },
       {
-        'title': 'Actions'
+        'title': 'Actions',
+        formatter: (row) => {
+          return <Link className='button' to={'/user/detail/' + row.uuid} disabled>
+            Detalle
+          </Link>
+        }
       }
     ]
-  }
-
-  getData (items) {
-    var cols = this.getColumns()
-    var data = []
-
-    if (!items) {
-      return data
-    }
-
-    for (var item of items) {
-      var row = []
-      for (var col of cols) {
-        if (col.title === 'Actions') {
-          row.push(
-            <Link className='button' to={'/user/detail/' + item.uuid} disabled>
-              Detalle
-            </Link>
-          )
-
-          continue
-        }
-
-        var value = item[col.property]
-
-        if (typeof value === 'boolean' && value) {
-          value = 'Yes'
-        }
-
-        row.push(value || col.default)
-      }
-      data.push(row)
-    }
-
-    return data
   }
 
   render () {
@@ -90,7 +60,6 @@ class Users extends Component {
                   branchName='users'
                   baseUrl='/admin/user'
                   columns={this.getColumns()}
-                  getData={this.getData.bind(this)}
                  />
               </div>
             </div>
