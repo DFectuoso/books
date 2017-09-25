@@ -3,7 +3,7 @@ require('co-mocha')
 
 const { expect, assert } = require('chai')
 const http = require('http')
-const { clearDatabase, createRequestLog } = require('../utils')
+const { clearDatabase } = require('../utils')
 const api = require('api/')
 const request = require('supertest')
 const {RequestLog} = require('models')

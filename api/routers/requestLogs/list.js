@@ -11,8 +11,6 @@ module.exports = {
       sort: '-createdAt'
     })
 
-    ctx.body = {
-      ...requestLogs
-    }
+    ctx.body = requestLogs
   }
 }
