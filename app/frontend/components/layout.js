@@ -53,9 +53,9 @@ class Layout extends Component {
     }
 
     var userData
-    if (this.state.user && this.state.user.screenName) {
+    /*if (this.state.user && this.state.user.screenName) {
       userData = (<h1>Welcome {this.state.user.screenName}</h1>)
-    }
+    }*/
 
     return (<div>
       <NavBar />

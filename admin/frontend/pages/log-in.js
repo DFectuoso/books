@@ -85,11 +85,6 @@ class LogIn extends Component {
             <p className='card-header-title'>
               Log in
             </p>
-            <a className='card-header-icon'>
-              <span className='icon'>
-                <i className='fa fa-angle-down' />
-              </span>
-            </a>
           </header>
           <div className='card-content'>
             <div className='content'>

@@ -31,6 +31,10 @@ module.exports = {
           { loader: 'css-loader' },
           { loader: 'sass-loader' }
         ]
+      },
+      {
+        test: /\.(jpe|jpg|woff|woff2|eot|ttf|svg)(\?.*$|$)/,
+        loader: 'file-loader'
       }
     ]
   },
