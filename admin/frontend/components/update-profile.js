@@ -8,15 +8,15 @@ import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/bas
 
 const schema = {
   type: 'object',
-  required: ['name', 'email'],
+  required: ['screenName', 'email'],
   properties: {
-    name: {type: 'string', title: 'Name'},
+    screenName: {type: 'string', title: 'Name'},
     email: {type: 'string', title: 'Email'}
   }
 }
 
 const uiSchema = {
-  name: {'ui:widget': TextWidget},
+  screenName: {'ui:widget': TextWidget},
   email: {'ui:widget': EmailWidget}
 }
 
@@ -24,17 +24,20 @@ class UpdateProfileForm extends Component {
   constructor (props) {
     super(props)
 
-    let username
+    let screenName
     let email
+    let uuid
     if (tree.get('user')) {
-      username = tree.get('user').screenName
+      screenName = tree.get('user').screenName
       email = tree.get('user').email
+      uuid = tree.get('user').uuid
     }
 
     this.state = {
       formData: {
         email: email,
-        name: username
+        screenName: screenName,
+        uuid: uuid
       }
     }
   }
@@ -46,7 +49,18 @@ class UpdateProfileForm extends Component {
   }
 
   async submitHandler ({formData}) {
-    this.setState({formData})
+    var data
+    try {
+      data = await api.post('/user/me/update', formData)
+    } catch (e) {
+      return this.setState({
+        error: e.message,
+        formData: {
+          email: '',
+          screenName: ''
+        }
+      })
+    }
   }
 
   render () {

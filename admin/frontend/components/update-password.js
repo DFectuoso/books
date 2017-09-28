@@ -26,11 +26,17 @@ class UpdatePasswordForm extends Component {
   constructor (props) {
     super(props)
 
+    let uuid
+    if (tree.get('user')) {
+      uuid = tree.get('user').uuid
+    }
+
     this.state = {
       formData: {
         password: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        uuid: uuid
       }
     }
   }
@@ -42,7 +48,17 @@ class UpdatePasswordForm extends Component {
   }
 
   async submitHandler ({formData}) {
-    this.setState({formData})
+    var data
+    try {
+      data = await api.post('/user/me/update-password', formData)
+    } catch (e) {
+      return this.setState({
+        error: e.message,
+        formData: {
+          password: ''
+        }
+      })
+    }
   }
 
   render () {
