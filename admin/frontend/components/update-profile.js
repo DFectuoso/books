@@ -34,6 +34,8 @@ class UpdateProfileForm extends Component {
     }
 
     this.state = {
+      apiCallMessage: 'is-hidden',
+      apiCallErrorMessage:'is-hidden',
       formData: {
         email: email,
         screenName: screenName,
@@ -45,7 +47,7 @@ class UpdateProfileForm extends Component {
   errorHandler (e) {}
 
   changeHandler ({formData}) {
-    this.setState({formData})
+    this.setState({formData, apiCallMessage: 'is-hidden', apiCallErrorMessage: 'is-hidden'})
   }
 
   async submitHandler ({formData}) {
@@ -55,12 +57,15 @@ class UpdateProfileForm extends Component {
     } catch (e) {
       return this.setState({
         error: e.message,
+        apiCallErrorMessage: 'message is-danger',
         formData: {
           email: '',
           screenName: ''
         }
       })
     }
+
+    this.setState({apiCallMessage: 'message is-success'})
   }
 
   render () {
@@ -73,7 +78,6 @@ class UpdateProfileForm extends Component {
 
     return (
       <div className='is-fullwidth-block'>
-        {error}
         <BaseForm schema={schema}
           uiSchema={uiSchema}
           formData={this.state.formData}
@@ -81,6 +85,15 @@ class UpdateProfileForm extends Component {
           onSubmit={(e) => { this.submitHandler(e) }}
           onError={(e) => { this.errorHandler(e) }}
           className='is-fullwidth'>
+
+          <div className={this.state.apiCallMessage}>
+            <div className="message-body is-size-7 has-text-centered">Tus datos se han modificado correctamente</div>
+          </div>
+
+          <div className={this.state.apiCallErrorMessage}>
+            <div className="message-body is-size-7 has-text-centered">{error}</div>
+          </div>
+
           <div>
             <button className='button is-primary is-fullwidth' type='submit'>Modificar</button>
           </div>
