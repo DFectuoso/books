@@ -1,6 +1,7 @@
+const Route = require('lib/router/route')
 const {User} = require('models')
 
-module.exports = {
+module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
@@ -8,14 +9,11 @@ module.exports = {
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,
       find: {},
-      // populate: 'url tags user',
       sort: '-email'
     })
 
     users.data = users.data.map((user) => { return user.toPublic() })
 
-    ctx.body = {
-      ...users
-    }
+    ctx.body = users
   }
-}
+})

@@ -1,9 +1,10 @@
+const Route = require('lib/router/route')
 const Joi = require('joi')
 const jwt = require('lib/jwt')
 
 const {User} = require('models')
 
-module.exports = {
+module.exports = new Route({
   method: 'post',
   path: '/',
   validator: Joi.object().keys({
@@ -31,4 +32,4 @@ module.exports = {
       })
     }
   }
-}
+})

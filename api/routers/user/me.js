@@ -1,4 +1,6 @@
-module.exports = {
+const Route = require('lib/router/route')
+
+module.exports = new Route({
   method: 'get',
   path: '/me',
   handler: async function (ctx) {
@@ -13,4 +15,4 @@ module.exports = {
       }
     }
   }
-}
+})

@@ -30,7 +30,13 @@ if (config.env === 'development') {
   }))
 } else {
   console.log(`Starting server in ${config.env} with static assets`)
-  app.use('/assets', express.static('app/dist'))
+  app.use('/assets', express.static('admin/dist'))
+}
+
+if (config.server.adminPrefix) {
+  app.get('/', function (req, res) {
+    res.redirect(config.server.adminPrefix)
+  })
 }
 
 app.get('*', function (req, res) {

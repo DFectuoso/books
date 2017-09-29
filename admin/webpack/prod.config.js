@@ -5,7 +5,6 @@ const config = require('../../config')
 const path = require('path')
 const webpack = require('webpack')
 
-console.log('=>', path.resolve('../dist'))
 module.exports = {
   context: __dirname,
   entry: [
@@ -13,7 +12,7 @@ module.exports = {
     '../frontend/index.js'
   ],
   output: {
-    path: path.resolve('./app/dist'),
+    path: path.resolve('./admin/dist'),
     filename: 'bundle.js'
   },
   module: {
@@ -36,7 +35,9 @@ module.exports = {
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']
         })
-      }
+      },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
     ]
   },
   plugins: [
@@ -45,7 +46,13 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
+      'PREFIX': JSON.stringify(config.server.adminPrefix),
       'API_HOST': JSON.stringify(config.server.apiHost)
+    }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
@@ -57,8 +64,9 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     alias: {
-      '~core': path.resolve('./app/frontend/core'),
-      '~components': path.resolve('./app/frontend/components')
+      '~base': path.resolve('./lib/frontend/'),
+      '~core': path.resolve('./admin/frontend/core'),
+      '~components': path.resolve('./admin/frontend/components')
     }
   }
 }

@@ -1,40 +1,15 @@
 import React from 'react'
 import {
-  BrowserRouter as Router,
-  Route,
-  Redirect
+  BrowserRouter as Router
 } from 'react-router-dom'
 
-import tree from '~core/tree'
 import AdminLayout from '~components/admin-layout'
+
+import {PrivateRoute, LoginRoute} from '~base/router'
 
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
 import Users from './pages/users'
-
-const LoginRoute = ({ component: Component, ...rest }) => {
-  return <Route {...rest} render={props => {
-    if (tree.get('loggedIn')) {
-      return <Redirect to={{
-        pathname: '/app'
-      }} />
-    } else {
-      return <Component {...props} />
-    }
-  }} />
-}
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  return <Route {...rest} render={props => {
-    if (!tree.get('loggedIn')) {
-      return <Redirect to={{
-        pathname: '/log-in'
-      }} />
-    } else {
-      return <Component {...props} />
-    }
-  }} />
-}
 
 const AppRouter = () => {
   return (<Router>

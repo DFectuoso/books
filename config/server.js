@@ -5,5 +5,6 @@ module.exports = {
   appHost: process.env.APP_HOST || 'http://localhost:4000',
   adminPort: parseInt(process.env.ADMIN_PORT) || 5000,
   adminHost: process.env.ADMIN_HOST || 'http://localhost:5000',
+  adminPrefix: process.env.ADMIN_PREFIX || '',
   static: process.env.WEBPACK_PUBLIC_PATH
 }
