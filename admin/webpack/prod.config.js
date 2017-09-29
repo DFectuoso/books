@@ -49,6 +49,11 @@ module.exports = {
       'PREFIX': JSON.stringify(config.server.adminPrefix),
       'API_HOST': JSON.stringify(config.server.apiHost)
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compress: {
@@ -61,9 +66,7 @@ module.exports = {
     alias: {
       '~base': path.resolve('./lib/frontend/'),
       '~core': path.resolve('./admin/frontend/core'),
-      '~components': path.resolve('./admin/frontend/components'),
-      'react': 'react-lite',
-      'react-dom': 'react-lite'
+      '~components': path.resolve('./admin/frontend/components')
     }
   }
 }

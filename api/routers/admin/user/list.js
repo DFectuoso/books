@@ -1,6 +1,7 @@
+const Route = require('lib/router/route')
 const {User} = require('models')
 
-module.exports = {
+module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
@@ -15,4 +16,4 @@ module.exports = {
 
     ctx.body = users
   }
-}
+})

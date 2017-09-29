@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import {isEmpty} from 'lodash'
 import React, { Component } from 'react'
 import { root } from 'baobab-react/higher-order'
 
@@ -54,12 +54,12 @@ class AdminLayout extends Component {
       return <div>Loading...</div>
     }
 
-    if (!_.isEmpty(this.state.user)) {
+    if (!isEmpty(this.state.user)) {
       return (<div className='is-wrapper'>
         <AdminNavBar />
         <div className='is-flex c-flex-1 columns is-gapless'>
           <Sidebar />
-          <div className='column is-flex is-flex-column'>
+          <div className='column is-flex is-flex-column main-wrapper'>
             <section className='section c-flex-1'>
               {this.props.children}
             </section>
