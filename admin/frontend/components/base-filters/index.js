@@ -37,10 +37,10 @@ class BaseFilterPanel extends Component {
   }
 
   getFilters (type, title, key, value, name, handleChange) {
-    let filters = ( {
-        SearchFilter: () => SearchFilter(title, key, value, name, handleChange)
-    } )[ type ] || SearchFilter(title, key)
-
+    let filters = ({
+        SearchFilter: SearchFilter
+    })[ type ] || SearchFilter
+    
     return filters(title, key, value, name, handleChange)
   }
 
@@ -63,7 +63,9 @@ class BaseFilterPanel extends Component {
         </a>
       </header>
       <form>
-        { Object.keys(uiSchema).map( (e, i) => this.getFilters(uiSchema[e]['ui:widget'], schema.properties[e].title, i, formData[e], e, handleChange) ) }
+        { Object.keys(uiSchema).map( (e, i) => {
+          return this.getFilters(uiSchema[e]['ui:widget'], schema.properties[e].title, i, formData[e], e, handleChange)
+        } ) }
         {SubmitReset(onFilter, onResetFilters)}
       </form>      
     </div>

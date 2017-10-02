@@ -88,7 +88,7 @@ class Users extends Component {
   }
 
   handleFilters () {
-    debugger
+    
   }
 
   handleResetFilters () {
