@@ -60,7 +60,7 @@ class AdminLayout extends Component {
         <div className='is-flex c-flex-1 columns is-gapless'>
           <Sidebar />
           <div className='column is-flex is-flex-column main-wrapper'>
-            <section className='section c-flex-1'>
+            <section className='c-flex-1 is-flex'>
               {this.props.children}
             </section>
             <Footer />

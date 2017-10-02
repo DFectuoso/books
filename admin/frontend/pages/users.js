@@ -2,11 +2,40 @@ import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
+import BaseFilterPanel from '~components/base-filters'
 
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import FontAwesome from 'react-fontawesome'
 
+const schema = {
+  type: 'object',
+  required: [],
+  properties: {
+    name: {type: 'text', title: 'Por nombre'},
+    byId: {type: 'text', title: 'Por ID'}
+  }
+}
+
+const uiSchema = {
+  name: {'ui:widget': 'SearchFilter'},
+  byId: {'ui:widget': 'SearchFilter'}
+}
+
 class Users extends Component {
+  constructor (props) {
+    super(props)
+    this.setFormData = this.setFormData.bind(this)
+    this.toggleFilterPanel = this.toggleFilterPanel.bind(this)
+    this.handleFilters = this.handleFilters.bind(this)
+    this.handleResetFilters = this.handleResetFilters.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+
+    this.state = {
+      isFilterOpen: false,
+      formData: this.setFormData()
+    }
+  }
+
   componentWillMount () {
     this.context.tree.set('users', {
       page: 1,
@@ -45,34 +74,85 @@ class Users extends Component {
     ]
   }
 
+  setFormData () {
+    let obj = {}
+
+    for (var item in uiSchema) {
+      obj[item] = ''
+    }
+    return obj
+  }
+
+  toggleFilterPanel (isFilterOpen) {
+    this.setState({isFilterOpen: !isFilterOpen})
+  }
+
+  handleFilters () {
+    debugger
+  }
+
+  handleResetFilters () {
+    let emptyForm = this.setFormData()
+    this.setState({formData: emptyForm})
+  }
+
+  handleChange (e){
+    let obj = {}
+    obj[e.target.name] = e.target.value
+    
+    this.setState( {formData: obj} )
+  }
+
   render () {
-    return (
-      <section className='section c-flex-1 is-paddingless'>
+    let { isFilterOpen } = this.state
+    let filterPanel
+    if (isFilterOpen) {
+      filterPanel = (<div className='column is-narrow side-filters is-paddingless'>
+        <BaseFilterPanel 
+          schema={schema} 
+          uiSchema={uiSchema} 
+          formData={this.state.formData} 
+          handleChange={this.handleChange} 
+          onToggle={() => this.toggleFilterPanel(isFilterOpen)} 
+          onFilter={() => this.handleFilters()} 
+          onResetFilters={() => this.handleResetFilters()} />
+      </div>)
+    }
 
-        <div className="searchbox">
+    if (!isFilterOpen) {
+      filterPanel =(<div className='searchbox'>
+        <a href='javascript:void(0)' className='card-header-icon has-text-white' aria-label='more options' onClick={() => this.toggleFilterPanel(isFilterOpen)}>
           <FontAwesome name='search' />
-        </div> 
+        </a>
+      </div>)
+    }
 
-        <div className='card'>
-          <header className='card-header'>
-            <p className='card-header-title'>
-              Users #{this.context.tree.get('users', 'totalItems') || ''}
-            </p>
-          </header>
-          <div className='card-content'>
-            <div className='columns'>
-              <div className='column'>
-                <BranchedPaginatedTable
-                  branchName='users'
-                  baseUrl='/admin/user'
-                  columns={this.getColumns()}
-                 />
+    return (
+      <div className="columns c-flex-1 is-marginless">
+        <div className='column is-paddingless'>
+          <div className="section">
+            <div className='card'>
+              <header className='card-header'>
+                <p className='card-header-title'>
+                  Users #{this.context.tree.get('users', 'totalItems') || ''}
+                </p>
+              </header>
+              <div className='card-content'>
+                <div className='columns'>
+                  <div className='column'>
+                    <BranchedPaginatedTable
+                      branchName='users'
+                      baseUrl='/admin/user'
+                      columns={this.getColumns()}
+                     />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-
+        { filterPanel }
+      </div>
     )
   }
 }

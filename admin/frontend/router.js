@@ -14,7 +14,7 @@ import Users from './pages/users'
 const AppRouter = () => {
   return (<Router>
     <AdminLayout>
-      <div>
+      <div className='c-flex-1 is-flex is-flex-column is-relative'>
         <LoginRoute exact path='/' component={LogIn} />
         <PrivateRoute path='/app' component={Dashboard} />
         <PrivateRoute path='/users' component={Users} />

@@ -125,10 +125,9 @@ html, body {
 
 .searchbox {
   position: absolute;
-  top: 0;
-  right: 0;
-  padding: 15px 13px 15px 19px;
-  margin-top: 22px;
+  top: 0px;
+  right: 0px;
+  padding: 0px;
   background-color: #5d5d5d;
   color: white;
   border-radius: 5px 0px 0px 5px;
@@ -136,6 +135,14 @@ html, body {
   text-align: center;
 }
 
+.side-filters {
+  width: 250px;
+  background-color: #cccccc;
+}
+
+.is-fullwidth {
+  width: 100%
+}
 
 a .navbar-item:hover {
   background-color: transparent;
