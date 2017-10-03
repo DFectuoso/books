@@ -27,3 +27,23 @@ body {
   max-width: 400px;
   margin: 100px auto;
 }
+
+.is-align-center {
+  align-items: center;
+}
+
+.is-rounded {
+  border-radius: 50%;
+}
+
+.is-bg-white {
+  background-color: white;
+}
+
+.is-fullwidth-block {
+  width: 100%;
+}
+
+.panel-body {
+  padding: 1.5em;
+}
