@@ -30,7 +30,11 @@ if (config.env === 'development') {
   }))
 } else {
   console.log(`Starting server in ${config.env} with static assets`)
-  app.use('/assets', express.static('admin/dist'))
+  if (config.server.adminPrefix) {
+    app.use(config.server.adminPrefix + '/assets', express.static('admin/dist'))
+  } else {
+    app.use('/assets', express.static('admin/dist'))
+  }
 }
 
 if (config.server.adminPrefix) {
@@ -40,7 +44,10 @@ if (config.server.adminPrefix) {
 }
 
 app.get('*', function (req, res) {
-  res.render('index', {env: config.env})
+  res.render('index', {
+    env: config.env,
+    prefix: config.server.adminPrefix
+  })
 })
 
 module.exports = app

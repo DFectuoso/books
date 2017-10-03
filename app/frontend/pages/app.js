@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import request from '~core/request'
 import tree from '~core/tree'
 import { Redirect } from 'react-router-dom'
+import Loader from '~base/components/spinner'
 
 class App extends Component {
   constructor (props) {
@@ -29,7 +30,7 @@ class App extends Component {
     const {loading, posts} = this.state
 
     if (loading) {
-      return <div>Loading...</div>
+      return <div className='is-flex is-flex-1'><Loader /></div>
     }
 
     if (this.state.redirect) {

@@ -11,7 +11,7 @@ module.exports = {
   ],
   output: {
     path: __dirname,
-    publicPath: '/assets',
+    publicPath: config.server.adminPrefix + '/assets',
     filename: 'bundle.js'
   },
   module: {

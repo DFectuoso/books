@@ -42,7 +42,6 @@ html, body {
 
 .c-topbar {
     position: relative;
-    z-index: 200;
     width: 100%;
     top: 0;
     left: 0;
@@ -140,8 +139,24 @@ html, body {
   background-color: #cccccc;
 }
 
+.panel-body {
+  padding: 1.5em;
+}
+
 .is-fullwidth {
-  width: 100%
+  width: 100%;
+}
+
+.is-justify-center{
+  justify-content: center;
+}
+
+.is-justify-center {
+  justify-content: center;
+}
+
+.is-align-center {
+  align-items: center;
 }
 
 a .navbar-item:hover {
@@ -176,4 +191,16 @@ footer.footer {
 
 .c-flex-1 {
     flex: 1;
+}
+
+.is-rounded {
+  border-radius: 50%;
+}
+
+.is-align-center {
+  align-items: center;
+}
+
+.is-bg-white {
+  background-color: white;
 }

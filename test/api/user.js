@@ -46,6 +46,31 @@ describe('/user', () => {
     })
   })
 
+  describe.only('[post] /me/update', () => {
+    it('should return a error', async function () {
+      await test()
+        .post('/api/user/me/update')
+        .send()
+        .set('Accept', 'application/json')
+        .expect(422)
+    })
+
+    it('should return a 200', async function () {
+      const user = await createUser({ password })
+      const res = await test()
+        .post('/api/user/me/update')
+        .send({
+          email: 'app@user.com',
+          screenName: 'newNick',
+          uuid: user.uuid
+        })
+        .set('Accept', 'application/json')
+        .expect(200)
+
+      expect(res.body.user.uuid).equal(user.uuid)
+    })
+  })
+
   describe('[post] /login', () => {
     it('should return a error', async function () {
       const user = await createUser({ password })
@@ -70,7 +95,7 @@ describe('/user', () => {
     })
   })
 
-  describe.only('[get] /me Gets jwt user data', () => {
+  describe('[get] /me Gets jwt user data', () => {
     it('should return a 200 with loggedIn false', async function () {
       const res = await test()
         .get('/api/user/me')

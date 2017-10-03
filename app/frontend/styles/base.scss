@@ -27,3 +27,44 @@ body {
   max-width: 400px;
   margin: 100px auto;
 }
+
+.is-fullwidth {
+  width: 100%;
+}
+
+.is-justify-center{
+  justify-content: center;
+}
+
+.is-justify-center {
+  justify-content: center;
+}
+
+.is-align-center {
+  align-items: center;
+}
+
+.full-height {
+  min-height: 100%;
+}
+
+.is-flex-1 {
+  flex: 1;
+}
+
+.wrapper {
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.is-rounded {
+  border-radius: 50%;
+}
+
+.is-bg-white {
+  background-color: white;
+}
+
+.panel-body {
+  padding: 1.5em;
+}

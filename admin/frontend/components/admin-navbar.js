@@ -10,7 +10,30 @@ class NavBar extends Component {
     super(props)
     this.state = {
       mobileMenu: 'close',
+      profileDropdown: 'is-hidden',
+      dropCaret: 'fa fa-caret-down',
       redirect: false
+    }
+
+    this.setWrapperRef = this.setWrapperRef.bind(this)           
+    this.handleClickOutside = this.handleClickOutside.bind(this)
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside)
+  }
+  
+  setWrapperRef(node) {
+    this.wrapperRef = node
+  }
+
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ 'profileDropdown': 'is-hidden', 'dropCaret': 'fa fa-caret-down' })
     }
   }
 
@@ -23,7 +46,17 @@ class NavBar extends Component {
     tree.set('loggedIn', false)
     tree.commit()
 
-    history.push('/')
+    history.push('/admin')
+  }
+
+  toggleBtnClass () {
+    if (this.wrapperRef) {
+      if (this.state.profileDropdown === 'is-hidden') {
+        this.setState({ 'profileDropdown': 'is-active', 'dropCaret': 'fa fa-caret-up' })
+      } else {
+        this.setState({ 'profileDropdown': 'is-hidden', 'dropCaret': 'fa fa-caret-down' })
+      }
+    }
   }
 
   handleNavbarBurgerClick () {
@@ -41,11 +74,20 @@ class NavBar extends Component {
     }
 
     var navButtons
+    let avatar
+    let username
     if (this.props.loggedIn) {
-      navButtons = (<div className='field is-grouped'>
-        <p className='control'>
-          <button className='bd-tw-button button' onClick={() => this.handleLogout()}>Log out</button>
-        </p>
+      avatar = 'http://1bigappstore.com/images/avt-default.jpg'
+
+      if (tree.get('user')) {
+        username = tree.get('user').screenName
+      }
+
+      navButtons = (<div className='dropdown-content'>
+        <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/admin/profile'>Profile</Link>
+        <a className='dropdown-item' onClick={() => this.handleLogout()}>
+          Logout
+        </a>
       </div>)
     } else {
       navButtons = (<div className='field is-grouped'>
@@ -74,26 +116,28 @@ class NavBar extends Component {
             </div>
           </div>
           <div className='navbar-end'>
-            <div className='dropdown is-right'>
-              <div className='dropdown-trigger'>
-                <a href='#' className='navbar-item'>
+
+            <div className='navbar-item is-size-7 has-text-grey is-capitalized'>
+              Bienvenido { username }
+            </div>
+            <div className='is-flex is-align-center'>
+              <img className='is-rounded' src={ avatar } width='40' height='45' alt='Avatar' />
+            </div>
+
+            
+            <div className='dropdown is-active is-right' ref={this.setWrapperRef}>
+              <div className='dropdown-trigger is-flex'>
+                <a href='javascript:undefined' className='navbar-item' onClick={() => this.toggleBtnClass()}>
                   <span className='icon'>
-                    <i className='fa fa-cog' />
+                    <i className={this.state.dropCaret} />
                   </span>
                 </a>
               </div>
-              <div className='dropdown-menu' id='dropdown-menu' role='menu'>
-                <div className='dropdown-content'>
-                  <a href='#' className='dropdown-item'>
-                    Profile
-                  </a>
-                  <hr className='dropdown-divider' />
-                  <a href='#' className='dropdown-item'>
-                      Log out
-                    </a>
-                </div>
+              <div className={this.state.profileDropdown}>
+                <div className='dropdown-menu' id='dropdown-menu' role='menu'>{ navButtons }</div>
               </div>
             </div>
+
           </div>
         </div>
       </div>

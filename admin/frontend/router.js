@@ -10,6 +10,7 @@ import {PrivateRoute, LoginRoute} from '~base/router'
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
 import Users from './pages/users'
+import Profile from './pages/profile'
 
 const AppRouter = () => {
   return (<Router>
@@ -18,6 +19,7 @@ const AppRouter = () => {
         <LoginRoute exact path='/' component={LogIn} />
         <PrivateRoute path='/app' component={Dashboard} />
         <PrivateRoute path='/users' component={Users} />
+        <PrivateRoute path='/profile' component={Profile} />
       </div>
     </AdminLayout>
   </Router>)
