@@ -104,7 +104,7 @@ class Users extends Component {
     this.setState({formData: this.setFormData()})
   }
 
-  handleChange (e){
+  handleChange (e) {
     let formData = {...this.state.formData}
     formData[e.target.name] = e.target.value
     this.setState({ formData })
