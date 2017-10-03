@@ -11,7 +11,7 @@ class Profile extends Component {
 
   render () {
     return (
-      <section>
+      <section className="is-fullwidth">
         <div className='columns is-multiline'>
           <div className='column is-one-third'>
 

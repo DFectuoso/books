@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import request from '~base/request'
 import { Redirect } from 'react-router-dom'
+import Spinner from 'react-spinkit'
+import Loader from '~base/components/spinner'
 
 class Dashboard extends Component {
   constructor (props) {
@@ -28,7 +30,7 @@ class Dashboard extends Component {
     const {loading, posts} = this.state
 
     if (loading) {
-      return <div>Loading...</div>
+      return <Loader />
     }
 
     if (this.state.redirect) {

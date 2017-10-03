@@ -15,7 +15,7 @@ import Profile from './pages/profile'
 const AppRouter = () => {
   return (<Router>
     <AdminLayout>
-      <div>
+      <div className='is-fullwidth is-flex full-height'>
         <LoginRoute exact path='/' component={LogIn} />
         <PrivateRoute path='/app' component={Dashboard} />
         <PrivateRoute path='/users' component={Users} />

@@ -1,6 +1,7 @@
+const Route = require('lib/router/route')
 const {RequestLog} = require('models')
 
-module.exports = {
+module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
@@ -13,4 +14,4 @@ module.exports = {
 
     ctx.body = requestLogs
   }
-}
+})
