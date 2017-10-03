@@ -1,7 +1,8 @@
+const Route = require('lib/router/route')
 const Joi = require('joi')
 const {User} = require('models')
 
-module.exports = {
+module.exports = new Route({
   method: 'post',
   path: '/me/update',
   validator: Joi.object().keys({
@@ -24,4 +25,4 @@ module.exports = {
       data: 'OK'
     }
   }
-}
+})
