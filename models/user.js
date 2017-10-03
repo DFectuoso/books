@@ -110,6 +110,20 @@ userSchema.statics.register = async function (options) {
   return createdUser
 }
 
+userSchema.statics.update = async function (options) {
+  const {uuid} = options
+
+  var user = await this.findOne({ uuid })
+  console.log('user', user)
+  assert(user, 404, 'User not found')
+
+  // update in mongoose
+  user = user.set(options)
+  user.save()
+
+  return user
+}
+
 userSchema.plugin(dataTables)
 
 module.exports = mongoose.model('User', userSchema)

@@ -12,6 +12,7 @@ import Home from './pages/home'
 import About from './pages/about'
 import SignUp from './pages/sign-up'
 import LogIn from './pages/log-in'
+import Profile from './pages/profile'
 
 import App from './pages/app'
 
@@ -48,6 +49,7 @@ const AppRouter = () => {
         <LoginRoute exact path='/sign-up' component={SignUp} />
         <LoginRoute exact path='/log-in' component={LogIn} />
         <PrivateRoute path='/app' component={App} />
+        <PrivateRoute path='/profile' component={Profile} />
       </div>
     </Layout>
   </Router>)

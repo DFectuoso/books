@@ -56,3 +56,15 @@ body {
   min-height: 100vh;
   flex-direction: column;
 }
+
+.is-rounded {
+  border-radius: 50%;
+}
+
+.is-bg-white {
+  background-color: white;
+}
+
+.panel-body {
+  padding: 1.5em;
+}

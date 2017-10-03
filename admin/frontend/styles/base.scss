@@ -42,7 +42,6 @@ html, body {
 
 .c-topbar {
     position: relative;
-    z-index: 200;
     width: 100%;
     top: 0;
     left: 0;
@@ -119,6 +118,18 @@ html, body {
     padding: 0;
 }
 
+.panel-body {
+  padding: 1.5em;
+}
+
+form.is-fullwidth {
+  width: 100%
+}
+
+.is-fullwidth-block{
+  width: 100%
+}
+
 
 .is-fullwidth {
   width: 100%;
@@ -168,4 +179,16 @@ footer.footer {
 
 .c-flex-1 {
     flex: 1;
+}
+
+.is-rounded {
+  border-radius: 50%;
+}
+
+.is-align-center {
+  align-items: center;
+}
+
+.is-bg-white {
+  background-color: white;
 }
