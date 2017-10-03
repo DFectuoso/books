@@ -110,9 +110,9 @@ class Users extends Component {
     }
 
     return (
-      <div className="columns c-flex-1 is-marginless">
+      <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
-          <div className="section">
+          <div className='section'>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>

@@ -10,7 +10,7 @@ class Profile extends Component {
 
 
   render () {
-    return (
+    return (<div className='section'>
       <section className="is-fullwidth">
         <div className='columns is-multiline'>
           <div className='column is-one-third'>
@@ -50,7 +50,7 @@ class Profile extends Component {
           </div>
         </div>
       </section>
-    )
+    </div>)
   }
 }
 

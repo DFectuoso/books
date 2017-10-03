@@ -43,14 +43,14 @@ class Dashboard extends Component {
       </div>
     })
 
-    return (
+    return (<div className='section'>
       <div className='Dashboard'>
         <div className='Dashboard-header'>
           <h2>Post list</h2>
         </div>
         {postsList}
       </div>
-    )
+    </div>)
   }
 }
 
