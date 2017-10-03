@@ -74,7 +74,7 @@ class UpdatePasswordForm extends Component {
     }
 
     return (
-      <div className='is-fullwidth-block'>
+      <div className='is-fullwidth'>
         {error}
         <BaseForm schema={schema}
           uiSchema={uiSchema}

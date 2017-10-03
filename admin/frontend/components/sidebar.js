@@ -3,7 +3,7 @@ import Link from '~base/router/link'
 
 class Sidebar extends Component {
   render () {
-    return (<div className='offcanvas column is-narrow'>
+    return (<div className='offcanvas column is-narrow is-paddingless'>
       <aside className='menu'>
         <ul className='menu-list'>
           <li>

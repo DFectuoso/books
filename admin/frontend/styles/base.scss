@@ -118,18 +118,30 @@ html, body {
     padding: 0;
 }
 
+.is-relative {
+  position: relative
+}
+
+.searchbox {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 0px;
+  background-color: #5d5d5d;
+  color: white;
+  border-radius: 5px 0px 0px 5px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.side-filters {
+  width: 250px;
+  background-color: #cccccc;
+}
+
 .panel-body {
   padding: 1.5em;
 }
-
-form.is-fullwidth {
-  width: 100%
-}
-
-.is-fullwidth-block{
-  width: 100%
-}
-
 
 .is-fullwidth {
   width: 100%;

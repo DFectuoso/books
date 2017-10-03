@@ -77,7 +77,7 @@ class UpdateProfileForm extends Component {
     }
 
     return (
-      <div className='is-fullwidth-block'>
+      <div className='is-fullwidth'>
         <BaseForm schema={schema}
           uiSchema={uiSchema}
           formData={this.state.formData}
