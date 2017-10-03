@@ -11,14 +11,14 @@ const schema = {
   type: 'object',
   required: [],
   properties: {
-    name: {type: 'text', title: 'Por nombre'},
-    byId: {type: 'text', title: 'Por ID'}
+    screenName: {type: 'text', title: 'Por nombre'},
+    email: {type: 'text', title: 'Por email'}
   }
 }
 
 const uiSchema = {
-  name: {'ui:widget': 'SearchFilter'},
-  byId: {'ui:widget': 'SearchFilter'}
+  screenName: {'ui:widget': 'SearchFilter'},
+  email: {'ui:widget': 'SearchFilter'}
 }
 
 class Users extends Component {
@@ -32,6 +32,7 @@ class Users extends Component {
 
     this.state = {
       isFilterOpen: false,
+      filters: {},
       formData: this.setFormData()
     }
   }
@@ -88,23 +89,29 @@ class Users extends Component {
   }
 
   handleFilters () {
-    
+    let formData = this.state.formData
+    let filters = {}
+
+    for (var field in formData) {
+      if (formData[field]) {
+        filters[field] = formData[field]
+      }
+    }
+    this.setState({filters})
   }
 
   handleResetFilters () {
-    let emptyForm = this.setFormData()
-    this.setState({formData: emptyForm})
+    this.setState({formData: this.setFormData()})
   }
 
   handleChange (e){
-    let obj = {}
-    obj[e.target.name] = e.target.value
-    
-    this.setState( {formData: obj} )
+    let formData = {...this.state.formData}
+    formData[e.target.name] = e.target.value
+    this.setState({ formData })
   }
 
   render () {
-    let { isFilterOpen } = this.state
+    let { isFilterOpen, filters } = this.state
     let filterPanel
     if (isFilterOpen) {
       filterPanel = (<div className='column is-narrow side-filters is-paddingless'>
@@ -143,7 +150,8 @@ class Users extends Component {
                     <BranchedPaginatedTable
                       branchName='users'
                       baseUrl='/admin/user'
-                      columns={this.getColumns()}
+                      columns={this.getColumns()} 
+                      filters={ filters }
                      />
                   </div>
                 </div>
