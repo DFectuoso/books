@@ -28,7 +28,7 @@ class Users extends Component {
       isFilterOpen: false,
       filters: {}
     }
-    
+
     this.toggleFilterPanel = this.toggleFilterPanel.bind(this)
     this.handleOnFilter = this.handleOnFilter.bind(this)
   }
@@ -92,17 +92,17 @@ class Users extends Component {
 
     if (isFilterOpen) {
       filterPanel = (<div className='column is-narrow side-filters is-paddingless'>
-        <BaseFilterPanel 
-          schema={schema} 
-          uiSchema={uiSchema} 
+        <BaseFilterPanel
+          schema={schema}
+          uiSchema={uiSchema}
           filters={filters}
-          onFilter={this.handleOnFilter} 
+          onFilter={this.handleOnFilter}
           onToggle={() => this.toggleFilterPanel(isFilterOpen)} />
       </div>)
     }
 
     if (!isFilterOpen) {
-      filterPanel =(<div className='searchbox'>
+      filterPanel = (<div className='searchbox'>
         <a href='javascript:void(0)' className='card-header-icon has-text-white' aria-label='more options' onClick={() => this.toggleFilterPanel(isFilterOpen)}>
           <FontAwesome name='search' />
         </a>
@@ -110,9 +110,9 @@ class Users extends Component {
     }
 
     return (
-      <div className="columns c-flex-1 is-marginless">
+      <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
-          <div className="section">
+          <div className='section'>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>
@@ -125,8 +125,8 @@ class Users extends Component {
                     <BranchedPaginatedTable
                       branchName='users'
                       baseUrl='/admin/user'
-                      columns={this.getColumns()} 
-                      filters={ filters }
+                      columns={this.getColumns()}
+                      filters={filters}
                      />
                   </div>
                 </div>
