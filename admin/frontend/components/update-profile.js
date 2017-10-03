@@ -8,15 +8,15 @@ import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/bas
 
 const schema = {
   type: 'object',
-  required: ['name', 'email'],
+  required: ['screenName', 'email'],
   properties: {
-    name: {type: 'string', title: 'Name'},
+    screenName: {type: 'string', title: 'Name'},
     email: {type: 'string', title: 'Email'}
   }
 }
 
 const uiSchema = {
-  name: {'ui:widget': TextWidget},
+  screenName: {'ui:widget': TextWidget},
   email: {'ui:widget': EmailWidget}
 }
 
@@ -24,17 +24,22 @@ class UpdateProfileForm extends Component {
   constructor (props) {
     super(props)
 
-    let username
+    let screenName
     let email
+    let uuid
     if (tree.get('user')) {
-      username = tree.get('user').screenName
+      screenName = tree.get('user').screenName
       email = tree.get('user').email
+      uuid = tree.get('user').uuid
     }
 
     this.state = {
+      apiCallMessage: 'is-hidden',
+      apiCallErrorMessage:'is-hidden',
       formData: {
         email: email,
-        name: username
+        screenName: screenName,
+        uuid: uuid
       }
     }
   }
@@ -42,11 +47,25 @@ class UpdateProfileForm extends Component {
   errorHandler (e) {}
 
   changeHandler ({formData}) {
-    this.setState({formData})
+    this.setState({formData, apiCallMessage: 'is-hidden', apiCallErrorMessage: 'is-hidden'})
   }
 
   async submitHandler ({formData}) {
-    this.setState({formData})
+    var data
+    try {
+      data = await api.post('/user/me/update', formData)
+    } catch (e) {
+      return this.setState({
+        error: e.message,
+        apiCallErrorMessage: 'message is-danger',
+        formData: {
+          email: '',
+          screenName: ''
+        }
+      })
+    }
+
+    this.setState({apiCallMessage: 'message is-success'})
   }
 
   render () {
@@ -59,7 +78,6 @@ class UpdateProfileForm extends Component {
 
     return (
       <div className='is-fullwidth-block'>
-        {error}
         <BaseForm schema={schema}
           uiSchema={uiSchema}
           formData={this.state.formData}
@@ -67,6 +85,15 @@ class UpdateProfileForm extends Component {
           onSubmit={(e) => { this.submitHandler(e) }}
           onError={(e) => { this.errorHandler(e) }}
           className='is-fullwidth'>
+
+          <div className={this.state.apiCallMessage}>
+            <div className="message-body is-size-7 has-text-centered">Tus datos se han modificado correctamente</div>
+          </div>
+
+          <div className={this.state.apiCallErrorMessage}>
+            <div className="message-body is-size-7 has-text-centered">{error}</div>
+          </div>
+
           <div>
             <button className='button is-primary is-fullwidth' type='submit'>Modificar</button>
           </div>

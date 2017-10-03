@@ -26,11 +26,19 @@ class UpdatePasswordForm extends Component {
   constructor (props) {
     super(props)
 
+    let uuid
+    if (tree.get('user')) {
+      uuid = tree.get('user').uuid
+    }
+
     this.state = {
+      apiCallMessage: 'is-hidden',
+      apiCallErrorMessage:'is-hidden',
       formData: {
         password: '',
         newPassword: '',
-        confirmPassword: ''
+        confirmPassword: '',
+        uuid: uuid
       }
     }
   }
@@ -38,11 +46,23 @@ class UpdatePasswordForm extends Component {
   errorHandler (e) {}
 
   changeHandler ({formData}) {
-    this.setState({formData})
+    this.setState({formData, apiCallMessage: 'is-hidden', apiCallErrorMessage: 'is-hidden'})
   }
 
   async submitHandler ({formData}) {
-    this.setState({formData})
+    var data
+    try {
+      data = await api.post('/user/me/update-password', formData)
+    } catch (e) {
+      return this.setState({
+        error: e.message,
+        formData: {
+          password: ''
+        }
+      })
+    }
+
+    this.setState({apiCallMessage: 'message is-success'})
   }
 
   render () {
@@ -63,6 +83,14 @@ class UpdatePasswordForm extends Component {
           onSubmit={(e) => { this.submitHandler(e) }}
           onError={(e) => { this.errorHandler(e) }}
           className='is-fullwidth'>
+          <div className={this.state.apiCallMessage}>
+            <div className="message-body is-size-7 has-text-centered">Tus datos se han modificado correctamente</div>
+          </div>
+
+          <div className={this.state.apiCallErrorMessage}>
+            <div className="message-body is-size-7 has-text-centered">{error}</div>
+          </div>
+
           <div>
             <button className='button is-primary is-fullwidth' type='submit'>Modificar</button>
           </div>

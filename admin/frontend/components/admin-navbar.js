@@ -15,20 +15,20 @@ class NavBar extends Component {
       redirect: false
     }
 
-    this.setWrapperRef = this.setWrapperRef.bind(this);           
-    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this)           
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
   componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
   componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
   
   setWrapperRef(node) {
-    this.wrapperRef = node;
+    this.wrapperRef = node
   }
 
   handleClickOutside(event) {
