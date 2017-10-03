@@ -24,17 +24,13 @@ const uiSchema = {
 class Users extends Component {
   constructor (props) {
     super(props)
-    this.setFormData = this.setFormData.bind(this)
-    this.toggleFilterPanel = this.toggleFilterPanel.bind(this)
-    this.handleFilters = this.handleFilters.bind(this)
-    this.handleResetFilters = this.handleResetFilters.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-
     this.state = {
       isFilterOpen: false,
-      filters: {},
-      formData: this.setFormData()
+      filters: {}
     }
+    
+    this.toggleFilterPanel = this.toggleFilterPanel.bind(this)
+    this.handleOnFilter = this.handleOnFilter.bind(this)
   }
 
   componentWillMount () {
@@ -75,21 +71,11 @@ class Users extends Component {
     ]
   }
 
-  setFormData () {
-    let obj = {}
-
-    for (var item in uiSchema) {
-      obj[item] = ''
-    }
-    return obj
-  }
-
   toggleFilterPanel (isFilterOpen) {
     this.setState({isFilterOpen: !isFilterOpen})
   }
 
-  handleFilters () {
-    let formData = this.state.formData
+  handleOnFilter (formData) {
     let filters = {}
 
     for (var field in formData) {
@@ -100,29 +86,18 @@ class Users extends Component {
     this.setState({filters})
   }
 
-  handleResetFilters () {
-    this.setState({formData: this.setFormData()})
-  }
-
-  handleChange (e) {
-    let formData = {...this.state.formData}
-    formData[e.target.name] = e.target.value
-    this.setState({ formData })
-  }
-
   render () {
     let { isFilterOpen, filters } = this.state
     let filterPanel
+
     if (isFilterOpen) {
       filterPanel = (<div className='column is-narrow side-filters is-paddingless'>
         <BaseFilterPanel 
           schema={schema} 
           uiSchema={uiSchema} 
-          formData={this.state.formData} 
-          handleChange={this.handleChange} 
-          onToggle={() => this.toggleFilterPanel(isFilterOpen)} 
-          onFilter={() => this.handleFilters()} 
-          onResetFilters={() => this.handleResetFilters()} />
+          filters={filters}
+          onFilter={this.handleOnFilter} 
+          onToggle={() => this.toggleFilterPanel(isFilterOpen)} />
       </div>)
     }
 
