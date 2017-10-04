@@ -37,7 +37,7 @@ class BaseFilterPanel extends Component {
 
   handleResetFilters () {
     this.setState({formData: this.setFormData()}, () => {
-      this.props.onFilter( this.state.formData )
+      this.props.onFilter(this.state.formData)
     })
   }
 
@@ -56,16 +56,16 @@ class BaseFilterPanel extends Component {
   }
 
   render () {
-    const { schema, uiSchema, onToggle, onFilter, filters } = this.props
+    const { schema, uiSchema, onFilter } = this.props
 
     return <div className='card full-height is-shadowless'>
       <header className='card-header'>
         <p className='card-header-title'>
           Filtros
         </p>
-        <a href='javascript:void(0)' 
-          className='card-header-icon' 
-          aria-label='more options' 
+        <a href='javascript:void(0)'
+          className='card-header-icon'
+          aria-label='more options'
           onClick={() => this.props.onToggle()}>
 
           <span className='icon'>
@@ -79,20 +79,20 @@ class BaseFilterPanel extends Component {
         })}
 
         <div className='panel-block'>
-          <div className="columns c-flex-1">
-            <div className="column">
-              <button type="button" className='button is-primary is-fullwidth' onClick={() => onFilter( this.state.formData )}>
+          <div className='columns c-flex-1'>
+            <div className='column'>
+              <button type='button' className='button is-primary is-fullwidth' onClick={() => onFilter(this.state.formData)}>
                 Filter
               </button>
             </div>
-            <div className="column">
-              <button type="button" className='button is-warning is-fullwidth' onClick={() => this.handleResetFilters()}>
+            <div className='column'>
+              <button type='button' className='button is-warning is-fullwidth' onClick={() => this.handleResetFilters()}>
                 Reset
               </button>
             </div>
           </div>
         </div>
-      </form>      
+      </form>
     </div>
   }
 }
