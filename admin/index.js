@@ -13,7 +13,11 @@ expressNunjucks(app, {
   noCache: false
 })
 
-app.use('/public', express.static('admin/public'))
+if (config.server.adminPrefix) {
+  app.use(config.server.adminPrefix + '/public', express.static('admin/public'))
+} else {
+  app.use('/public', express.static('admin/public'))
+}
 
 if (config.env === 'development') {
   console.log('Starting server in development with webpack hot reload')

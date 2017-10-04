@@ -7,7 +7,7 @@ class Sidebar extends Component {
       <aside className='menu'>
         <ul className='menu-list'>
           <li>
-            <Link className='' to='/app'>
+            <Link className='' to='/'>
               <span className='icon'>
                 <i className='fa fa-github' />
               </span>
