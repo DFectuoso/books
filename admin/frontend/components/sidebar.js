@@ -1,80 +1,81 @@
 import React, { Component } from 'react'
-import Link from '~base/router/link'
+import SidebarItem from '~components/sidebar-item'
 
 class Sidebar extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      dropdown: true,
+      active: ''
+    }
+    this.handleActiveLink = this.handleActiveLink.bind(this)
+  }
+
+  componentWillMount () {
+    this.handleActiveLink(window.location.pathname.split('/').splice(-1, 1).pop())
+  }
+
+  getMenuItems () {
+    return [{
+      title: 'Dashboard',
+      icon: 'github',
+      to: '/'
+    },
+    {
+      title: 'Users',
+      icon: 'users',
+      to: '/users'
+    },
+    {
+      title: 'Customers',
+      icon: 'address-book',
+      to: '/customers'
+    },
+    {
+      title: 'Team Settings',
+      icon: 'id-card-o',
+      to: '/team'
+    },
+    {
+      title: 'Manage Your Team',
+      icon: 'users',
+      to: '/',
+      dropdown: [{
+        title: 'Plugins',
+        icon: 'id-badge',
+        to: '/plugins'
+      },
+      {
+        title: 'Add a member',
+        icon: 'linode',
+        to: '/add'
+      }]
+    },
+    {
+      title: 'Invitations',
+      icon: 'snowflake-o',
+      to: '/invitations'
+    }]
+  }
+
+  handleActiveLink (item) {
+    this.setState({active: item})
+  }
+
   render () {
     return (<div className='offcanvas column is-narrow is-paddingless'>
       <aside className='menu'>
         <ul className='menu-list'>
-          <li>
-            <Link className='' to='/'>
-              <span className='icon'>
-                <i className='fa fa-github' />
-              </span>
-              <span>Dashboard</span>
-            </Link>
-          </li>
-          <li>
-            <Link className='' to='/users'>
-              <span className='icon'>
-                <i className='fa fa-users' />
-              </span>
-              <span>Users</span>
-            </Link>
-          </li>
-          <li>
-            <a>
-              <span className='icon'>
-                <i className='fa fa-address-book' />
-              </span>
-              <span>Customers</span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span className='icon'>
-                <i className='fa fa-id-card-o' />
-              </span>
-              <span>Team Settings</span>
-            </a>
-          </li>
-          <li>
-            <a className='is-active'>
-              <span className='icon'>
-                <i className='fa fa-sitemap' />
-              </span>
-              <span>Manage Your Team</span>
-              <span className='icon is-pulled-right'>
-                <i className='fa fa-angle-right' />
-              </span>
-            </a>
-            <ul>
-              <li>
-                <a>
-                  <span className='icon'>
-                    <i className='fa fa-id-badge' />
-                  </span>
-                  <span>Plugins</span>
-                </a>
-              </li>
-              <li>
-                <a>
-                  <span className='icon'>
-                    <i className='fa fa-linode' />
-                  </span>
-                  <span>Add a member</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <a>
-              <span className='icon'>
-                <i className='fa fa-snowflake-o' />
-              </span>
-              <span>Invitations</span>
-            </a>
-          </li>
+          {this.getMenuItems().map(e => {
+            return <SidebarItem
+              title={e.title}
+              icon={e.icon}
+              to={e.to}
+              dropdown={e.dropdown}
+              onClick={this.handleActiveLink}
+              activeItem={this.state.active}
+              key={e.title.toLowerCase().replace(/\s/g, '')} />
+          })}
         </ul>
       </aside>
     </div>)
