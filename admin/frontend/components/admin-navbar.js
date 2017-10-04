@@ -15,23 +15,23 @@ class NavBar extends Component {
       redirect: false
     }
 
-    this.setWrapperRef = this.setWrapperRef.bind(this)           
+    this.setWrapperRef = this.setWrapperRef.bind(this)
     this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('mousedown', this.handleClickOutside)
   }
-  
-  setWrapperRef(node) {
+
+  setWrapperRef (node) {
     this.wrapperRef = node
   }
 
-  handleClickOutside(event) {
+  handleClickOutside (event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ 'profileDropdown': 'is-hidden', 'dropCaret': 'fa fa-caret-down' })
     }
@@ -68,11 +68,6 @@ class NavBar extends Component {
   }
 
   render () {
-    var navbarMenuClassName = 'navbar-menu'
-    if (this.state.mobileMenu === 'open') {
-      navbarMenuClassName = 'navbar-menu is-active'
-    }
-
     var navButtons
     let avatar
     let username
@@ -121,10 +116,8 @@ class NavBar extends Component {
               Bienvenido { username }
             </div>
             <div className='is-flex is-align-center'>
-              <img className='is-rounded' src={ avatar } width='40' height='45' alt='Avatar' />
+              <img className='is-rounded' src={avatar} width='40' height='45' alt='Avatar' />
             </div>
-
-            
             <div className='dropdown is-active is-right' ref={this.setWrapperRef}>
               <div className='dropdown-trigger is-flex'>
                 <a href='javascript:undefined' className='navbar-item' onClick={() => this.toggleBtnClass()}>

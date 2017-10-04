@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
 
@@ -12,26 +12,26 @@ class NavBar extends Component {
       mobileMenu: 'close',
       redirect: false,
       profileDropdown: 'is-hidden',
-      dropCaret: 'fa fa-caret-down',
+      dropCaret: 'fa fa-caret-down'
     }
 
-    this.setWrapperRef = this.setWrapperRef.bind(this);           
-    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this)
+    this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
-  componentDidMount() {
-    document.addEventListener('mousedown', this.handleClickOutside);
+  componentDidMount () {
+    document.addEventListener('mousedown', this.handleClickOutside)
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('mousedown', this.handleClickOutside);
+  componentWillUnmount () {
+    document.removeEventListener('mousedown', this.handleClickOutside)
   }
 
-  setWrapperRef(node) {
-    this.wrapperRef = node;
+  setWrapperRef (node) {
+    this.wrapperRef = node
   }
 
-  handleClickOutside(event) {
+  handleClickOutside (event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ 'profileDropdown': 'is-hidden', 'dropCaret': 'fa fa-caret-down' })
     }
@@ -88,7 +88,7 @@ class NavBar extends Component {
           Bienvenido { username }
         </div>
         <div className='is-flex is-align-center'>
-          <img className='is-rounded' src={ avatar } width='40' height='45' alt='Avatar' />
+          <img className='is-rounded' src={avatar} width='40' height='45' alt='Avatar' />
         </div>
         <div className='dropdown is-active is-right' ref={this.setWrapperRef}>
           <div className='dropdown-trigger is-flex'>
@@ -100,30 +100,29 @@ class NavBar extends Component {
           </div>
           <div className={this.state.profileDropdown}>
             <div className='dropdown-menu' id='dropdown-menu' role='menu'>
-                <div className='dropdown-content'>
-              <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/profile'>Profile</Link>
-              <a className='dropdown-item' onClick={() => this.handleLogout()}>
-                Logout
-              </a>
-            </div>
-
+              <div className='dropdown-content'>
+                <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/profile'>Profile</Link>
+                <a className='dropdown-item' onClick={() => this.handleLogout()}>
+                  Logout
+                </a>
+              </div>
             </div>
           </div>
         </div>
       </div>)
-
     } else {
       navButtons = (<div className='navbar-end'>
         <div className='navbar-item'>
           <div className='field is-grouped'>
-          <p className='control'>
-            <Link className='bd-tw-button button' to='/log-in'>Log in</Link>
-          </p>
-          <p className='control'>
-            <Link className='bd-tw-button button is-primary' to='/sign-up'>Sign up</Link>
-          </p>
+            <p className='control'>
+              <Link className='bd-tw-button button' to='/log-in'>Log in</Link>
+            </p>
+            <p className='control'>
+              <Link className='bd-tw-button button is-primary' to='/sign-up'>Sign up</Link>
+            </p>
+          </div>
         </div>
-      </div></div>)
+      </div>)
     }
 
     return (
