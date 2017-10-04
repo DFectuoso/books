@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
 
+import Image from '~base/components/image'
+import Link from '~base/router/link'
 import tree from '~core/tree'
 
 class NavBar extends Component {
@@ -15,23 +16,23 @@ class NavBar extends Component {
       redirect: false
     }
 
-    this.setWrapperRef = this.setWrapperRef.bind(this)           
+    this.setWrapperRef = this.setWrapperRef.bind(this)
     this.handleClickOutside = this.handleClickOutside.bind(this)
   }
 
-  componentDidMount() {
+  componentDidMount () {
     document.addEventListener('mousedown', this.handleClickOutside)
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('mousedown', this.handleClickOutside)
   }
-  
-  setWrapperRef(node) {
+
+  setWrapperRef (node) {
     this.wrapperRef = node
   }
 
-  handleClickOutside(event) {
+  handleClickOutside (event) {
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ 'profileDropdown': 'is-hidden', 'dropCaret': 'fa fa-caret-down' })
     }
@@ -68,43 +69,29 @@ class NavBar extends Component {
   }
 
   render () {
-    var navbarMenuClassName = 'navbar-menu'
-    if (this.state.mobileMenu === 'open') {
-      navbarMenuClassName = 'navbar-menu is-active'
-    }
-
     var navButtons
     let avatar
     let username
     if (this.props.loggedIn) {
-      avatar = 'http://1bigappstore.com/images/avt-default.jpg'
+      avatar = '/public/img/avt-default.jpg'
 
       if (tree.get('user')) {
         username = tree.get('user').screenName
       }
 
       navButtons = (<div className='dropdown-content'>
-        <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/admin/profile'>Profile</Link>
+        <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/profile'>Profile</Link>
         <a className='dropdown-item' onClick={() => this.handleLogout()}>
           Logout
         </a>
-      </div>)
-    } else {
-      navButtons = (<div className='field is-grouped'>
-        <p className='control'>
-          <Link className='bd-tw-button button' to='/log-in'>Log in</Link>
-        </p>
-        <p className='control'>
-          <Link className='bd-tw-button button is-primary' to='/sign-up'>Sign up</Link>
-        </p>
       </div>)
     }
 
     return (<nav className='c-topbar navbar c-fixed'>
       <div className='c-topbar__aside navbar-brand'>
-        <a href='#' className='navbar-item'>
+        <Link to='/' className='navbar-item'>
           <img className='is-flex' src='http://bulma.io/images/bulma-logo.png' />
-        </a>
+        </Link>
       </div>
       <div className='c-topbar__main'>
         <div className='navbar-menu'>
@@ -116,15 +103,12 @@ class NavBar extends Component {
             </div>
           </div>
           <div className='navbar-end'>
-
             <div className='navbar-item is-size-7 has-text-grey is-capitalized'>
               Bienvenido { username }
             </div>
             <div className='is-flex is-align-center'>
-              <img className='is-rounded' src={ avatar } width='40' height='45' alt='Avatar' />
+              <Image className='is-rounded' src={avatar} width='40' height='45' alt='Avatar' />
             </div>
-
-            
             <div className='dropdown is-active is-right' ref={this.setWrapperRef}>
               <div className='dropdown-trigger is-flex'>
                 <a href='javascript:undefined' className='navbar-item' onClick={() => this.toggleBtnClass()}>
@@ -137,7 +121,6 @@ class NavBar extends Component {
                 <div className='dropdown-menu' id='dropdown-menu' role='menu'>{ navButtons }</div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
