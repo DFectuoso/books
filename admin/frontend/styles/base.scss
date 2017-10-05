@@ -124,7 +124,7 @@ html, body {
 
 .searchbox {
   position: absolute;
-  top: 0px;
+  top: 20px;
   right: 0px;
   padding: 0px;
   background-color: #5d5d5d;
@@ -203,4 +203,15 @@ footer.footer {
 
 .is-bg-white {
   background-color: white;
+}
+
+.is-paddingless-top {
+  padding-top: 0px;
+}
+
+.is-padding-top-small {
+  padding-top: 0.5em;
+}
+.is-padding-bottom-small {
+  padding-bottom: 0.5em;
 }
