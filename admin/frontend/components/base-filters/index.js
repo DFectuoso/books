@@ -56,7 +56,7 @@ class BaseFilterPanel extends Component {
   }
 
   render () {
-    const {schema, uiSchema, onToggle, onFilter} = this.props
+    const { schema, uiSchema, onFilter } = this.props
 
     return <div className='card full-height is-shadowless'>
       <header className='card-header'>
@@ -66,7 +66,7 @@ class BaseFilterPanel extends Component {
         <a href='javascript:void(0)'
           className='card-header-icon'
           aria-label='more options'
-          onClick={() => onToggle()}>
+          onClick={() => this.props.onToggle()}>
 
           <span className='icon'>
             <FontAwesome name='times' />
