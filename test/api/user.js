@@ -21,7 +21,7 @@ describe('/user', () => {
   describe('[post] / Create user', () => {
     it('should return a error', async function () {
       await test()
-        .post('/api/user')
+        .post('/api/user/')
         .send()
         .set('Accept', 'application/json')
         .expect(422)
@@ -46,7 +46,7 @@ describe('/user', () => {
     })
   })
 
-  describe.only('[post] /me/update', () => {
+  describe('[post] /me/update', () => {
     it('should return a error', async function () {
       await test()
         .post('/api/user/me/update')
