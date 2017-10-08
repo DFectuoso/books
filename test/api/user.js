@@ -6,6 +6,7 @@ const http = require('http')
 const { clearDatabase, createUser } = require('../utils')
 const api = require('api/')
 const request = require('supertest')
+const {User} = require('models')
 
 function test () {
   return request(http.createServer(api.callback()))
@@ -55,8 +56,21 @@ describe('/user', () => {
         .expect(422)
     })
 
+    it('should return a 403 if no user data is send', async function () {
+      await test()
+        .post('/api/user/me/update')
+        .send({
+          email: 'app@user.com',
+          screenName: 'newNick'
+        })
+        .set('Accept', 'application/json')
+        .expect(403)
+    })
+
     it('should return a 200', async function () {
       const user = await createUser({ password })
+      const jwt = user.getJwt()
+
       const res = await test()
         .post('/api/user/me/update')
         .send({
@@ -64,10 +78,57 @@ describe('/user', () => {
           screenName: 'newNick',
           uuid: user.uuid
         })
+        .set('Authorization', `Bearer ${jwt}`)
         .set('Accept', 'application/json')
         .expect(200)
 
       expect(res.body.user.uuid).equal(user.uuid)
+    })
+  })
+
+  describe('[post] /me/update-password', () => {
+    it('should return a error', async function () {
+      await test()
+        .post('/api/user/me/update-password')
+        .send()
+        .set('Accept', 'application/json')
+        .expect(422)
+    })
+
+    it('should return a 403 if no user data is send', async function () {
+      const newPassword = '123'
+
+      await test()
+        .post('/api/user/me/update-password')
+        .send({
+          password: password,
+          newPassword: newPassword,
+          confirmPassword: newPassword
+        })
+        .set('Accept', 'application/json')
+        .expect(403)
+    })
+
+    it.only('should return a 200', async function () {
+      const user = await createUser({ password })
+      const jwt = user.getJwt()
+      const newPassword = '123'
+
+      const res = await test()
+        .post('/api/user/me/update-password')
+        .send({
+          password: password,
+          newPassword: newPassword,
+          confirmPassword: newPassword
+        })
+        .set('Authorization', `Bearer ${jwt}`)
+        .set('Accept', 'application/json')
+        .expect(200)
+
+      expect(res.body.user.uuid).equal(user.uuid)
+
+      const updatedUser = await User.findOne({uuid: user.uuid})
+      expect(await updatedUser.validatePassword(newPassword)).equal(true)
     })
   })
 

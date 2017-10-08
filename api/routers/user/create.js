@@ -1,5 +1,5 @@
 const Route = require('lib/router/route')
-const Joi = require('joi')
+const lov = require('lov')
 const jwt = require('lib/jwt')
 
 const {User} = require('models')
@@ -7,11 +7,11 @@ const {User} = require('models')
 module.exports = new Route({
   method: 'post',
   path: '/',
-  validator: Joi.object().keys({
-    email: Joi.string().email().required(),
-    password: Joi.string().required(),
-    screenName: Joi.string().required(),
-    displayName: Joi.string()
+  validator: lov.object().keys({
+    email: lov.string().email().required(),
+    password: lov.string().required(),
+    screenName: lov.string().required(),
+    displayName: lov.string()
   }),
   handler: async function (ctx) {
     const { screenName, displayName, email, password } = ctx.request.body
