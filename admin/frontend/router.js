@@ -16,7 +16,7 @@ const AppRouter = () => {
   return (<Router>
     <AdminLayout>
       <div className='c-flex-1 is-flex is-flex-column is-relative'>
-        <LoginRoute exact path='/' component={LogIn} />
+        <LoginRoute exact path='/log-in' component={LogIn} />
         <PrivateRoute exact path='/' component={Dashboard} />
         <PrivateRoute exact path='/users' component={Users} />
         <PrivateRoute exact path='/profile' component={Profile} />

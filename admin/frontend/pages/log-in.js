@@ -58,7 +58,7 @@ class LogIn extends Component {
       tree.set('loggedIn', true)
       tree.commit()
 
-      this.props.history.push(env.PREFIX + '/app', {})
+      this.props.history.push(env.PREFIX + '/', {})
     } else {
       this.setState({
         error: 'Invalid user',
