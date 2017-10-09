@@ -56,7 +56,7 @@ describe('/user', () => {
         .expect(422)
     })
 
-    it('should return a 403 if no user data is send', async function () {
+    it('should return a 403 if no user data is sent', async function () {
       await test()
         .post('/api/user/me/update')
         .send({
