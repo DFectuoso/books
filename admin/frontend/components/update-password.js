@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 
 import api from '~base/api'
-import env from '~base/env-variables'
 import tree from '~core/tree'
 
-import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/base-form'
+import {BaseForm, PasswordWidget} from '~components/base-form'
 
 const schema = {
   type: 'object',
@@ -33,7 +32,7 @@ class UpdatePasswordForm extends Component {
 
     this.state = {
       apiCallMessage: 'is-hidden',
-      apiCallErrorMessage:'is-hidden',
+      apiCallErrorMessage: 'is-hidden',
       formData: {
         password: '',
         newPassword: '',
@@ -50,9 +49,8 @@ class UpdatePasswordForm extends Component {
   }
 
   async submitHandler ({formData}) {
-    var data
     try {
-      data = await api.post('/user/me/update-password', formData)
+      await api.post('/user/me/update-password', formData)
     } catch (e) {
       return this.setState({
         error: e.message,
@@ -84,11 +82,11 @@ class UpdatePasswordForm extends Component {
           onError={(e) => { this.errorHandler(e) }}
           className='is-fullwidth'>
           <div className={this.state.apiCallMessage}>
-            <div className="message-body is-size-7 has-text-centered">Tus datos se han modificado correctamente</div>
+            <div className='message-body is-size-7 has-text-centered'>Tus datos se han modificado correctamente</div>
           </div>
 
           <div className={this.state.apiCallErrorMessage}>
-            <div className="message-body is-size-7 has-text-centered">{error}</div>
+            <div className='message-body is-size-7 has-text-centered'>{error}</div>
           </div>
 
           <div>

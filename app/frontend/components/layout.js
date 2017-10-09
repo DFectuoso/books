@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { root } from 'baobab-react/higher-order'
 
 import tree from '~core/tree'
@@ -53,9 +52,6 @@ class Layout extends Component {
     }
 
     var userData
-    /*if (this.state.user && this.state.user.screenName) {
-      userData = (<h1>Welcome {this.state.user.screenName}</h1>)
-    }*/
 
     return (<div>
       <NavBar />

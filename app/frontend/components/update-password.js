@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import tree from '~core/tree'
-import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/base-form'
+import {BaseForm, PasswordWidget} from '~components/base-form'
 
 const schema = {
   type: 'object',
