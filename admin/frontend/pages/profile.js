@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import UpdateProfileForm from '~components/update-profile'
-import UpdatePasswordForm from '~components/update-password'
+import UpdateProfileForm from '~base/components/update-profile'
+import UpdatePasswordForm from '~base/components/update-password'
 
 class Profile extends Component {
   render () {

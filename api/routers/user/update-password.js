@@ -14,7 +14,7 @@ module.exports = new Route({
     const user = ctx.state.user
 
     if (!user) {
-      return ctx.throw(403)
+      return ctx.throw(401, 'Invalid password')
     }
 
     const { password, newPassword, confirmPassword } = ctx.request.body

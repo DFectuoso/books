@@ -1,7 +1,7 @@
 import qs from 'qs'
 
+import envVars from '~base/env-variables'
 import request from './request'
-import envVars from './env-variables'
 import tree from './tree'
 
 export default {

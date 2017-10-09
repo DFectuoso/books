@@ -24,7 +24,11 @@ class LogIn extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      loading: false
+      loading: false,
+      formData: {
+        email: '',
+        password: ''
+      }
     }
   }
 
@@ -53,6 +57,7 @@ class LogIn extends Component {
 
   render () {
     let spinner
+
     if (this.state.loading) {
       spinner = <Loader />
     }
@@ -76,9 +81,7 @@ class LogIn extends Component {
                 uiSchema={uiSchema}
                 onSubmit={(e) => { this.submitHandler(e) }}
                 onError={(e) => { this.errorHandler(e) }}>
-
                 { spinner }
-
                 <div>
                   <button className='button is-primary is-fullwidth' type='submit'>Log in</button>
                 </div>
