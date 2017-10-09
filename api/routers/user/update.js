@@ -1,24 +1,23 @@
 const Route = require('lib/router/route')
-const Joi = require('joi')
-const {User} = require('models')
+const lov = require('lov')
 
 module.exports = new Route({
   method: 'post',
   path: '/me/update',
-  validator: Joi.object().keys({
-    email: Joi.string().email().required(),
-    screenName: Joi.string().required(),
-    uuid: Joi.string()
+  validator: lov.object().keys({
+    email: lov.string().email().required(),
+    screenName: lov.string().required(),
+    uuid: lov.string()
   }),
   handler: async function (ctx) {
-    const keys = Object.keys(ctx.request.body)
-    const {email, screenName, uuid} = ctx.request.body
+    const user = ctx.state.user
 
-    if (keys.length === 0) {
-      ctx.throw(400, 'User object required')
+    if (!user) {
+      return ctx.throw(403)
     }
 
-    const user = await User.update({email, screenName, uuid})
+    user.set(ctx.request.body)
+    await user.save()
 
     ctx.body = {
       user: user.format(),

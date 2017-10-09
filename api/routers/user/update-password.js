@@ -1,25 +1,34 @@
 const Route = require('lib/router/route')
-const Joi = require('joi')
-const {User} = require('models')
+const lov = require('lov')
 
 module.exports = new Route({
   method: 'post',
   path: '/me/update-password',
-  validator: Joi.object().keys({
-    password: Joi.string().required(),
-    newPassword: Joi.string().required(),
-    confirmPassword: Joi.string().required(),
-    uuid: Joi.string()
+  validator: lov.object().keys({
+    password: lov.string().required(),
+    newPassword: lov.string().required(),
+    confirmPassword: lov.string().required(),
+    uuid: lov.string()
   }),
   handler: async function (ctx) {
-    const keys = Object.keys(ctx.request.body)
-    const { newPassword, uuid } = ctx.request.body
+    const user = ctx.state.user
 
-    if (keys.length === 0) {
-      ctx.throw(400, 'Password object required')
+    if (!user) {
+      return ctx.throw(401, 'Invalid password')
     }
 
-    const user = await User.update({ newPassword, uuid })
+    const { password, newPassword, confirmPassword } = ctx.request.body
+
+    if (confirmPassword !== newPassword) {
+      ctx.throw(422, 'New passwords dont match')
+    }
+
+    if (await user.validatePassword(password)) {
+      user.password = newPassword
+      await user.save()
+    } else {
+      return ctx.throw(401, 'Invalid password')
+    }
 
     ctx.body = {
       user: user.format(),

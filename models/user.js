@@ -38,7 +38,9 @@ userSchema.pre('save', function (next) {
 })
 
 userSchema.pre('save', function (next) {
-  if (!this.password || !this.isModified('password')) return next()
+  if (!this.password || !this.isModified('password')) {
+    return next()
+  }
 
   try {
     const salt = bcrypt.genSaltSync(SALT_WORK_FACTOR)
@@ -90,6 +92,7 @@ userSchema.statics.auth = async function (email, password) {
       (err ? reject(err) : resolve(compared))
     )
   })
+
   assert(isValid, 401, 'Invalid email/password')
 
   return user
@@ -110,17 +113,18 @@ userSchema.statics.register = async function (options) {
   return createdUser
 }
 
-userSchema.statics.update = async function (options) {
-  const {uuid} = options
+userSchema.methods.validatePassword = async function (password) {
+  const isValid = await new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, (err, compared) =>
+      (err ? reject(err) : resolve(compared))
+    )
+  })
 
-  var user = await this.findOne({ uuid })
-  assert(user, 404, 'User not found')
+  return isValid
+}
 
-  // update in mongoose
-  user = user.set(options)
-  user.save()
+userSchema.methods.setPassword = async function (password) {
 
-  return user
 }
 
 userSchema.plugin(dataTables)

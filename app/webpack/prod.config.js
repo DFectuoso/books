@@ -45,6 +45,7 @@ module.exports = {
     }),
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
+      'PREFIX': JSON.stringify(''),
       'API_HOST': JSON.stringify(config.server.apiHost)
     }),
     new webpack.optimize.UglifyJsPlugin({
