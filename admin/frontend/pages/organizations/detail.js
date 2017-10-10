@@ -52,6 +52,21 @@ class OrganizationDetail extends Component {
         <div className='column is-paddingless'>
           <div className='section'>
             <div className='columns'>
+              <div className='column has-text-right'>
+                <div className='field is-grouped is-grouped-right'>
+                  <div className='control'>
+                    <button
+                      className='button is-danger'
+                      type='button'
+                      onClick={() => this.deleteOnClick()}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='columns'>
               <div className='column'>
                 <div className='card'>
                   <header className='card-header'>
@@ -71,15 +86,6 @@ class OrganizationDetail extends Component {
                           <div className='field is-grouped'>
                             <div className='control'>
                               <button className='button is-primary'>Save</button>
-                            </div>
-                            <div className='control'>
-                              <button
-                                className='button is-danger'
-                                type='button'
-                                onClick={() => this.deleteOnClick()}
-                              >
-                                Delete
-                              </button>
                             </div>
                           </div>
                         </OrganizationForm>
