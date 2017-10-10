@@ -11,6 +11,8 @@ import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
 import Users from './pages/users'
 import Profile from './pages/profile'
+import Organizations from './pages/organizations/list'
+import OrganizationDetail from './pages/organizations/detail'
 
 const AppRouter = () => {
   return (<Router>
@@ -20,6 +22,8 @@ const AppRouter = () => {
         <PrivateRoute exact path='/' component={Dashboard} />
         <PrivateRoute exact path='/users' component={Users} />
         <PrivateRoute exact path='/profile' component={Profile} />
+        <PrivateRoute exact path='/organizations' component={Organizations} />
+        <PrivateRoute exact path='/organizations/detail/:uuid' component={OrganizationDetail} />
       </div>
     </AdminLayout>
   </Router>)

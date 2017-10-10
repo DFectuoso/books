@@ -1,0 +1,122 @@
+import React, { Component } from 'react'
+import { branch } from 'baobab-react/higher-order'
+import PropTypes from 'baobab-react/prop-types'
+import Link from '~base/router/link'
+import moment from 'moment'
+
+import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
+import CreateCompany from './create'
+
+class Organizations extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      className: ''
+    }
+  }
+
+  componentWillMount () {
+    this.context.tree.set('organizations', {
+      page: 1,
+      totalItems: 0,
+      items: [],
+      pageLength: 10
+    })
+    this.context.tree.commit()
+  }
+
+  getColumns () {
+    return [
+      {
+        'title': 'Name',
+        'property': 'name',
+        'default': 'N/A',
+        formatter: (row) => {
+          return (
+            <Link to={'/organizations/detail/' + row.uuid}>
+              {row.name}
+            </Link>
+          )
+        }
+      },
+      {
+        'title': 'Created',
+        'property': 'dateCreated',
+        'default': 'N/A',
+        formatter: (row) => {
+          return (
+            moment.utc(row.dateCreated).local().format('DD/MM/YYYY hh:mm a')
+          )
+        }
+      },
+      {
+        'title': 'Actions',
+        formatter: (row) => {
+          return <Link className='button' to={'/organizations/detail/' + row.uuid}>
+            Detalle
+          </Link>
+        }
+      }
+    ]
+  }
+
+  showModal () {
+    this.setState({
+      className: ' is-active'
+    })
+  }
+
+  hideModal () {
+    this.setState({
+      className: ''
+    })
+  }
+
+  render () {
+    return (
+      <div className='columns c-flex-1 is-marginless'>
+        <div className='column is-paddingless'>
+          <div className='section'>
+            <div className='card'>
+              <header className='card-header'>
+                <p className='card-header-title'>
+                    Organizations
+                </p>
+                <div className='card-header-select'>
+                  <button className='button is-primary' onClick={() => this.showModal()}>
+                    New Organization
+                  </button>
+                  <CreateCompany
+                    className={this.state.className}
+                    hideModal={this.hideModal.bind(this)}
+                    branchName='organizations'
+                    baseUrl='/admin/organizations'
+                    url='/admin/organizations/create'
+                  />
+                </div>
+              </header>
+              <div className='card-content'>
+                <div className='columns'>
+                  <div className='column'>
+                    <BranchedPaginatedTable
+                      branchName='organizations'
+                      baseUrl='/admin/organizations'
+                      columns={this.getColumns()}
+                      // getData={this.getData.bind(this)}
+                       />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+Organizations.contextTypes = {
+  tree: PropTypes.baobab
+}
+
+export default branch({organizations: 'organizations'}, Organizations)

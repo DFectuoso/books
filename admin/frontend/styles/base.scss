@@ -215,3 +215,11 @@ footer.footer {
 .is-padding-bottom-small {
   padding-bottom: 0.5em;
 }
+
+.card-header-select {    
+  padding: .30em   
+}    
+   
+.card-header-select.select:not(.is-multiple)::after {    
+  margin-top: -.130em    
+}
