@@ -72,6 +72,13 @@ class Organizations extends Component {
     })
   }
 
+  finishUp (object) {
+    this.setState({
+      className: ''
+    })
+    this.props.history.push('/admin/organizations/detail/' + object.uuid)
+  }
+
   render () {
     return (
       <div className='columns c-flex-1 is-marginless'>
@@ -89,9 +96,10 @@ class Organizations extends Component {
                   <CreateCompany
                     className={this.state.className}
                     hideModal={this.hideModal.bind(this)}
+                    finishUp={this.finishUp.bind(this)}
                     branchName='organizations'
                     baseUrl='/admin/organizations'
-                    url='/admin/organizations/create'
+                    url='/admin/organizations'
                   />
                 </div>
               </header>

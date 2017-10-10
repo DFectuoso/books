@@ -49,7 +49,7 @@ class CreateOrganization extends Component {
         <CompanyForm
           baseUrl='/admin/organizations'
           url={this.props.url}
-          finishUp={this.hideModal}
+          finishUp={this.props.finishUp}
           initialState={initialState}
           load={this.load.bind(this)}
         >

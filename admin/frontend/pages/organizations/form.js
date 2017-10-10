@@ -57,8 +57,10 @@ class OrganizationForm extends Component {
     try {
       var data = await api.post(this.props.url, formData)
       await this.props.load()
-      if (this.props.finishUp) this.props.finishUp()
       this.clearState()
+      this.setState({...this.state, apiCallMessage: 'message is-success'})
+      if (this.props.finishUp) this.props.finishUp(data.data)
+      return
     } catch (e) {
       return this.setState({
         ...this.state,
@@ -66,8 +68,6 @@ class OrganizationForm extends Component {
         apiCallErrorMessage: 'message is-danger'
       })
     }
-
-    this.setState({...this.state, apiCallMessage: 'message is-success'})
   }
 
   render () {
