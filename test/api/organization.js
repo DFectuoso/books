@@ -135,25 +135,4 @@ describe('Organization CRUD', () => {
       expect(newOrg.isDeleted).equal(true)
     })
   })
-
-  // describe.skip('[get] /Create wrong request-log', () => {
-  //   it('should create the request-log with error', async function () {
-  //     await test()
-  //       .post('/api/wrong-url-123123')
-  //       .set('Accept', 'application/json')
-
-  //     // find request log w error
-  //     const errorLog = await RequestLog.findOne({})
-  //     expect(errorLog).to.have.property('error')
-  //   })
-  // })
-
-  // describe('[get] /request-logs Gets request logs', () => {
-  //   it('should return request logs', async function () {
-  //     await test()
-  //       .get('/api/request-logs')
-  //       .set('Accept', 'application/json')
-  //       .expect(200)
-  //   })
-  // })
 })
