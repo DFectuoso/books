@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "ajv": "5.0.0",
     "app-module-path": "^2.2.0",
@@ -53,6 +53,7 @@
     "sass-loader": "^6.0.6",
     "style-loader": "^0.18.2",
     "superagent": "^3.5.2",
+    "underscore.string": "^3.3.4",
     "traverse": "^0.6.6",
     "webpack": "^3.4.1",
     "webpack-dev-middleware": "^1.12.0",

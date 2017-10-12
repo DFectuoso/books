@@ -27,9 +27,9 @@ class Sidebar extends Component {
       to: '/users'
     },
     {
-      title: 'Customers',
+      title: 'Organizations',
       icon: 'address-book',
-      to: '/customers'
+      to: '/organizations'
     },
     {
       title: 'Team Settings',

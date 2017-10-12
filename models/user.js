@@ -18,6 +18,7 @@ const userSchema = new Schema({
   screenName: { type: String, unique: true, required: true },
   displayName: { type: String },
   isAdmin: {type: Boolean, default: false},
+  organizations: [{ type: Schema.Types.ObjectId, ref: 'Organization' }],
 
   resetPasswordToken: { type: String, default: v4 },
 

@@ -109,7 +109,7 @@ describe('/user', () => {
         .expect(403)
     })
 
-    it.only('should return a 200', async function () {
+    it('should return a 200', async function () {
       const user = await createUser({ password })
       const jwt = user.getJwt()
       const newPassword = '123'
