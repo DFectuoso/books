@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import UpdatePasswordForm from '~components/update-password'
-import UpdateProfileForm from '~components/update-profile'
+import UpdatePasswordForm from '~base/components/update-password'
+import UpdateProfileForm from '~base/components/update-profile'
 
 class Profile extends Component {
   render () {
@@ -8,7 +8,6 @@ class Profile extends Component {
       <section className='section'>
         <div className='columns is-multiline'>
           <div className='column is-one-third'>
-
             <div className='panel is-bg-white'>
               <p className='panel-heading'>
                 Perfil
@@ -17,7 +16,6 @@ class Profile extends Component {
                 <UpdateProfileForm />
               </div>
             </div>
-
             <div className='panel is-bg-white'>
               <p className='panel-heading'>
                 Perfil
@@ -27,7 +25,6 @@ class Profile extends Component {
               </div>
             </div>
           </div>
-
           <div className='column is-two-thirds'>
             <div className='card'>
               <header className='card-header'>

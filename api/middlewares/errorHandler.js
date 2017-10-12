@@ -8,7 +8,7 @@ module.exports = async function (ctx, next) {
     ctx.status = err.status || 500
 
     if (ctx.status === 500) {
-      console.error('=>', err)
+      console.error('=>', err.message, err)
     }
   }
 }
