@@ -80,7 +80,6 @@ class OrganizationForm extends Component {
 
     return (
       <div>
-        {error}
         <BaseForm schema={schema}
           uiSchema={uiSchema}
           formData={this.state.formData}
