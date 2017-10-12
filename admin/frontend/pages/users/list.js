@@ -63,7 +63,7 @@ class Users extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/user/detail/' + row.uuid} disabled>
+          return <Link className='button' to={'/users/detail/' + row.uuid}>
             Detalle
           </Link>
         }
@@ -125,7 +125,7 @@ class Users extends Component {
                   <div className='column'>
                     <BranchedPaginatedTable
                       branchName='users'
-                      baseUrl='/admin/user'
+                      baseUrl='/admin/users'
                       columns={this.getColumns()}
                       filters={filters}
                      />

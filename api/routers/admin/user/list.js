@@ -24,7 +24,7 @@ module.exports = new Route({
       sort: '-email'
     })
 
-    users.data = users.data.map((user) => { return user.toPublic() })
+    users.data = users.data.map((user) => { return user.toAdmin() })
 
     ctx.body = users
   }

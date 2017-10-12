@@ -81,6 +81,18 @@ userSchema.methods.toPublic = function () {
   }
 }
 
+userSchema.methods.toAdmin = function () {
+  return {
+    uuid: this.uuid,
+    screenName: this.screenName,
+    displayName: this.displayName,
+    name: this.name,
+    email: this.email,
+    isAdmin: this.isAdmin,
+    validEmail: this.validEmail
+  }
+}
+
 // Statics
 userSchema.statics.auth = async function (email, password) {
   const userEmail = email.toLowerCase()
