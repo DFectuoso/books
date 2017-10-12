@@ -8,7 +8,6 @@ const cors = require('koa-cors')
 
 const routers = require('./routers')
 const { errorHandler, getRequestData } = require('./middlewares')
-const { saveRequestLog } = require('lib/middlewares')
 
 const { env } = config
 
@@ -23,7 +22,6 @@ app.use(convert(bodyParser()))
 
 app.use(errorHandler)
 app.use(getRequestData)
-app.use(saveRequestLog)
 
 // api routers
 routers(app)

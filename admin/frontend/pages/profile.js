@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
-import request from '~base/request'
 
 import UpdateProfileForm from '~components/update-profile'
 import UpdatePasswordForm from '~components/update-password'
 
-
-
 class Profile extends Component {
-
-
   render () {
     return (<div className='section'>
-      <section className="is-fullwidth">
+      <section className='is-fullwidth'>
         <div className='columns is-multiline'>
           <div className='column is-one-third'>
 

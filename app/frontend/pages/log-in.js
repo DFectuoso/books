@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
 
 import tree from '~core/tree'
 import api from '~core/api'
@@ -50,13 +49,10 @@ class LogIn extends Component {
     tree.commit()
 
     this.props.history.push('/app', {})
-
   }
 
   render () {
-
-    let spinner 
-
+    let spinner
     if (this.state.loading) {
       spinner = <Loader />
     }

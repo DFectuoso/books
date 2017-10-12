@@ -112,11 +112,12 @@ class Users extends Component {
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
-          <div className='section'>
+          <div className='section is-paddingless-top'>
+            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Usuarios</h1>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>
-                  Users #{this.context.tree.get('users', 'totalItems') || ''}
+                  Total de usuarios: {this.context.tree.get('users', 'totalItems') || ''}
                 </p>
               </header>
               <div className='card-content'>

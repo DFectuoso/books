@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import request from '~core/request'
-import tree from '~core/tree'
 import { Redirect } from 'react-router-dom'
 import Loader from '~base/components/spinner'
 

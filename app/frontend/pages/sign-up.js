@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
-import Form from 'react-jsonschema-form'
 import api from '~core/api'
 import tree from '~core/tree'
-import { Redirect } from 'react-router-dom'
 
 import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/base-form'
 
