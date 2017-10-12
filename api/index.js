@@ -8,6 +8,7 @@ const cors = require('koa-cors')
 
 const routers = require('./routers')
 const { errorHandler, getRequestData } = require('./middlewares')
+const { sanitizeBody } = require('lib/middlewares')
 
 const { env } = config
 
@@ -18,8 +19,9 @@ if (env !== 'test') {
 }
 
 app.use(convert(cors()))
-app.use(convert(bodyParser()))
+app.use(convert(bodyParser({strict: false})))
 
+app.use(sanitizeBody)
 app.use(errorHandler)
 app.use(getRequestData)
 
