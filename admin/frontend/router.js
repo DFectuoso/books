@@ -20,7 +20,7 @@ const AppRouter = () => {
         <LoginRoute exact path='/log-in' component={LogIn} />
         <PrivateRoute exact path='/' component={Dashboard} />
         <PrivateRoute exact path='/users' component={Users} />
-        <PrivateRoute exact path='/users/detail/:uuid' component={UserDetail} />
+        <PrivateRoute exact path='/users/:uuid' component={UserDetail} />
         <PrivateRoute exact path='/profile' component={Profile} />
       </div>
     </AdminLayout>

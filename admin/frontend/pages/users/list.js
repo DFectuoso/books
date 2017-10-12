@@ -63,7 +63,7 @@ class Users extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/users/detail/' + row.uuid}>
+          return <Link className='button' to={'/users/' + row.uuid}>
             Detalle
           </Link>
         }
