@@ -33,7 +33,7 @@ class Organizations extends Component {
         'default': 'N/A',
         formatter: (row) => {
           return (
-            <Link to={'/organizations/detail/' + row.uuid}>
+            <Link to={'/organizations/' + row.uuid}>
               {row.name}
             </Link>
           )
@@ -52,7 +52,7 @@ class Organizations extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/organizations/detail/' + row.uuid}>
+          return <Link className='button' to={'/organizations/' + row.uuid}>
             Detalle
           </Link>
         }
@@ -76,7 +76,7 @@ class Organizations extends Component {
     this.setState({
       className: ''
     })
-    this.props.history.push('/admin/organizations/detail/' + object.uuid)
+    this.props.history.push('/admin/organizations/' + object.uuid)
   }
 
   render () {

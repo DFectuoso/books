@@ -2,11 +2,9 @@ import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
-// import moment from 'moment'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 
-// import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import OrganizationForm from './form'
 
 class OrganizationDetail extends Component {
