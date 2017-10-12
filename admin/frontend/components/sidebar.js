@@ -39,16 +39,16 @@ class Sidebar extends Component {
     {
       title: 'Manage Your Team',
       icon: 'users',
-      to: '/',
+      to: 'manage',
       dropdown: [{
         title: 'Plugins',
         icon: 'id-badge',
-        to: '/plugins'
+        to: '/manage/plugins'
       },
       {
         title: 'Add a member',
         icon: 'linode',
-        to: '/add'
+        to: '/manage/add'
       }]
     },
     {
