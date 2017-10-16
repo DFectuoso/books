@@ -172,8 +172,19 @@ a .navbar-item:hover {
   background-color: #f1f1f1;
 }
 
-.menu li ul {
-  margin: 0.75em 0px 0px 0.75em;
+.menu ul li > ul {
+  margin: 0px;
+  padding: 0px;
+  li {
+    background-color: #f7f7f7;
+    a {
+      padding-left: 1.8em;
+      &.is-active {
+        background: #f7f7f7;
+        color: $primary;
+      }
+    }
+  }
 }
 
 footer {
