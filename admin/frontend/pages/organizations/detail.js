@@ -5,6 +5,7 @@ import Link from '~base/router/link'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 
+import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import OrganizationForm from './form'
 
 class OrganizationDetail extends Component {
@@ -18,6 +19,13 @@ class OrganizationDetail extends Component {
   }
 
   componentWillMount () {
+    this.context.tree.set('organizations', {
+      page: 1,
+      totalItems: 0,
+      items: [],
+      pageLength: 10
+    })
+    this.context.tree.commit()
     this.load()
   }
 
@@ -30,6 +38,29 @@ class OrganizationDetail extends Component {
       loaded: true,
       organization: body.data
     })
+  }
+
+  getColumns () {
+    return [
+      {
+        'title': 'Screen name',
+        'property': 'screenName',
+        'default': 'N/A'
+      },
+      {
+        'title': 'Email',
+        'property': 'email',
+        'default': 'N/A'
+      },
+      {
+        'title': 'Actions',
+        formatter: (row) => {
+          return <Link className='button' to={'/users/' + row.uuid}>
+            Detalle
+          </Link>
+        }
+      }
+    ]
   }
 
   async deleteOnClick () {
@@ -101,7 +132,14 @@ class OrganizationDetail extends Component {
                   </header>
                   <div className='card-content'>
                     <div className='columns'>
-                      <div className='column' />
+                      <div className='column'>
+                        <BranchedPaginatedTable
+                          branchName='users'
+                          baseUrl='/admin/users'
+                          columns={this.getColumns()}
+                          filters={{organization: this.props.match.params.uuid}}
+                         />
+                      </div>
                     </div>
                   </div>
                 </div>
