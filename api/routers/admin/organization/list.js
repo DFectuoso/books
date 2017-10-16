@@ -1,5 +1,7 @@
+var ObjectId = require('mongodb').ObjectID
+
 const Route = require('lib/router/route')
-const {Organization} = require('models')
+const {Organization, User} = require('models')
 
 module.exports = new Route({
   method: 'get',
@@ -8,6 +10,13 @@ module.exports = new Route({
     var filters = {}
     for (var filter in ctx.request.query) {
       if (filter === 'limit' || filter === 'start') {
+        continue
+      }
+
+      if (filter === 'user') {
+        const user = await User.findOne({'uuid': ctx.request.query[filter]})
+
+        filters['users'] = { $nin: [ObjectId(user._id)] }
         continue
       }
 

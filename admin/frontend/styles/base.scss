@@ -223,3 +223,16 @@ footer.footer {
 .card-header-select.select:not(.is-multiple)::after {    
   margin-top: -.130em    
 }
+
+.multiselect-column {
+  height: 15em;
+  max-height: 70%;
+  overflow-y: auto;
+  border: 1px solid;
+  border-color: #dbdbdb;
+  border-radius: 3px;
+}
+
+.multiselect-icon {
+  padding-top: 7.8em;
+}
