@@ -5,9 +5,9 @@ import Link from '~base/router/link'
 import moment from 'moment'
 
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
-import CreateOrganization from './create'
+import CreateCompany from './create'
 
-class Organizations extends Component {
+class Roles extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -16,7 +16,7 @@ class Organizations extends Component {
   }
 
   componentWillMount () {
-    this.context.tree.set('organizations', {
+    this.context.tree.set('roles', {
       page: 1,
       totalItems: 0,
       items: [],
@@ -33,7 +33,7 @@ class Organizations extends Component {
         'default': 'N/A',
         formatter: (row) => {
           return (
-            <Link to={'/organizations/' + row.uuid}>
+            <Link to={'/roles/' + row.uuid}>
               {row.name}
             </Link>
           )
@@ -52,7 +52,7 @@ class Organizations extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/organizations/' + row.uuid}>
+          return <Link className='button' to={'/roles/' + row.uuid}>
             Detalle
           </Link>
         }
@@ -76,30 +76,31 @@ class Organizations extends Component {
     this.setState({
       className: ''
     })
-    this.props.history.push('/admin/organizations/' + object.uuid)
+    this.props.history.push('/admin/roles/' + object.uuid)
   }
 
   render () {
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
-          <div className='section'>
+          <div className='section is-paddingless-top'>
+            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Roles</h1>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>
-                    Organizations
+                    Roles
                 </p>
                 <div className='card-header-select'>
                   <button className='button is-primary' onClick={() => this.showModal()}>
-                    New Organization
+                    New Role
                   </button>
-                  <CreateOrganization
+                  <CreateCompany
                     className={this.state.className}
                     hideModal={this.hideModal.bind(this)}
                     finishUp={this.finishUp.bind(this)}
-                    branchName='organizations'
-                    baseUrl='/admin/organizations'
-                    url='/admin/organizations'
+                    branchName='roles'
+                    baseUrl='/admin/roles'
+                    url='/admin/roles'
                   />
                 </div>
               </header>
@@ -107,11 +108,10 @@ class Organizations extends Component {
                 <div className='columns'>
                   <div className='column'>
                     <BranchedPaginatedTable
-                      branchName='organizations'
-                      baseUrl='/admin/organizations'
+                      branchName='roles'
+                      baseUrl='/admin/roles'
                       columns={this.getColumns()}
-                      // getData={this.getData.bind(this)}
-                       />
+                    />
                   </div>
                 </div>
               </div>
@@ -123,8 +123,8 @@ class Organizations extends Component {
   }
 }
 
-Organizations.contextTypes = {
+Roles.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({organizations: 'organizations'}, Organizations)
+export default branch({roles: 'roles'}, Roles)

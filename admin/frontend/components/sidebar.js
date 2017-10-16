@@ -32,6 +32,11 @@ class Sidebar extends Component {
       to: '/organizations'
     },
     {
+      title: 'Roles',
+      icon: 'address-book',
+      to: '/roles'
+    },
+    {
       title: 'Team Settings',
       icon: 'id-card-o',
       to: '/team'
