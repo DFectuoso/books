@@ -19,7 +19,7 @@ module.exports = new Route({
       ctx.throw(400, "You can't have two roles with the same name")
     }
 
-    if (auxRole.isDeleted) {
+    if (auxRole && auxRole.isDeleted) {
       auxRole.isDeleted = false
       auxRole.save()
 
