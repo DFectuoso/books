@@ -19,6 +19,7 @@ const userSchema = new Schema({
   displayName: { type: String },
   isAdmin: {type: Boolean, default: false},
   organizations: [{ type: Schema.Types.ObjectId, ref: 'Organization' }],
+  groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
 
   resetPasswordToken: { type: String, default: v4 },
 
@@ -91,7 +92,8 @@ userSchema.methods.toAdmin = function () {
     email: this.email,
     isAdmin: this.isAdmin,
     validEmail: this.validEmail,
-    organizations: this.organizations
+    organizations: this.organizations,
+    groups: this.groups
   }
 }
 
