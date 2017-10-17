@@ -7,7 +7,7 @@ const moment = require('moment')
 const roleSchema = new Schema({
   name: { type: String },
   description: { type: String },
-  slug: { type: String },
+  slug: { type: String, unique: true },
   users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
 
   dateCreated: { type: Date, default: moment.utc },
