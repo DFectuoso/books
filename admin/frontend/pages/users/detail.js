@@ -6,6 +6,7 @@ import moment from 'moment'
 
 import Loader from '~base/components/spinner'
 import UserForm from './form'
+import Multiselect from '~base/components/base-multiselect'
 
 class UserDetail extends Component {
   constructor (props) {
@@ -14,20 +15,22 @@ class UserDetail extends Component {
       loaded: false,
       loading: true,
       user: {},
-      roles: []
+      roles: [],
+      orgs: []
     }
   }
 
   componentWillMount () {
     this.load()
     this.loadRoles()
+    this.loadOrgs()
   }
 
   async load () {
     var url = '/admin/users/' + this.props.match.params.uuid
     const body = await api.get(url)
 
-    this.setState({
+    await this.setState({
       loading: false,
       loaded: true,
       user: body.data
@@ -50,6 +53,23 @@ class UserDetail extends Component {
     })
   }
 
+  async loadOrgs () {
+    var url = '/admin/organizations/'
+    const body = await api.get(
+      url,
+      {
+        user: this.props.match.params.uuid,
+        start: 0,
+        limit: 0
+      }
+    )
+
+    this.setState({
+      ...this.state,
+      orgs: body.data
+    })
+  }
+
   getDateCreated () {
     if (this.state.user.dateCreated) {
       return moment.utc(
@@ -58,6 +78,30 @@ class UserDetail extends Component {
     }
 
     return 'N/A'
+  }
+
+  async availableRowOnClick (uuid) {
+    var url = '/admin/users/' + this.props.match.params.uuid + '/add/organization'
+    await api.post(url,
+      {
+        organization: uuid
+      }
+    )
+
+    this.load()
+    this.loadOrgs()
+  }
+
+  async assignedRowOnClick (uuid) {
+    var url = '/admin/users/' + this.props.match.params.uuid + '/remove/organization'
+    await api.post(url,
+      {
+        organization: uuid
+      }
+    )
+
+    this.load()
+    this.loadOrgs()
   }
 
   render () {
@@ -97,6 +141,24 @@ class UserDetail extends Component {
                         </UserForm>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className='column'>
+                <div className='card'>
+                  <header className='card-header'>
+                    <p className='card-header-title'>
+                      Organizations
+                    </p>
+                  </header>
+                  <div className='card-content'>
+                    <Multiselect
+                      assignedList={user.organizations}
+                      availableList={this.state.orgs}
+                      dataFormatter={(item) => { return item.name || 'N/A' }}
+                      availableClickHandler={this.availableRowOnClick.bind(this)}
+                      assignedClickHandler={this.assignedRowOnClick.bind(this)}
+                    />
                   </div>
                 </div>
               </div>

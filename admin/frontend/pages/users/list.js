@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
-import BaseFilterPanel from '~components/base-filters'
+import api from '~base/api'
 
+import BaseFilterPanel from '~base/components/base-filters'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import FontAwesome from 'react-fontawesome'
 
@@ -12,13 +13,15 @@ const schema = {
   required: [],
   properties: {
     screenName: {type: 'text', title: 'Por nombre'},
-    email: {type: 'text', title: 'Por email'}
+    email: {type: 'text', title: 'Por email'},
+    organization: {type: 'text', title: 'Por organización'}
   }
 }
 
 const uiSchema = {
   screenName: {'ui:widget': 'SearchFilter'},
-  email: {'ui:widget': 'SearchFilter'}
+  email: {'ui:widget': 'SearchFilter'},
+  organization: {'ui:widget': 'SelectSearchFilter'}
 }
 
 class Users extends Component {
@@ -41,6 +44,25 @@ class Users extends Component {
       pageLength: 10
     })
     this.context.tree.commit()
+    this.loadOrgs()
+  }
+
+  async loadOrgs () {
+    var url = '/admin/organizations/'
+    const body = await api.get(
+      url,
+      {
+        start: 0,
+        limit: 0
+      }
+    )
+
+    this.setState({
+      ...this.state,
+      orgs: body.data
+    })
+
+    schema.properties.organization['values'] = body.data
   }
 
   getColumns () {
@@ -91,19 +113,26 @@ class Users extends Component {
     let filterPanel
 
     if (isFilterOpen) {
-      filterPanel = (<div className='column is-narrow side-filters is-paddingless'>
-        <BaseFilterPanel
-          schema={schema}
-          uiSchema={uiSchema}
-          filters={filters}
-          onFilter={this.handleOnFilter}
-          onToggle={() => this.toggleFilterPanel(isFilterOpen)} />
-      </div>)
+      filterPanel = (
+        <div className='column is-narrow side-filters is-paddingless'>
+          <BaseFilterPanel
+            schema={schema}
+            uiSchema={uiSchema}
+            filters={filters}
+            onFilter={this.handleOnFilter}
+            onToggle={() => this.toggleFilterPanel(isFilterOpen)} />
+        </div>
+      )
     }
 
     if (!isFilterOpen) {
       filterPanel = (<div className='searchbox'>
-        <a href='javascript:void(0)' className='card-header-icon has-text-white' aria-label='more options' onClick={() => this.toggleFilterPanel(isFilterOpen)}>
+        <a
+          href='javascript:void(0)'
+          className='card-header-icon has-text-white'
+          aria-label='more options'
+          onClick={() => this.toggleFilterPanel(isFilterOpen)}
+        >
           <FontAwesome name='search' />
         </a>
       </div>)
@@ -113,11 +142,17 @@ class Users extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section is-paddingless-top'>
-            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Usuarios</h1>
+            <h1
+              className='is-size-3 is-padding-top-small is-padding-bottom-small'
+            >
+              Usuarios
+            </h1>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>
-                  Total de usuarios: {this.context.tree.get('users', 'totalItems') || ''}
+                  Total de usuarios: {
+                    this.context.tree.get('users', 'totalItems') || ''
+                  }
                 </p>
               </header>
               <div className='card-content'>

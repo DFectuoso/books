@@ -92,7 +92,8 @@ userSchema.methods.toAdmin = function () {
     email: this.email,
     isAdmin: this.isAdmin,
     validEmail: this.validEmail,
-    role: this.role
+    role: this.role,
+    organizations: this.organizations
   }
 }
 

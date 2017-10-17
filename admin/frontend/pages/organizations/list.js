@@ -83,7 +83,8 @@ class Organizations extends Component {
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
-          <div className='section'>
+          <div className='section is-paddingless-top'>
+            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Organizaciones</h1>
             <div className='card'>
               <header className='card-header'>
                 <p className='card-header-title'>
