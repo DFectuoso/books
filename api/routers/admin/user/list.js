@@ -1,5 +1,6 @@
+var ObjectId = require('mongodb').ObjectID
 const Route = require('lib/router/route')
-const {User} = require('models')
+const {User, Organization} = require('models')
 
 module.exports = new Route({
   method: 'get',
@@ -11,12 +12,25 @@ module.exports = new Route({
         continue
       }
 
+      if (filter === 'organization') {
+        const organization = await Organization.findOne(
+          {'uuid': ctx.request.query[filter]}
+        )
+
+        if (organization) {
+          filters['organizations'] = { $in: [ObjectId(organization._id)] }
+        }
+
+        continue
+      }
+
       if (!isNaN(parseInt(ctx.request.query[filter]))) {
         filters[filter] = parseInt(ctx.request.query[filter])
       } else {
         filters[filter] = ctx.request.query[filter]
       }
     }
+
     var users = await User.dataTables({
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,

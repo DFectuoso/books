@@ -90,7 +90,8 @@ userSchema.methods.toAdmin = function () {
     name: this.name,
     email: this.email,
     isAdmin: this.isAdmin,
-    validEmail: this.validEmail
+    validEmail: this.validEmail,
+    organizations: this.organizations
   }
 }
 
