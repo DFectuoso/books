@@ -17,8 +17,15 @@ module.exports = new Route({
     const role = await Role.findOne({'uuid': roleId})
     ctx.assert(role, 404, 'Role not found')
 
-    data.slug = slugify(data.name)
-    role.set(data)
+    if (!role.slug === 'default') {
+      data.slug = slugify(data.name)
+      role.set(data)
+    } else {
+      role.set({
+        description: data.description
+      })
+    }
+
     role.save()
 
     ctx.body = {

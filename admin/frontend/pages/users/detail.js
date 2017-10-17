@@ -4,13 +4,6 @@ import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 import moment from 'moment'
 
-import {
-  SimpleTable,
-  TableBody,
-  BodyRow,
-  TableData,
-  TableHeader
-} from '~base/components/base-table'
 import Loader from '~base/components/spinner'
 import UserForm from './form'
 

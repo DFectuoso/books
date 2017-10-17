@@ -78,6 +78,10 @@ class RoleForm extends Component {
       </div>
     }
 
+    if (this.state.formData.slug === 'default') {
+      uiSchema.name['ui:disabled'] = true
+    }
+
     return (
       <div>
         <BaseForm schema={schema}

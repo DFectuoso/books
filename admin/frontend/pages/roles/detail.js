@@ -7,6 +7,13 @@ import api from '~base/api'
 import Loader from '~base/components/spinner'
 import RoleForm from './form'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
+import {
+  SimpleTable,
+  TableBody,
+  BodyRow,
+  TableData,
+  TableHeader
+} from '~base/components/base-table'
 
 class RoleDetail extends Component {
   constructor (props) {
@@ -14,7 +21,7 @@ class RoleDetail extends Component {
     this.state = {
       loading: true,
       loaded: false,
-      organization: {}
+      role: {}
     }
   }
 
@@ -29,7 +36,7 @@ class RoleDetail extends Component {
     this.setState({
       loading: false,
       loaded: true,
-      organization: body.data
+      role: body.data
     })
   }
 
@@ -62,10 +69,76 @@ class RoleDetail extends Component {
     this.props.history.push('/admin/roles')
   }
 
-  render () {
-    const { organization } = this.state
+  getDeleteButton () {
+    if (this.state.role.slug !== 'default') {
+      return (
+        <div className='columns'>
+          <div className='column has-text-right'>
+            <div className='field is-grouped is-grouped-right'>
+              <div className='control'>
+                <button
+                  className='button is-danger'
+                  type='button'
+                  onClick={() => this.deleteOnClick()}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
 
-    if (!organization.uuid) {
+    return null
+  }
+
+  getRoleDetail () {
+    if (this.state.role.slug !== 'default') {
+      return (
+        <RoleForm
+          baseUrl='/admin/roles'
+          url={'/admin/roles/' + this.props.match.params.uuid}
+          initialState={this.state.role}
+          load={this.load.bind(this)}
+        >
+          <div className='field is-grouped'>
+            <div className='control'>
+              <button className='button is-primary'>Save</button>
+            </div>
+          </div>
+        </RoleForm>
+      )
+    }
+
+    return (
+      <SimpleTable>
+        <TableBody>
+          <BodyRow>
+            <TableHeader>
+              Name
+            </TableHeader>
+            <TableData>
+              {this.state.role.name || 'N/A'}
+            </TableData>
+          </BodyRow>
+          <BodyRow>
+            <TableHeader>
+              Description
+            </TableHeader>
+            <TableData>
+              {this.state.role.description}
+            </TableData>
+          </BodyRow>
+        </TableBody>
+      </SimpleTable>
+    )
+  }
+
+  render () {
+    const { role } = this.state
+
+    if (!role.uuid) {
       return <Loader />
     }
 
@@ -73,21 +146,7 @@ class RoleDetail extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='columns'>
-              <div className='column has-text-right'>
-                <div className='field is-grouped is-grouped-right'>
-                  <div className='control'>
-                    <button
-                      className='button is-danger'
-                      type='button'
-                      onClick={() => this.deleteOnClick()}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {this.getDeleteButton()}
             <div className='columns'>
               <div className='column'>
                 <div className='card'>
@@ -99,18 +158,7 @@ class RoleDetail extends Component {
                   <div className='card-content'>
                     <div className='columns'>
                       <div className='column'>
-                        <RoleForm
-                          baseUrl='/admin/roles'
-                          url={'/admin/roles/' + this.props.match.params.uuid}
-                          initialState={this.state.organization}
-                          load={this.load.bind(this)}
-                        >
-                          <div className='field is-grouped'>
-                            <div className='control'>
-                              <button className='button is-primary'>Save</button>
-                            </div>
-                          </div>
-                        </RoleForm>
+                        {this.getRoleDetail()}
                       </div>
                     </div>
                   </div>
