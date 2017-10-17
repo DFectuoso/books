@@ -34,7 +34,6 @@ module.exports = new Route({
     user.role = defaultRole
     user.save()
 
-    defaultRole.users.push(user)
     // await user.sendValidationEmail()
 
     ctx.body = {
