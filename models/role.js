@@ -8,6 +8,7 @@ const roleSchema = new Schema({
   name: { type: String },
   description: { type: String },
   slug: { type: String, unique: true },
+  isDefault: { type: Boolean, default: false },
 
   dateCreated: { type: Date, default: moment.utc },
   uuid: { type: String, default: v4 },
@@ -32,7 +33,8 @@ roleSchema.methods.format = function () {
     name: this.name,
     description: this.description,
     slug: this.slug,
-    dateCreated: this.dateCreated
+    dateCreated: this.dateCreated,
+    isDefault: this.isDefault
   }
 }
 

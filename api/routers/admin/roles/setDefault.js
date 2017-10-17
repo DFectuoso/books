@@ -1,25 +1,24 @@
 const Route = require('lib/router/route')
-const lov = require('lov')
-const slugify = require('underscore.string/slugify')
 
 const {Role} = require('models')
 
 module.exports = new Route({
   method: 'post',
-  path: '/:uuid',
-  validator: lov.object().keys({
-    name: lov.string().required()
-  }),
+  path: '/:uuid/setDefault',
   handler: async function (ctx) {
     var roleId = ctx.params.uuid
-    var data = ctx.request.body
 
     const role = await Role.findOne({'uuid': roleId})
     ctx.assert(role, 404, 'Role not found')
 
-    data.slug = slugify(data.name)
-    role.set(data)
+    const defaultRole = await Role.findOne({isDefault: true})
 
+    if (defaultRole) {
+      defaultRole.set({isDefault: false})
+      defaultRole.save()
+    }
+
+    role.set({isDefault: true})
     role.save()
 
     ctx.body = {

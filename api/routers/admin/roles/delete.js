@@ -11,8 +11,8 @@ module.exports = new Route({
     var role = await Role.findOne({'uuid': roleId}).populate('users')
     ctx.assert(role, 404, 'Role not found')
 
-    if (role.slug !== 'default') {
-      var defaultRole = await Role.findOne({'slug': 'default'})
+    if (!role.isDefault) {
+      var defaultRole = await Role.findOne({isDefault: true})
       var users = await User.find({role: role._id})
 
       for (var user of users) {
@@ -24,9 +24,9 @@ module.exports = new Route({
         isDeleted: true,
         users: []
       })
-    }
 
-    await role.save()
+      await role.save()
+    }
 
     ctx.body = {
       data: role.format()

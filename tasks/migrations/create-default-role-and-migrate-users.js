@@ -24,7 +24,8 @@ var migrateUsers = async function () {
       defaultRole = await Role.create({
         name: 'Default',
         slug: 'default',
-        description: 'Default role'
+        description: 'Default role',
+        isDefault: true
       })
     }
 

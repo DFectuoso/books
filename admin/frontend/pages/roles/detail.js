@@ -69,21 +69,25 @@ class RoleDetail extends Component {
     this.props.history.push('/admin/roles')
   }
 
+  async defaultOnClick () {
+    var url = '/admin/roles/' + this.props.match.params.uuid + '/setDefault'
+    await api.post(url)
+    this.load()
+  }
+
   getDeleteButton () {
-    if (this.state.role.slug !== 'default') {
+    if (!this.state.role.isDefault) {
       return (
-        <div className='columns'>
-          <div className='column has-text-right'>
-            <div className='field is-grouped is-grouped-right'>
-              <div className='control'>
-                <button
-                  className='button is-danger'
-                  type='button'
-                  onClick={() => this.deleteOnClick()}
+        <div className='column has-text-right'>
+          <div className='field is-grouped is-grouped-right'>
+            <div className='control'>
+              <button
+                className='button is-danger'
+                type='button'
+                onClick={() => this.deleteOnClick()}
                 >
                   Delete
                 </button>
-              </div>
             </div>
           </div>
         </div>
@@ -93,46 +97,27 @@ class RoleDetail extends Component {
     return null
   }
 
-  getRoleDetail () {
-    if (this.state.role.slug !== 'default') {
+  getDefaultButton () {
+    console.log(this.state.role)
+    if (!this.state.role.isDefault) {
       return (
-        <RoleForm
-          baseUrl='/admin/roles'
-          url={'/admin/roles/' + this.props.match.params.uuid}
-          initialState={this.state.role}
-          load={this.load.bind(this)}
-        >
-          <div className='field is-grouped'>
+        <div className='column'>
+          <div className='field is-grouped is-grouped-left'>
             <div className='control'>
-              <button className='button is-primary'>Save</button>
+              <button
+                className='button is-primary'
+                type='button'
+                onClick={() => this.defaultOnClick()}
+                >
+                  Set as default
+                </button>
             </div>
           </div>
-        </RoleForm>
+        </div>
       )
     }
 
-    return (
-      <SimpleTable>
-        <TableBody>
-          <BodyRow>
-            <TableHeader>
-              Name
-            </TableHeader>
-            <TableData>
-              {this.state.role.name || 'N/A'}
-            </TableData>
-          </BodyRow>
-          <BodyRow>
-            <TableHeader>
-              Description
-            </TableHeader>
-            <TableData>
-              {this.state.role.description}
-            </TableData>
-          </BodyRow>
-        </TableBody>
-      </SimpleTable>
-    )
+    return null
   }
 
   render () {
@@ -146,7 +131,10 @@ class RoleDetail extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            {this.getDeleteButton()}
+            <div className='columns'>
+              {this.getDefaultButton()}
+              {this.getDeleteButton()}
+            </div>
             <div className='columns'>
               <div className='column'>
                 <div className='card'>
@@ -158,7 +146,18 @@ class RoleDetail extends Component {
                   <div className='card-content'>
                     <div className='columns'>
                       <div className='column'>
-                        {this.getRoleDetail()}
+                        <RoleForm
+                          baseUrl='/admin/roles'
+                          url={'/admin/roles/' + this.props.match.params.uuid}
+                          initialState={this.state.role}
+                          load={this.load.bind(this)}
+                        >
+                          <div className='field is-grouped'>
+                            <div className='control'>
+                              <button className='button is-primary'>Save</button>
+                            </div>
+                          </div>
+                        </RoleForm>
                       </div>
                     </div>
                   </div>

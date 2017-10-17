@@ -54,6 +54,7 @@ class RoleForm extends Component {
   }
 
   async submitHandler ({formData}) {
+    formData.isDefault = undefined
     try {
       var data = await api.post(this.props.url, formData)
       await this.props.load()

@@ -22,12 +22,13 @@ module.exports = new Route({
       password
     })
 
-    let defaultRole = await Role.findOne({name: 'Default'})
+    let defaultRole = await Role.findOne({isDefault: true})
     if (!defaultRole) {
       defaultRole = await Role.create({
         name: 'Default',
         slug: 'default',
-        description: 'Default role'
+        description: 'Default role',
+        isDefault: true
       })
     }
 
