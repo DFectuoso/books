@@ -50,6 +50,17 @@ class Roles extends Component {
         }
       },
       {
+        'title': 'Default',
+        'property': 'isDefault',
+        formatter: (row) => {
+          if (row.isDefault) {
+            return (
+              'Yes'
+            )
+          }
+        }
+      },
+      {
         'title': 'Actions',
         formatter: (row) => {
           return <Link className='button' to={'/roles/' + row.uuid}>

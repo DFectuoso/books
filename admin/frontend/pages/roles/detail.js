@@ -98,7 +98,6 @@ class RoleDetail extends Component {
   }
 
   getDefaultButton () {
-    console.log(this.state.role)
     if (!this.state.role.isDefault) {
       return (
         <div className='column'>
