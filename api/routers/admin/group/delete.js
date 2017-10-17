@@ -14,7 +14,6 @@ module.exports = new Route({
     group.set({isDeleted: true})
 
     for (var user of group.users) {
-      console.log(user)
       var pos = user.groups.indexOf(group._id)
       user.groups.splice(pos, 1)
       user.save()
