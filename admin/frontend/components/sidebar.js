@@ -22,39 +22,31 @@ class Sidebar extends Component {
       to: '/'
     },
     {
-      title: 'Users',
+      title: 'Manage Your Team',
       icon: 'users',
-      to: '/users'
-    },
-    {
-      title: 'Organizations',
-      icon: 'address-book',
-      to: '/organizations'
-    },
-    {
-      title: 'Roles',
-      icon: 'address-book',
-      to: '/roles'
+      to: '',
+      dropdown: [
+        {
+          title: 'Roles',
+          icon: 'address-book',
+          to: '/roles'
+        },
+        {
+          title: 'Organizations',
+          icon: 'address-book',
+          to: '/organizations'
+        },
+        {
+          title: 'Users',
+          icon: 'user',
+          to: '/users'
+        }
+      ]
     },
     {
       title: 'Team Settings',
       icon: 'id-card-o',
       to: '/team'
-    },
-    {
-      title: 'Manage Your Team',
-      icon: 'users',
-      to: 'manage',
-      dropdown: [{
-        title: 'Plugins',
-        icon: 'id-badge',
-        to: '/manage/plugins'
-      },
-      {
-        title: 'Add a member',
-        icon: 'linode',
-        to: '/manage/add'
-      }]
     },
     {
       title: 'Invitations',
