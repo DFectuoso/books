@@ -16,7 +16,8 @@ class UserDetail extends Component {
       loading: true,
       user: {},
       roles: [],
-      orgs: []
+      orgs: [],
+      groups: []
     }
   }
 
@@ -24,6 +25,7 @@ class UserDetail extends Component {
     this.load()
     this.loadRoles()
     this.loadOrgs()
+    this.loadGroups()
   }
 
   async load () {
@@ -70,6 +72,23 @@ class UserDetail extends Component {
     })
   }
 
+  async loadGroups () {
+    var url = '/admin/groups/'
+    const body = await api.get(
+      url,
+      {
+        user: this.props.match.params.uuid,
+        start: 0,
+        limit: 0
+      }
+    )
+
+    this.setState({
+      ...this.state,
+      groups: body.data
+    })
+  }
+
   getDateCreated () {
     if (this.state.user.dateCreated) {
       return moment.utc(
@@ -80,7 +99,7 @@ class UserDetail extends Component {
     return 'N/A'
   }
 
-  async availableRowOnClick (uuid) {
+  async availableOrgOnClick (uuid) {
     var url = '/admin/users/' + this.props.match.params.uuid + '/add/organization'
     await api.post(url,
       {
@@ -92,7 +111,7 @@ class UserDetail extends Component {
     this.loadOrgs()
   }
 
-  async assignedRowOnClick (uuid) {
+  async assignedOrgOnClick (uuid) {
     var url = '/admin/users/' + this.props.match.params.uuid + '/remove/organization'
     await api.post(url,
       {
@@ -102,6 +121,30 @@ class UserDetail extends Component {
 
     this.load()
     this.loadOrgs()
+  }
+
+  async availableGroupOnClick (uuid) {
+    var url = '/admin/users/' + this.props.match.params.uuid + '/add/group'
+    await api.post(url,
+      {
+        group: uuid
+      }
+    )
+
+    this.load()
+    this.loadGroups()
+  }
+
+  async assignedGroupOnClick (uuid) {
+    var url = '/admin/users/' + this.props.match.params.uuid + '/remove/group'
+    await api.post(url,
+      {
+        group: uuid
+      }
+    )
+
+    this.load()
+    this.loadGroups()
   }
 
   render () {
@@ -115,8 +158,8 @@ class UserDetail extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='columns'>
-              <div className='column'>
+            <div className='columns is-multiline'>
+              <div className='column is-half'>
                 <div className='card'>
                   <header className='card-header'>
                     <p className='card-header-title'>
@@ -144,7 +187,7 @@ class UserDetail extends Component {
                   </div>
                 </div>
               </div>
-              <div className='column'>
+              <div className='column is-half'>
                 <div className='card'>
                   <header className='card-header'>
                     <p className='card-header-title'>
@@ -156,8 +199,26 @@ class UserDetail extends Component {
                       assignedList={user.organizations}
                       availableList={this.state.orgs}
                       dataFormatter={(item) => { return item.name || 'N/A' }}
-                      availableClickHandler={this.availableRowOnClick.bind(this)}
-                      assignedClickHandler={this.assignedRowOnClick.bind(this)}
+                      availableClickHandler={this.availableOrgOnClick.bind(this)}
+                      assignedClickHandler={this.assignedOrgOnClick.bind(this)}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className='column is-offset-half is-half'>
+                <div className='card'>
+                  <header className='card-header'>
+                    <p className='card-header-title'>
+                      Groups
+                    </p>
+                  </header>
+                  <div className='card-content'>
+                    <Multiselect
+                      assignedList={user.groups}
+                      availableList={this.state.groups}
+                      dataFormatter={(item) => { return item.name || 'N/A' }}
+                      availableClickHandler={this.availableGroupOnClick.bind(this)}
+                      assignedClickHandler={this.assignedGroupOnClick.bind(this)}
                     />
                   </div>
                 </div>

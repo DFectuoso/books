@@ -16,6 +16,8 @@ import Organizations from './pages/organizations/list'
 import OrganizationDetail from './pages/organizations/detail'
 import Roles from './pages/roles/list'
 import RoleDetail from './pages/roles/detail'
+import Groups from './pages/groups/list'
+import GroupDetail from './pages/groups/detail'
 
 const AppRouter = () => {
   return (<Router>
@@ -30,6 +32,8 @@ const AppRouter = () => {
         <PrivateRoute exact path='/organizations/:uuid' component={OrganizationDetail} />
         <PrivateRoute exact path='/roles' component={Roles} />
         <PrivateRoute exact path='/roles/:uuid' component={RoleDetail} />
+        <PrivateRoute exact path='/groups' component={Groups} />
+        <PrivateRoute exact path='/groups/:uuid' component={GroupDetail} />
       </div>
     </AdminLayout>
   </Router>)

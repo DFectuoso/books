@@ -37,6 +37,11 @@ class Sidebar extends Component {
           to: '/organizations'
         },
         {
+          title: 'Groups',
+          icon: 'users',
+          to: '/groups'
+        },
+        {
           title: 'Users',
           icon: 'user',
           to: '/users'
