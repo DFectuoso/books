@@ -3,15 +3,9 @@ import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 import moment from 'moment'
-import Loader from '~base/components/spinner'
 
-import {
-  SimpleTable,
-  TableBody,
-  BodyRow,
-  TableData,
-  TableHeader
-} from '~base/components/base-table'
+import Loader from '~base/components/spinner'
+import UserForm from './form'
 import Multiselect from '~base/components/base-multiselect'
 
 class UserDetail extends Component {
@@ -21,6 +15,7 @@ class UserDetail extends Component {
       loaded: false,
       loading: true,
       user: {},
+      roles: [],
       orgs: [],
       groups: []
     }
@@ -28,6 +23,7 @@ class UserDetail extends Component {
 
   componentWillMount () {
     this.load()
+    this.loadRoles()
     this.loadOrgs()
     this.loadGroups()
   }
@@ -40,6 +36,22 @@ class UserDetail extends Component {
       loading: false,
       loaded: true,
       user: body.data
+    })
+  }
+
+  async loadRoles () {
+    var url = '/admin/roles/'
+    const body = await api.get(
+      url,
+      {
+        start: 0,
+        limit: 0
+      }
+    )
+
+    this.setState({
+      ...this.state,
+      roles: body.data
     })
   }
 
@@ -155,50 +167,23 @@ class UserDetail extends Component {
                     </p>
                   </header>
                   <div className='card-content'>
-                    <SimpleTable>
-                      <TableBody>
-                        <BodyRow>
-                          <TableHeader>
-                            Name
-                          </TableHeader>
-                          <TableData>
-                            {user.name || 'N/A'}
-                          </TableData>
-                        </BodyRow>
-                        <BodyRow>
-                          <TableHeader>
-                            Email
-                          </TableHeader>
-                          <TableData>
-                            {user.email}
-                          </TableData>
-                        </BodyRow>
-                        <BodyRow>
-                          <TableHeader>
-                            Screen name
-                          </TableHeader>
-                          <TableData>
-                            {user.screenName}
-                          </TableData>
-                        </BodyRow>
-                        <BodyRow>
-                          <TableHeader>
-                            Display name
-                          </TableHeader>
-                          <TableData>
-                            {user.displayName}
-                          </TableData>
-                        </BodyRow>
-                        <BodyRow>
-                          <TableHeader>
-                            Is admin?
-                          </TableHeader>
-                          <TableData>
-                            {user.isAdmin ? 'Yes' : 'No'}
-                          </TableData>
-                        </BodyRow>
-                      </TableBody>
-                    </SimpleTable>
+                    <div className='columns'>
+                      <div className='column'>
+                        <UserForm
+                          baseUrl='/admin/users'
+                          url={'/admin/users/' + this.props.match.params.uuid}
+                          initialState={this.state.user}
+                          load={this.load.bind(this)}
+                          roles={this.state.roles || []}
+                        >
+                          <div className='field is-grouped'>
+                            <div className='control'>
+                              <button className='button is-primary'>Save</button>
+                            </div>
+                          </div>
+                        </UserForm>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

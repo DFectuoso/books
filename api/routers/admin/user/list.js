@@ -1,6 +1,6 @@
 var ObjectId = require('mongodb').ObjectID
 const Route = require('lib/router/route')
-const {User, Organization, Group} = require('models')
+const {User, Organization, Role, Group} = require('models')
 
 module.exports = new Route({
   method: 'get',
@@ -9,6 +9,18 @@ module.exports = new Route({
     var filters = {}
     for (var filter in ctx.request.query) {
       if (filter === 'limit' || filter === 'start') {
+        continue
+      }
+
+      if (filter === 'role') {
+        const role = await Role.findOne(
+          {'uuid': ctx.request.query[filter]}
+        )
+
+        if (role) {
+          filters['role'] = ObjectId(role._id)
+        }
+
         continue
       }
 

@@ -2,7 +2,7 @@ const Route = require('lib/router/route')
 const lov = require('lov')
 const jwt = require('lib/jwt')
 
-const {User} = require('models')
+const {User, Role} = require('models')
 
 module.exports = new Route({
   method: 'post',
@@ -21,6 +21,19 @@ module.exports = new Route({
       email,
       password
     })
+
+    let defaultRole = await Role.findOne({isDefault: true})
+    if (!defaultRole) {
+      defaultRole = await Role.create({
+        name: 'Default',
+        slug: 'default',
+        description: 'Default role',
+        isDefault: true
+      })
+    }
+
+    user.role = defaultRole
+    user.save()
 
     // await user.sendValidationEmail()
 

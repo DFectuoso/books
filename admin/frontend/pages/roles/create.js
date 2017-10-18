@@ -4,14 +4,14 @@ import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 
 import BaseModal from '~base/components/base-modal'
-import OrganizationForm from './form'
+import RoleForm from './form'
 
 var initialState = {
   name: '',
   description: ''
 }
 
-class CreateOrganization extends Component {
+class CreateRole extends Component {
   constructor (props) {
     super(props)
     this.hideModal = this.props.hideModal.bind(this)
@@ -23,7 +23,7 @@ class CreateOrganization extends Component {
 
   async load () {
     const body = await api.get(
-      '/admin/organizations',
+      '/admin/roles',
       {
         start: 0,
         limit: this.cursor.get('pageLength') || 10
@@ -42,12 +42,12 @@ class CreateOrganization extends Component {
   render () {
     return (
       <BaseModal
-        title='Create Organization'
+        title='Create Role'
         className={this.props.className}
         hideModal={this.hideModal}
       >
-        <OrganizationForm
-          baseUrl='/admin/organizations'
+        <RoleForm
+          baseUrl='/admin/roles'
           url={this.props.url}
           finishUp={this.props.finishUp}
           initialState={initialState}
@@ -61,20 +61,20 @@ class CreateOrganization extends Component {
               <button className='button' onClick={this.hideModal}>Cancel</button>
             </div>
           </div>
-        </OrganizationForm>
+        </RoleForm>
       </BaseModal>
     )
   }
 }
 
-CreateOrganization.contextTypes = {
+CreateRole.contextTypes = {
   tree: PropTypes.baobab
 }
 
-const BranchedCreateOrganization = branch((props, context) => {
+const BranchedCreateRole = branch((props, context) => {
   return {
     data: props.branchName
   }
-}, CreateOrganization)
+}, CreateRole)
 
-export default BranchedCreateOrganization
+export default BranchedCreateRole
