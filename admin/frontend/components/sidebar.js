@@ -24,27 +24,27 @@ class Sidebar extends Component {
     {
       title: 'Manage Your Team',
       icon: 'users',
-      to: '',
+      to: '/manage',
       dropdown: [
         {
           title: 'Roles',
           icon: 'address-book',
-          to: '/roles'
+          to: '/manage/roles'
         },
         {
           title: 'Organizations',
           icon: 'address-book',
-          to: '/organizations'
+          to: '/manage/organizations'
         },
         {
           title: 'Groups',
           icon: 'users',
-          to: '/groups'
+          to: '/manage/groups'
         },
         {
           title: 'Users',
           icon: 'user',
-          to: '/users'
+          to: '/manage/users'
         }
       ]
     },
