@@ -23,13 +23,18 @@ class Sidebar extends Component {
     },
     {
       title: 'Users',
-      icon: 'users',
+      icon: 'user',
       to: '/users'
     },
     {
       title: 'Organizations',
       icon: 'address-book',
       to: '/organizations'
+    },
+    {
+      title: 'Groups',
+      icon: 'users',
+      to: '/groups'
     },
     {
       title: 'Team Settings',

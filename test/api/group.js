@@ -6,31 +6,31 @@ const http = require('http')
 const { clearDatabase } = require('../utils')
 const api = require('api/')
 const request = require('supertest')
-const {Organization} = require('models')
+const {Group, User} = require('models')
 
 function test () {
   return request(http.createServer(api.callback()))
 }
 
-describe('Organization CRUD', () => {
-  var orgUuid = ''
+describe('Group CRUD', () => {
+  var groupUuid = ''
   var userUuid = ''
 
   before(async function () {
     await clearDatabase()
   })
 
-  describe('[post] /Create an organization', () => {
+  describe('[post] /Create an group', () => {
     it('should return a 422 if no data is provided', async function () {
       await test()
-        .post('/api/admin/organizations')
+        .post('/api/admin/groups')
         .set('Accept', 'application/json')
         .expect(422)
     })
 
     it('should return a 422 if no name is provided', async function () {
       await test()
-        .post('/api/admin/organizations')
+        .post('/api/admin/groups')
         .send({
           description: 'Una descripción'
         })
@@ -38,34 +38,34 @@ describe('Organization CRUD', () => {
         .expect(422)
     })
 
-    it('should return a 200 and the org created', async function () {
+    it('should return a 200 and the group created', async function () {
       const res = await test()
-        .post('/api/admin/organizations')
+        .post('/api/admin/groups')
         .send({
-          name: 'Una org',
+          name: 'Un group',
           description: 'Una descripción'
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      orgUuid = res.body.data.uuid
-      const newOrg = await Organization.findOne({'uuid': orgUuid})
-      expect(newOrg.name).equal('Una org')
-      expect(newOrg.description).equal('Una descripción')
+      groupUuid = res.body.data.uuid
+      const newGroup = await Group.findOne({'uuid': groupUuid})
+      expect(newGroup.name).equal('Un group')
+      expect(newGroup.description).equal('Una descripción')
     })
   })
 
-  describe('[post] /Update an organization', () => {
+  describe('[post] /Update an group', () => {
     it('should return a 422 if no data is provided', async function () {
       await test()
-        .post('/api/admin/organizations/' + orgUuid)
+        .post('/api/admin/groups/' + groupUuid)
         .set('Accept', 'application/json')
         .expect(422)
     })
 
     it('should return a 422 if no name is provided', async function () {
       await test()
-        .post('/api/admin/organizations/' + orgUuid)
+        .post('/api/admin/groups/' + groupUuid)
         .send({
           description: 'Una descripción'
         })
@@ -73,53 +73,53 @@ describe('Organization CRUD', () => {
         .expect(422)
     })
 
-    it("should return a 404 if the org isn't found", async function () {
+    it("should return a 404 if the group isn't found", async function () {
       await test()
-        .post('/api/admin/organizations/blaaaaaa')
+        .post('/api/admin/groups/blaaaaaa')
         .send({
-          name: 'Una org',
+          name: 'Un group',
           description: 'Otra descripción'
         })
         .set('Accept', 'application/json')
         .expect(404)
     })
 
-    it('should return a 200 and the org updated', async function () {
+    it('should return a 200 and the group updated', async function () {
       await test()
-        .post('/api/admin/organizations/' + orgUuid)
+        .post('/api/admin/groups/' + groupUuid)
         .send({
-          name: 'Una org',
+          name: 'Un group',
           description: 'Otra descripción'
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newOrg = await Organization.findOne({'uuid': orgUuid})
-      expect(newOrg.name).equal('Una org')
-      expect(newOrg.description).equal('Otra descripción')
+      const newGroup = await Group.findOne({'uuid': groupUuid})
+      expect(newGroup.name).equal('Un group')
+      expect(newGroup.description).equal('Otra descripción')
     })
   })
 
-  describe('[get] An organization', () => {
-    it("should return a 404 if the org isn't found", async function () {
+  describe('[get] A group', () => {
+    it("should return a 404 if the group isn't found", async function () {
       await test()
-        .get('/api/admin/organizations/blaaaaaa')
+        .get('/api/admin/groups/blaaaaaa')
         .set('Accept', 'application/json')
         .expect(404)
     })
 
-    it('should return a 200 and the org requested', async function () {
+    it('should return a 200 and the group requested', async function () {
       const res = await test()
-        .get('/api/admin/organizations/' + orgUuid)
+        .get('/api/admin/groups/' + groupUuid)
         .set('Accept', 'application/json')
         .expect(200)
 
-      expect(res.body.data.name).equal('Una org')
+      expect(res.body.data.name).equal('Un group')
       expect(res.body.data.description).equal('Otra descripción')
     })
   })
 
-  describe('[post] Add user to an organization', () => {
+  describe('[post] Add user to a group', () => {
     before(async function () {
       const email = 'app@user.com'
       const res = await test()
@@ -138,16 +138,16 @@ describe('Organization CRUD', () => {
 
     it('should return a 404', async function () {
       await test()
-        .get('/api/admin/users/' + userUuid + '/add/organization')
+        .get('/api/admin/users/' + userUuid + '/add/group')
         .set('Accept', 'application/json')
         .expect(404)
     })
 
-    it("should return a 404 if the organization isn't found", async function () {
+    it("should return a 404 if the group isn't found", async function () {
       await test()
-        .post('/api/admin/users/' + userUuid + '/add/organization')
+        .post('/api/admin/users/' + userUuid + '/add/group')
         .send({
-          organization: 'blaaaa'
+          group: 'blaaaa'
         })
         .set('Accept', 'application/json')
         .expect(404)
@@ -155,9 +155,9 @@ describe('Organization CRUD', () => {
 
     it("should return a 404 if the user isn't found", async function () {
       await test()
-        .post('/api/admin/users/blaaa/add/organization')
+        .post('/api/admin/users/blaaa/add/group')
         .send({
-          organization: 'blaaaa'
+          group: 'blaaaa'
         })
         .set('Accept', 'application/json')
         .expect(404)
@@ -165,32 +165,32 @@ describe('Organization CRUD', () => {
 
     it('should return a 200', async function () {
       const res = await test()
-        .post('/api/admin/users/' + userUuid + '/add/organization')
+        .post('/api/admin/users/' + userUuid + '/add/group')
         .send({
-          organization: orgUuid
+          group: groupUuid
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newOrg = await Organization.findOne({'uuid': orgUuid}).populate('users')
-      expect(res.body.data.organizations[0]._id).equal('' + newOrg._id)
-      expect(newOrg.users[0].uuid).equal(userUuid)
+      const newGroup = await Group.findOne({'uuid': groupUuid}).populate('users')
+      expect(res.body.data.groups[0]._id).equal('' + newGroup._id)
+      expect(newGroup.users[0].uuid).equal(userUuid)
     })
   })
 
-  describe('[post] Remove user from a organization', () => {
+  describe('[post] Remove user from a group', () => {
     it('should return a 404', async function () {
       await test()
-        .get('/api/admin/users/' + userUuid + '/remove/organization')
+        .get('/api/admin/users/' + userUuid + '/remove/group')
         .set('Accept', 'application/json')
         .expect(404)
     })
 
-    it("should return a 404 if the organization isn't found", async function () {
+    it("should return a 404 if the group isn't found", async function () {
       await test()
-        .post('/api/admin/users/' + userUuid + '/remove/organization')
+        .post('/api/admin/users/' + userUuid + '/remove/group')
         .send({
-          organization: 'blaaaa'
+          group: 'blaaaa'
         })
         .set('Accept', 'application/json')
         .expect(404)
@@ -198,9 +198,9 @@ describe('Organization CRUD', () => {
 
     it("should return a 404 if the user isn't found", async function () {
       await test()
-        .post('/api/admin/users/blaaa/remove/organization')
+        .post('/api/admin/users/blaaa/remove/group')
         .send({
-          organization: 'blaaaa'
+          group: 'blaaaa'
         })
         .set('Accept', 'application/json')
         .expect(404)
@@ -208,35 +208,48 @@ describe('Organization CRUD', () => {
 
     it('should return a 200', async function () {
       const res = await test()
-        .post('/api/admin/users/' + userUuid + '/remove/organization')
+        .post('/api/admin/users/' + userUuid + '/remove/group')
         .send({
-          organization: orgUuid
+          group: groupUuid
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      expect(res.body.data.organizations.length).equal(0)
-      const newOrg = await Organization.findOne({'uuid': orgUuid})
-      expect(newOrg.users.length).equal(0)
+      expect(res.body.data.groups.length).equal(0)
+      const newGroup = await Group.findOne({'uuid': groupUuid})
+      expect(newGroup.users.length).equal(0)
     })
   })
 
-  describe('[delete] An organization', () => {
-    it("should return a 404 if the org isn't found", async function () {
+  describe('[delete] A group', () => {
+    before(async function () {
       await test()
-        .delete('/api/admin/organizations/blaaaaaa')
+        .post('/api/admin/users/' + userUuid + '/add/group')
+        .send({
+          group: groupUuid
+        })
+        .set('Accept', 'application/json')
+        .expect(200)
+    })
+
+    it("should return a 404 if the group isn't found", async function () {
+      await test()
+        .delete('/api/admin/groups/blaaaaaa')
         .set('Accept', 'application/json')
         .expect(404)
     })
 
     it('should return a 200 and set isDeleted to true', async function () {
       await test()
-        .delete('/api/admin/organizations/' + orgUuid)
+        .delete('/api/admin/groups/' + groupUuid)
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newOrg = await Organization.findOne({'uuid': orgUuid})
-      expect(newOrg.isDeleted).equal(true)
+      const newGroup = await Group.findOne({'uuid': groupUuid})
+      const newUser = await User.findOne({'uuid': userUuid})
+      expect(newGroup.isDeleted).equal(true)
+      expect(newGroup.users.length).equal(0)
+      expect(newUser.groups.length).equal(0)
     })
   })
 })
