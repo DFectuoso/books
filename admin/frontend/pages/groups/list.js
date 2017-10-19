@@ -76,7 +76,7 @@ class Groups extends Component {
     this.setState({
       className: ''
     })
-    this.props.history.push('/admin/groups/' + object.uuid)
+    this.props.history.push('/admin/manage/groups/' + object.uuid)
   }
 
   render () {

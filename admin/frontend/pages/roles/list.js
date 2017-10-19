@@ -87,7 +87,7 @@ class Roles extends Component {
     this.setState({
       className: ''
     })
-    this.props.history.push('/admin/roles/' + object.uuid)
+    this.props.history.push('/admin/manage/roles/' + object.uuid)
   }
 
   render () {

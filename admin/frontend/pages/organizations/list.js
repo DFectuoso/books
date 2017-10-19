@@ -76,7 +76,7 @@ class Organizations extends Component {
     this.setState({
       className: ''
     })
-    this.props.history.push('/admin/organizations/' + object.uuid)
+    this.props.history.push('/admin/manage/organizations/' + object.uuid)
   }
 
   render () {
