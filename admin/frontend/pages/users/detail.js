@@ -158,8 +158,8 @@ class UserDetail extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='columns is-multiline'>
-              <div className='column is-half'>
+            <div className='columns is-mobile'>
+              <div className='column'>
                 <div className='card'>
                   <header className='card-header'>
                     <p className='card-header-title'>
@@ -187,39 +187,45 @@ class UserDetail extends Component {
                   </div>
                 </div>
               </div>
-              <div className='column is-half'>
-                <div className='card'>
-                  <header className='card-header'>
-                    <p className='card-header-title'>
-                      Organizations
-                    </p>
-                  </header>
-                  <div className='card-content'>
-                    <Multiselect
-                      assignedList={user.organizations}
-                      availableList={this.state.orgs}
-                      dataFormatter={(item) => { return item.name || 'N/A' }}
-                      availableClickHandler={this.availableOrgOnClick.bind(this)}
-                      assignedClickHandler={this.assignedOrgOnClick.bind(this)}
-                    />
+              <div className='column'>
+                <div className='columns'>
+                  <div className='column'>
+                    <div className='card'>
+                      <header className='card-header'>
+                        <p className='card-header-title'>
+                          Organizations
+                        </p>
+                      </header>
+                      <div className='card-content'>
+                        <Multiselect
+                          assignedList={user.organizations}
+                          availableList={this.state.orgs}
+                          dataFormatter={(item) => { return item.name || 'N/A' }}
+                          availableClickHandler={this.availableOrgOnClick.bind(this)}
+                          assignedClickHandler={this.assignedOrgOnClick.bind(this)}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className='column is-offset-half is-half'>
-                <div className='card'>
-                  <header className='card-header'>
-                    <p className='card-header-title'>
-                      Groups
-                    </p>
-                  </header>
-                  <div className='card-content'>
-                    <Multiselect
-                      assignedList={user.groups}
-                      availableList={this.state.groups}
-                      dataFormatter={(item) => { return item.name || 'N/A' }}
-                      availableClickHandler={this.availableGroupOnClick.bind(this)}
-                      assignedClickHandler={this.assignedGroupOnClick.bind(this)}
-                    />
+                <div className='columns'>
+                  <div className='column'>
+                    <div className='card'>
+                      <header className='card-header'>
+                        <p className='card-header-title'>
+                          Groups
+                        </p>
+                      </header>
+                      <div className='card-content'>
+                        <Multiselect
+                          assignedList={user.groups}
+                          availableList={this.state.groups}
+                          dataFormatter={(item) => { return item.name || 'N/A' }}
+                          availableClickHandler={this.availableGroupOnClick.bind(this)}
+                          assignedClickHandler={this.assignedGroupOnClick.bind(this)}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

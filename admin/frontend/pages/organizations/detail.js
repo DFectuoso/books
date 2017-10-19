@@ -55,7 +55,7 @@ class OrganizationDetail extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/users/' + row.uuid}>
+          return <Link className='button' to={'/manage/users/' + row.uuid}>
             Detalle
           </Link>
         }
