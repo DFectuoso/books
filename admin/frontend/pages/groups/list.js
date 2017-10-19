@@ -33,7 +33,7 @@ class Groups extends Component {
         'default': 'N/A',
         formatter: (row) => {
           return (
-            <Link to={'/groups/' + row.uuid}>
+            <Link to={'/manage/groups/' + row.uuid}>
               {row.name}
             </Link>
           )
@@ -52,7 +52,7 @@ class Groups extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/groups/' + row.uuid}>
+          return <Link className='button' to={'/manage/groups/' + row.uuid}>
             Detalle
           </Link>
         }

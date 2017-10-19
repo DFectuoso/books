@@ -33,7 +33,7 @@ class Roles extends Component {
         'default': 'N/A',
         formatter: (row) => {
           return (
-            <Link to={'/roles/' + row.uuid}>
+            <Link to={'/manage/roles/' + row.uuid}>
               {row.name}
             </Link>
           )
@@ -63,7 +63,7 @@ class Roles extends Component {
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/roles/' + row.uuid}>
+          return <Link className='button' to={'/manage/roles/' + row.uuid}>
             Detalle
           </Link>
         }
