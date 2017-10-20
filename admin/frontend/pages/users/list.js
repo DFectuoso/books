@@ -7,6 +7,7 @@ import api from '~base/api'
 import BaseFilterPanel from '~base/components/base-filters'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import FontAwesome from 'react-fontawesome'
+import CreateUser from './create'
 
 const schema = {
   type: 'object',
@@ -108,6 +109,22 @@ class Users extends Component {
     this.setState({filters})
   }
 
+  showModal () {
+    this.setState({
+      className: ' is-active'
+    })
+  }
+
+  hideModal () {
+    this.setState({
+      className: ''
+    })
+  }
+
+  finishUp (object) {
+    debugger
+  }
+
   render () {
     let { isFilterOpen, filters } = this.state
     let filterPanel
@@ -154,6 +171,19 @@ class Users extends Component {
                     this.context.tree.get('users', 'totalItems') || ''
                   }
                 </p>
+                <div className='card-header-select'>
+                  <button className='button is-primary' onClick={() => this.showModal()}>
+                    New User
+                  </button>
+                  <CreateUser
+                    className={this.state.className}
+                    hideModal={this.hideModal.bind(this)}
+                    finishUp={this.finishUp.bind(this)}
+                    branchName='organizations'
+                    baseUrl='/admin/organizations'
+                    url='/admin/organizations'
+                  />
+                </div>
               </header>
               <div className='card-content'>
                 <div className='columns'>

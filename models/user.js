@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const dataTables = require('mongoose-datatables')
 const assert = require('http-assert')
 
+const Mailer = require('lib/mailer')
 const jwt = require('lib/jwt')
 
 const SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR)
@@ -23,6 +24,7 @@ const userSchema = new Schema({
   groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
 
   resetPasswordToken: { type: String, default: v4 },
+  inviteToken: { type: String, default: v4 },
 
   uuid: { type: String, default: v4 },
   apiToken: { type: String, default: v4 }
@@ -143,6 +145,25 @@ userSchema.methods.validatePassword = async function (password) {
 
 userSchema.methods.setPassword = async function (password) {
 
+}
+
+userSchema.methods.sendInviteEmail = async function () {
+  this.inviteToken = v4()
+  await this.save()
+
+  const email = new Mailer('invite')
+
+  const data = this.toJSON()
+  data.url = process.env.APP_HOST + '/emails/invite?token=' + this.inviteToken + '&email=' + encodeURIComponent(this.email)
+
+  await email.format(data)
+  await email.send({
+    recipient: {
+      email: this.email,
+      name: this.displayName
+    },
+    title: 'Invite to Marble Seeds'
+  })
 }
 
 userSchema.plugin(dataTables)
