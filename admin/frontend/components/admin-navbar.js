@@ -113,7 +113,7 @@ class NavBar extends Component {
       <div className='c-topbar__main navbar-menu'>
         <div className='is-flex c-flex-1'>
           <div className='navbar-end'>
-            <div className='navbar-item is-size-7 has-text-grey is-capitalized'>
+            <div className='navbar-item is-size-7 is-capitalized'>
               Bienvenido { username }
             </div>
             <div className='is-flex is-align-center'>

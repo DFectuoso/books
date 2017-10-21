@@ -47,16 +47,6 @@ class Sidebar extends Component {
           to: '/manage/users'
         }
       ]
-    },
-    {
-      title: 'Team Settings',
-      icon: 'id-card-o',
-      to: '/team'
-    },
-    {
-      title: 'Invitations',
-      icon: 'snowflake-o',
-      to: '/invitations'
     }]
   }
 

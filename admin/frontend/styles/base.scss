@@ -37,18 +37,18 @@ html, body {
 }
 
 .navbar-menu {
-    background-color: whitesmoke;
+  background-color: black;
 }
 
 .c-topbar {
-    position: relative;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background-color: #fff;
-    & > .navbar-brand {
-      min-width: 250px
-    }
+  position: relative;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background-color: #fff;
+  & > .navbar-brand {
+    min-width: 250px
+  }
 }
 
 .c-topbar__aside {
@@ -69,12 +69,12 @@ html, body {
 }
 
 .burger-desktop {
-    cursor: pointer;
-    display: block;
-    height: 3.25rem;
-    position: relative;
-    width: 3.25rem;
-    margin-left: auto;
+  cursor: pointer;
+  display: block;
+  height: 3.25rem;
+  position: relative;
+  width: 3.25rem;
+  margin-left: auto;
 }
 
 .main {
@@ -102,23 +102,23 @@ html, body {
 }
 
 .c-stack {
-    box-sizing: border-box;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: start;
-    -ms-flex-align: start;
-    align-items: flex-start;
-    -webkit-box-pack: start;
-    -ms-flex-pack: start;
-    justify-content: flex-start;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -ms-flex-flow: row wrap;
-    flex-flow: row wrap;
-    max-width: 100%;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .is-relative {
@@ -162,7 +162,17 @@ html, body {
   align-items: center;
 }
 
-a .navbar-item:hover {
+.navbar-item {
+  color: white;
+
+  .img-logo {
+    max-height: none;
+    margin: 0 auto;
+  }
+}
+
+a.navbar-item:hover {
+  color: #00d1b2;
   background-color: transparent;
 }
 
@@ -176,6 +186,10 @@ a .navbar-item:hover {
 .menu {
   width: 250px;
   height: 100%;
+
+  .icon {
+    margin-right: 5px;
+  }  
 }
 
 .menu li {
@@ -185,6 +199,7 @@ a .navbar-item:hover {
 .menu ul li > ul {
   margin: 0px;
   padding: 0px;
+
   li {
     background-color: #f7f7f7;
     a {
@@ -264,10 +279,4 @@ select.placeholder {
 
 .is-pulled-right-by-margin {
   margin-left: auto
-}
-
-.navbar-item {
-  .img-logo {
-    max-height: none;
-  }
 }
