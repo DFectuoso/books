@@ -60,12 +60,19 @@ class Sidebar extends Component {
     }]
   }
 
-  handleActiveLink (item) {
+  handleActiveLink (item, title) {
+    if (title && this.props.handleBurguer) {
+      this.props.handleBurguer()
+    }
     this.setState({active: item})
   }
 
   render () {
-    return (<div className='offcanvas column is-narrow is-paddingless'>
+    let divClass = 'offcanvas column is-narrow is-narrow-mobile is-narrow-tablet is-narrow-desktop  is-paddingless'
+    if (!this.props.burgerState) {
+      divClass = divClass + ' is-hidden-touch'
+    }
+    return (<div className={divClass}>
       <aside className='menu'>
         <ul className='menu-list'>
           {this.getMenuItems().map(e => {

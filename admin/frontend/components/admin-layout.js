@@ -14,8 +14,18 @@ class AdminLayout extends Component {
     super(props)
     this.state = {
       user: {},
-      loaded: false
+      loaded: false,
+      burger: false,
+      menuCollapse: false
     }
+  }
+
+  toggleBurguer () {
+    this.setState({burger: !this.state.burger})
+  }
+
+  toggleSidebarCollapse () {
+    this.setState({menuCollapse: !this.state.menuCollapse})
   }
 
   async componentWillMount () {
@@ -56,9 +66,9 @@ class AdminLayout extends Component {
 
     if (!isEmpty(this.state.user)) {
       return (<div className='is-wrapper'>
-        <AdminNavBar />
+        <AdminNavBar burgerState={this.state.burger} handleBurguer={() => this.toggleBurguer()} />
         <div className='is-flex c-flex-1 columns is-gapless'>
-          <Sidebar />
+          <Sidebar burgerState={this.state.burger} handleBurguer={() => this.toggleBurguer()} />
           <div className='column is-flex is-flex-column main-wrapper'>
             <section className='c-flex-1 is-flex'>
               {this.props.children}

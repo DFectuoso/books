@@ -46,6 +46,9 @@ html, body {
     top: 0;
     left: 0;
     background-color: #fff;
+    & > .navbar-brand {
+      min-width: 250px
+    }
 }
 
 .c-topbar__aside {
@@ -163,6 +166,13 @@ a .navbar-item:hover {
   background-color: transparent;
 }
 
+.navbar-logo {
+  a.navbar-item:hover {
+    background-color: black
+  }
+  background-color: black
+}
+
 .menu {
   width: 250px;
   height: 100%;
@@ -250,4 +260,14 @@ footer.footer {
 
 select.placeholder {  
   color: gray;
+}
+
+.is-pulled-right-by-margin {
+  margin-left: auto
+}
+
+.navbar-item {
+  .img-logo {
+    max-height: none;
+  }
 }

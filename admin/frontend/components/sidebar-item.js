@@ -17,7 +17,7 @@ class SidebarItem extends Component {
 
   getItemLink (to, icon, title, onClick) {
     let activeLink = to.replace(/\//g, '')
-    return (<Link className={this.props.activeItem === activeLink ? 'is-active' : ''} to={to} onClick={() => onClick(activeLink)}>
+    return (<Link className={this.props.activeItem === activeLink ? 'is-active' : ''} to={to} onClick={() => onClick(activeLink, title)}>
       <span className='icon'>
         <FontAwesome name={icon} />
       </span>

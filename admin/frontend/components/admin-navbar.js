@@ -13,7 +13,8 @@ class NavBar extends Component {
       mobileMenu: 'close',
       profileDropdown: 'is-hidden',
       dropCaret: 'fa fa-caret-down',
-      redirect: false
+      redirect: false,
+      burger: false
     }
 
     this.setWrapperRef = this.setWrapperRef.bind(this)
@@ -60,12 +61,8 @@ class NavBar extends Component {
     }
   }
 
-  handleNavbarBurgerClick () {
-    if (this.state.mobileMenu === 'open') {
-      this.setState({mobileMenu: 'close'})
-    } else {
-      this.setState({mobileMenu: 'open'})
-    }
+  addActiveClassName (className, state) {
+    return state ? className + ' is-active' : className
   }
 
   render () {
@@ -87,21 +84,34 @@ class NavBar extends Component {
       </div>)
     }
 
-    return (<nav className='c-topbar navbar c-fixed'>
-      <div className='c-topbar__aside navbar-brand'>
-        <Link to='/' className='navbar-item'>
-          <img className='is-flex' src='http://bulma.io/images/bulma-logo.png' />
+    return (<nav className='c-topbar navbar c-fixed' ref={this.setWrapperRef}>
+      <div className='navbar-brand navbar-logo'>
+        <Link to='/' className='navbar-item c-flex-1 is-dark is-paddingless'>
+          <Image className='img-logo' src='/public/img/logoCommonSenseHlargo.svg' width='200' height='100' alt='Logotipo' />
         </Link>
-      </div>
-      <div className='c-topbar__main'>
-        <div className='navbar-menu'>
-          <div className='navbar-start'>
-            <div className='navbar-burger burger-desktop'>
-              <span />
-              <span />
-              <span />
-            </div>
+        <div className='is-flex is-align-center navbar-item is-hidden-desktop is-pulled-right-by-margin'>
+          <Image className='is-rounded' src={avatar} width='30' height='35' alt='Avatar' />
+        </div>
+        <div className='dropdown is-active is-right is-hidden-desktop is-pulled-right'>
+          <div className='dropdown-trigger is-flex'>
+            <a href='javascript:undefined' className='navbar-item' onClick={() => this.toggleBtnClass()}>
+              <span className='icon has-text-white'>
+                <i className={this.state.dropCaret} />
+              </span>
+            </a>
           </div>
+          <div className={this.state.profileDropdown}>
+            <div className='dropdown-menu' id='dropdown-menu' role='menu'>{ navButtons }</div>
+          </div>
+        </div>
+        <div className={this.addActiveClassName('navbar-burger burger is-marginless has-text-white', this.props.burgerState)} onClick={() => this.props.handleBurguer()}>
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+      <div className='c-topbar__main navbar-menu'>
+        <div className='is-flex c-flex-1'>
           <div className='navbar-end'>
             <div className='navbar-item is-size-7 has-text-grey is-capitalized'>
               Bienvenido { username }
@@ -109,7 +119,7 @@ class NavBar extends Component {
             <div className='is-flex is-align-center'>
               <Image className='is-rounded' src={avatar} width='40' height='45' alt='Avatar' />
             </div>
-            <div className='dropdown is-active is-right' ref={this.setWrapperRef}>
+            <div className='dropdown is-active is-right'>
               <div className='dropdown-trigger is-flex'>
                 <a href='javascript:undefined' className='navbar-item' onClick={() => this.toggleBtnClass()}>
                   <span className='icon'>
