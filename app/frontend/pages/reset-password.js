@@ -1,49 +1,33 @@
 import React, { Component } from 'react'
 
-import tree from '~core/tree'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 
-import {BaseForm, PasswordWidget} from '~base/components/base-form'
-
-function validate (formData, errors) {
-  if (formData.password_1 !== formData.password_2) {
-    errors.password_2.addError("Passwords don't match!")
-  }
-  return errors
-}
+import {BaseForm, EmailWidget} from '~components/base-form'
 
 const schema = {
   type: 'object',
-  required: ['password_1', 'password_2'],
+  required: ['email'],
   properties: {
-    password_1: {type: 'string', title: 'Password'},
-    password_2: {type: 'string', title: 'Confirm Password'}
+    email: {type: 'string', title: 'Email'}
   }
 }
 
 const uiSchema = {
-  password_2: {'ui:widget': PasswordWidget},
-  password_1: {'ui:widget': PasswordWidget}
+  email: {'ui:widget': EmailWidget}
 }
 
-class EmailResetLanding extends Component {
+class ResetPassword extends Component {
   constructor (props) {
     super(props)
     this.state = {
       loading: false,
       formData: {
-        password_1: '',
-        password_2: ''
+        email: ''
       },
       apiCallMessage: 'is-hidden',
-      apiCallErrorMessage: 'is-hidden',
-      user: {}
+      apiCallErrorMessage: 'is-hidden'
     }
-  }
-
-  componentWillMount () {
-    this.verifyToken()
   }
 
   errorHandler (e) {}
@@ -67,61 +51,26 @@ class EmailResetLanding extends Component {
     })
   }
 
-  async verifyToken () {
-    var search = decodeURIComponent(this.props.location.search)
-      .substring(1)
-      .split('&')
-    let tokenData = {}
-
-    for (var param of search) {
-      var spl = param.split('=')
-      tokenData[spl[0]] = spl[1]
-    }
-
-    var data
-    try {
-      data = await api.post('/emails/reset/validate', tokenData)
-    } catch (e) {
-      return this.setState({
-        ...this.state,
-        error: e.message,
-        bigError: true,
-        apiCallErrorMessage: 'message is-danger'
-      })
-    }
-
-    this.setState({
-      ...this.state,
-      // apiCallMessage: 'is-hidden',
-      user: data.user
-    })
-  }
-
   async submitHandler ({formData}) {
-    formData.uuid = this.state.user.uuid
-    formData.password = formData.password_1
+    this.setState({loading: true})
 
-    var data
     try {
-      data = await api.post('/user/set-password', formData)
+      await api.post('/user/reset-password', formData)
     } catch (e) {
       return this.setState({
         error: e.message,
-        apiCallErrorMessage: 'message is-danger'
+        apiCallErrorMessage: 'message is-danger',
+        loading: false
       })
     }
 
-    window.localStorage.setItem('jwt', data.jwt)
-    tree.set('jwt', data.jwt)
-    tree.set('user', data.user)
-    tree.set('loggedIn', true)
-    tree.commit()
+    this.setState({loading: false})
 
     this.setState({...this.state, apiCallMessage: 'message is-success'})
 
     setTimeout(() => {
-      this.props.history.push('/app', {})
-    }, 4000)
+      this.props.history.push('/log-in', {})
+    }, 5000)
   }
 
   render () {
@@ -139,11 +88,11 @@ class EmailResetLanding extends Component {
     }
 
     return (
-      <div className='Reset single-form'>
+      <div className='LogIn single-form'>
         <div className='card'>
           <header className='card-header'>
             <p className='card-header-title'>
-              Hi {this.state.user.screenName}!
+              Reset Password
             </p>
             <a className='card-header-icon'>
               <span className='icon'>
@@ -154,7 +103,8 @@ class EmailResetLanding extends Component {
           <div className='card-content'>
             <div className='content'>
               <p>
-                Don't worry, you can create a new password here.
+                We need your email address for us to send you a password reset
+                link:
               </p>
               <BaseForm schema={schema}
                 uiSchema={uiSchema}
@@ -162,14 +112,11 @@ class EmailResetLanding extends Component {
                 onSubmit={(e) => { this.submitHandler(e) }}
                 onError={(e) => { this.errorHandler(e) }}
                 onChange={(e) => { this.changeHandler(e) }}
-                validate={validate}
-                showErrorList={false}
               >
                 { spinner }
                 <div className={this.state.apiCallMessage}>
                   <div className='message-body is-size-7 has-text-centered'>
-                    Password created successfully! We'll redirect you to the
-                    app in a sec.
+                    Reset password email sent!
                   </div>
                 </div>
                 <div className={this.state.apiCallErrorMessage}>
@@ -180,10 +127,10 @@ class EmailResetLanding extends Component {
                 <button
                   className='button is-primary is-fullwidth'
                   type='submit'
-                  disabled={!!error || this.state.bigError}
-                  >
-                    Reset password
-                  </button>
+                  disabled={!!error}
+                >
+                  Send reset password link
+                </button>
               </BaseForm>
             </div>
           </div>
@@ -193,4 +140,4 @@ class EmailResetLanding extends Component {
   }
 }
 
-export default EmailResetLanding
+export default ResetPassword

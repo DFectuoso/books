@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import tree from '~core/tree'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
+import env from '~base/env-variables'
 
 import {BaseForm, PasswordWidget} from '~base/components/base-form'
 
@@ -120,7 +121,7 @@ class EmailResetLanding extends Component {
     this.setState({...this.state, apiCallMessage: 'message is-success'})
 
     setTimeout(() => {
-      this.props.history.push('/app', {})
+      this.props.history.push(env.PREFIX + '/', {})
     }, 4000)
   }
 

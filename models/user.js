@@ -182,14 +182,17 @@ userSchema.methods.sendInviteEmail = async function () {
   })
 }
 
-userSchema.methods.sendResetPasswordEmail = async function () {
+userSchema.methods.sendResetPasswordEmail = async function (admin) {
   this.inviteToken = v4()
   await this.save()
+  let url = process.env.APP_HOST
+
+  if (admin) url = process.env.ADMIN_HOST + process.env.ADMIN_PREFIX
 
   const email = new Mailer('reset-password')
 
   const data = this.toJSON()
-  data.url = process.env.APP_HOST + '/emails/reset?token=' + this.resetPasswordToken + '&email=' + encodeURIComponent(this.email)
+  data.url = url + '/emails/reset?token=' + this.resetPasswordToken + '&email=' + encodeURIComponent(this.email)
 
   await email.format(data)
   await email.send({

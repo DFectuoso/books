@@ -3,6 +3,7 @@ import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 import moment from 'moment'
+import env from '~base/env-variables'
 
 import Loader from '~base/components/spinner'
 import UserForm from './form'
@@ -14,6 +15,9 @@ class UserDetail extends Component {
     this.state = {
       loaded: false,
       loading: true,
+      resetLoading: false,
+      resetText: 'Reset password',
+      resetClass: 'button is-danger',
       user: {},
       roles: [],
       orgs: [],
@@ -148,8 +152,38 @@ class UserDetail extends Component {
   }
 
   async resetOnClick () {
-    var url = '/user/' + this.props.match.params.uuid + '/reset-password'
-    await api.get(url)
+    await this.setState({
+      resetLoading: true,
+      resetText: 'Sending email...',
+      resetClass: 'button is-info'
+    })
+
+    var url = '/user/reset-password'
+
+    try {
+      await api.post(url, {email: this.state.user.email})
+      setTimeout(() => {
+        this.setState({
+          resetLoading: true,
+          resetText: 'Sucess!',
+          resetClass: 'button is-success'
+        })
+      }, 3000)
+    } catch (e) {
+      await this.setState({
+        resetLoading: true,
+        resetText: 'Error!',
+        resetClass: 'button is-danger'
+      })
+    }
+
+    setTimeout(() => {
+      this.setState({
+        resetLoading: false,
+        resetText: 'Reset Password',
+        resetClass: 'button is-danger'
+      })
+    }, 10000)
     // this.load()
   }
 
@@ -160,25 +194,33 @@ class UserDetail extends Component {
       return <Loader />
     }
 
+    var resetButton
+    if (env.EMAIL_SEND) {
+      resetButton = (
+        <div className='columns'>
+          <div className='column has-text-right'>
+            <div className='field is-grouped is-grouped-right'>
+              <div className='control'>
+                <button
+                  className={this.state.resetClass}
+                  type='button'
+                  onClick={() => this.resetOnClick()}
+                  disabled={!!this.state.resetLoading}
+                  >
+                  {this.state.resetText}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='columns'>
-              <div className='column has-text-right'>
-                <div className='field is-grouped is-grouped-right'>
-                  <div className='control'>
-                    <button
-                      className='button is-danger'
-                      type='button'
-                      onClick={() => this.resetOnClick()}
-                      >
-                        Reset password
-                      </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {resetButton}
             <div className='columns is-mobile'>
               <div className='column'>
                 <div className='card'>

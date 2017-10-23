@@ -27,7 +27,7 @@ const uiSchema = {
   password_1: {'ui:widget': PasswordWidget}
 }
 
-class Invited extends Component {
+class EmailInviteLanding extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -194,4 +194,4 @@ class Invited extends Component {
   }
 }
 
-export default Invited
+export default EmailInviteLanding

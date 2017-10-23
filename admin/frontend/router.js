@@ -9,6 +9,8 @@ import {PrivateRoute, LoginRoute} from '~base/router'
 
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
+import ResetPassword from './pages/reset-password'
+import EmailResetLanding from './pages/emails/reset'
 import Users from './pages/users/list'
 import UserDetail from './pages/users/detail'
 import Profile from './pages/profile'
@@ -24,6 +26,8 @@ const AppRouter = () => {
     <AdminLayout>
       <div className='c-flex-1 is-flex is-flex-column is-relative'>
         <LoginRoute exact path='/log-in' component={LogIn} />
+        <LoginRoute exact path='/password/forgotten' component={ResetPassword} />
+        <LoginRoute exact path='/emails/reset' component={EmailResetLanding} />
         <PrivateRoute exact path='/' component={Dashboard} />
         <PrivateRoute exact path='/profile' component={Profile} />
         <PrivateRoute exact path='/manage/users' component={Users} />

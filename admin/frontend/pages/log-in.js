@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import api from '~base/api'
 import env from '~base/env-variables'
 import tree from '~core/tree'
+import Link from '~base/router/link'
 
 import {BaseForm, PasswordWidget, EmailWidget} from '~components/base-form'
 
@@ -27,14 +28,26 @@ class LogIn extends Component {
       formData: {
         email: '',
         password: ''
-      }
+      },
+      apiCallErrorMessage: 'is-hidden'
     }
   }
 
   errorHandler (e) {}
 
   changeHandler ({formData}) {
-    this.setState({formData})
+    this.setState({
+      formData,
+      apiCallErrorMessage: 'is-hidden',
+      error: ''
+    })
+  }
+
+  clearState () {
+    this.setState({
+      apiCallErrorMessage: 'is-hidden',
+      formData: this.props.initialState
+    })
   }
 
   async submitHandler ({formData}) {
@@ -44,10 +57,7 @@ class LogIn extends Component {
     } catch (e) {
       return this.setState({
         error: e.message,
-        formData: {
-          email: '',
-          password: ''
-        }
+        apiCallErrorMessage: 'message is-danger'
       })
     }
 
@@ -62,6 +72,7 @@ class LogIn extends Component {
     } else {
       this.setState({
         error: 'Invalid user',
+        apiCallErrorMessage: 'message is-danger',
         formData: {
           email: '',
           password: ''
@@ -78,6 +89,17 @@ class LogIn extends Component {
       </div>
     }
 
+    var resetLink
+    if (env.EMAIL_SEND) {
+      resetLink = (
+        <p>
+          <Link to='/password/forgotten/'>
+            Forgot password?
+          </Link>
+        </p>
+      )
+    }
+
     return (
       <div className='LogIn single-form'>
         <div className='card'>
@@ -85,20 +107,41 @@ class LogIn extends Component {
             <p className='card-header-title'>
               Log in
             </p>
+            <a className='card-header-icon'>
+              <span className='icon'>
+                <i className='fa fa-angle-down' />
+              </span>
+            </a>
           </header>
           <div className='card-content'>
             <div className='content'>
-              {error}
-              <BaseForm schema={schema}
-                uiSchema={uiSchema}
-                formData={this.state.formData}
-                onChange={(e) => { this.changeHandler(e) }}
-                onSubmit={(e) => { this.submitHandler(e) }}
-                onError={(e) => { this.errorHandler(e) }}>
-                <div>
-                  <button className='button is-primary is-fullwidth' type='submit'>Log in</button>
+              <div className='columns'>
+                <div className='column'>
+                  <BaseForm schema={schema}
+                    uiSchema={uiSchema}
+                    formData={this.state.formData}
+                    onChange={(e) => { this.changeHandler(e) }}
+                    onSubmit={(e) => { this.submitHandler(e) }}
+                    onError={(e) => { this.errorHandler(e) }}
+                  >
+                    <div className={this.state.apiCallErrorMessage}>
+                      <div className='message-body is-size-7 has-text-centered'>
+                        {error}
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        className='button is-primary is-fullwidth'
+                        type='submit'
+                        disabled={!!error}
+                      >
+                        Log in
+                      </button>
+                    </div>
+                  </BaseForm>
                 </div>
-              </BaseForm>
+              </div>
+              {resetLink}
             </div>
           </div>
         </div>
