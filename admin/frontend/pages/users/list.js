@@ -122,7 +122,12 @@ class Users extends Component {
   }
 
   finishUp (object) {
-    debugger
+    window.setTimeout(() => {
+      this.setState({
+        className: ''
+      })
+      this.props.history.push('/admin/manage/users/' + object.uuid)
+    }, 2000)
   }
 
   render () {
@@ -179,9 +184,9 @@ class Users extends Component {
                     className={this.state.className}
                     hideModal={this.hideModal.bind(this)}
                     finishUp={this.finishUp.bind(this)}
-                    branchName='organizations'
-                    baseUrl='/admin/organizations'
-                    url='/admin/organizations'
+                    branchName='users'
+                    baseUrl='/admin/users'
+                    url='/admin/users'
                   />
                 </div>
               </header>

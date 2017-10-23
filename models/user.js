@@ -119,7 +119,7 @@ userSchema.statics.auth = async function (email, password) {
 }
 
 userSchema.statics.register = async function (options) {
-  const {screenName, displayName, email, password} = options
+  const {screenName, email} = options
 
   const emailTaken = await this.findOne({ email })
   assert(!emailTaken, 401, 'Email already in use')
@@ -128,7 +128,7 @@ userSchema.statics.register = async function (options) {
   assert(!screenTaken, 401, 'Username already taken')
 
   // create in mongoose
-  const createdUser = await this.create({ screenName: screenName, displayName: displayName, email: email, password: password })
+  const createdUser = await this.create(options)
 
   return createdUser
 }
