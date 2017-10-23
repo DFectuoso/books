@@ -124,7 +124,6 @@ class PasswordUserForm extends Component {
           onSubmit={(e) => { this.submitHandler(e) }}
           onError={(e) => { this.errorHandler(e) }}
           validate={validate}
-          liveValidate
         >
           <div className={this.state.apiCallMessage}>
             <div className='message-body is-size-7 has-text-centered'>

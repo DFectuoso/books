@@ -147,6 +147,12 @@ class UserDetail extends Component {
     this.loadGroups()
   }
 
+  async resetOnClick () {
+    var url = '/user/' + this.props.match.params.uuid + '/reset-password'
+    await api.get(url)
+    // this.load()
+  }
+
   render () {
     const { user } = this.state
 
@@ -158,6 +164,21 @@ class UserDetail extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
+            <div className='columns'>
+              <div className='column has-text-right'>
+                <div className='field is-grouped is-grouped-right'>
+                  <div className='control'>
+                    <button
+                      className='button is-danger'
+                      type='button'
+                      onClick={() => this.resetOnClick()}
+                      >
+                        Reset password
+                      </button>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className='columns is-mobile'>
               <div className='column'>
                 <div className='card'>

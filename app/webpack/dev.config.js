@@ -2,6 +2,7 @@ const path = require('path')
 const webpack = require('webpack')
 const config = require('config')
 
+console.log('Building with config.mailer.active =>', config.mailer.active)
 module.exports = {
   context: __dirname,
   entry: [
@@ -45,7 +46,8 @@ module.exports = {
     new webpack.DefinePlugin({
       'ENV': JSON.stringify(config.env),
       'PREFIX': JSON.stringify(''),
-      'API_HOST': JSON.stringify(config.server.apiHost)
+      'API_HOST': JSON.stringify(config.server.apiHost),
+      'EMAIL_SEND': JSON.stringify(config.mailer.active)
     })
   ],
   resolve: {

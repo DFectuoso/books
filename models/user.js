@@ -133,6 +133,22 @@ userSchema.statics.register = async function (options) {
   return createdUser
 }
 
+userSchema.statics.validateInvite = async function (email, token) {
+  const userEmail = email.toLowerCase()
+  const user = await this.findOne({email: userEmail, inviteToken: token})
+  assert(user, 401, 'Invalid token! You should contact the administrator of this page.')
+
+  return user
+}
+
+userSchema.statics.validateResetPassword = async function (email, token) {
+  const userEmail = email.toLowerCase()
+  const user = await this.findOne({email: userEmail, resetPasswordToken: token})
+  assert(user, 401, 'Invalid token! You should contact the administrator of this page.')
+
+  return user
+}
+
 userSchema.methods.validatePassword = async function (password) {
   const isValid = await new Promise((resolve, reject) => {
     bcrypt.compare(password, this.password, (err, compared) =>
@@ -163,6 +179,25 @@ userSchema.methods.sendInviteEmail = async function () {
       name: this.displayName
     },
     title: 'Invite to Marble Seeds'
+  })
+}
+
+userSchema.methods.sendResetPasswordEmail = async function () {
+  this.inviteToken = v4()
+  await this.save()
+
+  const email = new Mailer('reset-password')
+
+  const data = this.toJSON()
+  data.url = process.env.APP_HOST + '/emails/reset?token=' + this.resetPasswordToken + '&email=' + encodeURIComponent(this.email)
+
+  await email.format(data)
+  await email.send({
+    recipient: {
+      email: this.email,
+      name: this.displayName
+    },
+    title: 'Reset passsword for Marble Seeds'
   })
 }
 
