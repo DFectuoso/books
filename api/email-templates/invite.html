@@ -1,0 +1,30 @@
+{% extends "./layout.html" %}
+
+{% block content %}
+<table class="container">
+  <tbody>
+    <tr>
+      <td class="header">
+        <a href="https://github.com/latteware/marble-seeds/" class="logo" target="_blank">
+          <img src="http://bulma.io/images/bulma-logo.png" width="295" height="75" alt="marble-seeds">
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="body">
+        <p class="main">Invitacion para acceder a Marble Seeds</p>
+        <p class="label">Haz click en el botón:</p>
+        <p>
+          <a class="btn" href="{{ url }}" target="_blank">Acceder</a>
+        </p>
+        <p>o copia esta url: <a class="link" href="{{ url }}">{{ url }}</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2" class="footer">
+        Para preguntas de suporte visita <br/><a class="link" href="https://github.com/latteware/marble-seeds/" target="_blank">https://github.com/latteware/marble-seeds/</a> y crea un issue.
+      </td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
 const dataTables = require('mongoose-datatables')
 const assert = require('http-assert')
 
+const Mailer = require('lib/mailer')
 const jwt = require('lib/jwt')
 
 const SALT_WORK_FACTOR = parseInt(process.env.SALT_WORK_FACTOR)
@@ -23,6 +24,7 @@ const userSchema = new Schema({
   groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
 
   resetPasswordToken: { type: String, default: v4 },
+  inviteToken: { type: String, default: v4 },
 
   uuid: { type: String, default: v4 },
   apiToken: { type: String, default: v4 }
@@ -117,7 +119,7 @@ userSchema.statics.auth = async function (email, password) {
 }
 
 userSchema.statics.register = async function (options) {
-  const {screenName, displayName, email, password} = options
+  const {screenName, email} = options
 
   const emailTaken = await this.findOne({ email })
   assert(!emailTaken, 401, 'Email already in use')
@@ -126,9 +128,25 @@ userSchema.statics.register = async function (options) {
   assert(!screenTaken, 401, 'Username already taken')
 
   // create in mongoose
-  const createdUser = await this.create({ screenName: screenName, displayName: displayName, email: email, password: password })
+  const createdUser = await this.create(options)
 
   return createdUser
+}
+
+userSchema.statics.validateInvite = async function (email, token) {
+  const userEmail = email.toLowerCase()
+  const user = await this.findOne({email: userEmail, inviteToken: token})
+  assert(user, 401, 'Invalid token! You should contact the administrator of this page.')
+
+  return user
+}
+
+userSchema.statics.validateResetPassword = async function (email, token) {
+  const userEmail = email.toLowerCase()
+  const user = await this.findOne({email: userEmail, resetPasswordToken: token})
+  assert(user, 401, 'Invalid token! You should contact the administrator of this page.')
+
+  return user
 }
 
 userSchema.methods.validatePassword = async function (password) {
@@ -143,6 +161,47 @@ userSchema.methods.validatePassword = async function (password) {
 
 userSchema.methods.setPassword = async function (password) {
 
+}
+
+userSchema.methods.sendInviteEmail = async function () {
+  this.inviteToken = v4()
+  await this.save()
+
+  const email = new Mailer('invite')
+
+  const data = this.toJSON()
+  data.url = process.env.APP_HOST + '/emails/invite?token=' + this.inviteToken + '&email=' + encodeURIComponent(this.email)
+
+  await email.format(data)
+  await email.send({
+    recipient: {
+      email: this.email,
+      name: this.displayName
+    },
+    title: 'Invite to Marble Seeds'
+  })
+}
+
+userSchema.methods.sendResetPasswordEmail = async function (admin) {
+  this.inviteToken = v4()
+  await this.save()
+  let url = process.env.APP_HOST
+
+  if (admin) url = process.env.ADMIN_HOST + process.env.ADMIN_PREFIX
+
+  const email = new Mailer('reset-password')
+
+  const data = this.toJSON()
+  data.url = url + '/emails/reset?token=' + this.resetPasswordToken + '&email=' + encodeURIComponent(this.email)
+
+  await email.format(data)
+  await email.send({
+    recipient: {
+      email: this.email,
+      name: this.displayName
+    },
+    title: 'Reset passsword for Marble Seeds'
+  })
 }
 
 userSchema.plugin(dataTables)
