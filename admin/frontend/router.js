@@ -20,6 +20,7 @@ import Roles from './pages/roles/list'
 import RoleDetail from './pages/roles/detail'
 import Groups from './pages/groups/list'
 import GroupDetail from './pages/groups/detail'
+import RequestLogs from './pages/request-logs/list'
 
 const AppRouter = () => {
   return (<Router>
@@ -38,6 +39,7 @@ const AppRouter = () => {
         <PrivateRoute exact path='/manage/roles/:uuid' component={RoleDetail} />
         <PrivateRoute exact path='/manage/groups' component={Groups} />
         <PrivateRoute exact path='/manage/groups/:uuid' component={GroupDetail} />
+        <PrivateRoute exact path='/devtools/request-logs' component={RequestLogs} />
       </div>
     </AdminLayout>
   </Router>)
