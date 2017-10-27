@@ -280,3 +280,18 @@ select.placeholder {
 .is-pulled-right-by-margin {
   margin-left: auto
 }
+
+pre.json {
+  display: block;
+  padding: 1em;
+  margin: 0;
+}
+.request-log {
+  margin-bottom: 0.5rem !important;
+
+  .message-header {
+    cursor: pointer;
+  }
+}
+.show-log { display: block; }
+.hide-log { display: none; }
