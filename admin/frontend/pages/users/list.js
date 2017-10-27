@@ -6,7 +6,6 @@ import api from '~base/api'
 
 import BaseFilterPanel from '~base/components/base-filters'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
-import FontAwesome from 'react-fontawesome'
 import CreateUser from './create'
 
 const schema = {
@@ -29,11 +28,9 @@ class Users extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      isFilterOpen: false,
       filters: {}
     }
 
-    this.toggleFilterPanel = this.toggleFilterPanel.bind(this)
     this.handleOnFilter = this.handleOnFilter.bind(this)
   }
 
@@ -94,18 +91,7 @@ class Users extends Component {
     ]
   }
 
-  toggleFilterPanel (isFilterOpen) {
-    this.setState({isFilterOpen: !isFilterOpen})
-  }
-
-  handleOnFilter (formData) {
-    let filters = {}
-
-    for (var field in formData) {
-      if (formData[field]) {
-        filters[field] = formData[field]
-      }
-    }
+  handleOnFilter (filters) {
     this.setState({filters})
   }
 
@@ -131,34 +117,7 @@ class Users extends Component {
   }
 
   render () {
-    let { isFilterOpen, filters } = this.state
-    let filterPanel
-
-    if (isFilterOpen) {
-      filterPanel = (
-        <div className='column is-narrow side-filters is-paddingless'>
-          <BaseFilterPanel
-            schema={schema}
-            uiSchema={uiSchema}
-            filters={filters}
-            onFilter={this.handleOnFilter}
-            onToggle={() => this.toggleFilterPanel(isFilterOpen)} />
-        </div>
-      )
-    }
-
-    if (!isFilterOpen) {
-      filterPanel = (<div className='searchbox'>
-        <a
-          href='javascript:void(0)'
-          className='card-header-icon has-text-white'
-          aria-label='more options'
-          onClick={() => this.toggleFilterPanel(isFilterOpen)}
-        >
-          <FontAwesome name='search' />
-        </a>
-      </div>)
-    }
+    let { filters } = this.state
 
     return (
       <div className='columns c-flex-1 is-marginless'>
@@ -205,7 +164,12 @@ class Users extends Component {
             </div>
           </div>
         </div>
-        { filterPanel }
+
+        <BaseFilterPanel
+          schema={schema}
+          uiSchema={uiSchema}
+          filters={filters}
+          onFilter={this.handleOnFilter} />
       </div>
     )
   }
