@@ -21,6 +21,7 @@ import RoleDetail from './pages/roles/detail'
 import Groups from './pages/groups/list'
 import GroupDetail from './pages/groups/detail'
 import RequestLogs from './pages/request-logs/list'
+import Reports from './pages/reports/users'
 
 const AppRouter = () => {
   return (<Router>
@@ -31,6 +32,7 @@ const AppRouter = () => {
         <LoginRoute exact path='/emails/reset' component={EmailResetLanding} />
         <PrivateRoute exact path='/' component={Dashboard} />
         <PrivateRoute exact path='/profile' component={Profile} />
+        <PrivateRoute exact path='/reports/users' component={Reports} />
         <PrivateRoute exact path='/manage/users' component={Users} />
         <PrivateRoute exact path='/manage/users/:uuid' component={UserDetail} />
         <PrivateRoute exact path='/manage/organizations' component={Organizations} />
