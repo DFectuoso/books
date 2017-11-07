@@ -17,7 +17,7 @@ let columns = [{
 
 let tableData = [{
   _id: '2017-10-12T16:23:28.911Z',
-  leads: 'new oraganization',
+  leads: 45,
   isDeleted: false,
   name: 'elRic ',
   slug: 'elric'
