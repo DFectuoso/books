@@ -31,6 +31,7 @@ class Organizations extends Component {
         'title': 'Name',
         'property': 'name',
         'default': 'N/A',
+        'sortable': true,
         formatter: (row) => {
           return (
             <Link to={'/manage/organizations/' + row.uuid}>
@@ -43,6 +44,7 @@ class Organizations extends Component {
         'title': 'Created',
         'property': 'dateCreated',
         'default': 'N/A',
+        'sortable': true,
         formatter: (row) => {
           return (
             moment.utc(row.dateCreated).local().format('DD/MM/YYYY hh:mm a')
@@ -111,6 +113,7 @@ class Organizations extends Component {
                       branchName='organizations'
                       baseUrl='/admin/organizations'
                       columns={this.getColumns()}
+                      sortedBy='name'
                       // getData={this.getData.bind(this)}
                        />
                   </div>
