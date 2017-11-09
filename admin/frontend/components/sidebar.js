@@ -58,6 +58,17 @@ class Sidebar extends Component {
           to: '/devtools/request-logs'
         }
       ]
+    }, {
+      title: 'Reports',
+      icon: 'github-alt',
+      to: '/reports',
+      dropdown: [
+        {
+          title: 'Users',
+          icon: 'users',
+          to: '/reports/users'
+        }
+      ]
     }]
   }
 
