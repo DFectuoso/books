@@ -9,7 +9,7 @@ module.exports = new Route({
   handler: async function (ctx) {
     var filters = {}
     for (var filter in ctx.request.query) {
-      if (filter === 'limit' || filter === 'start') {
+      if (filter === 'limit' || filter === 'start' || filter === 'sort') {
         continue
       }
 
@@ -34,7 +34,7 @@ module.exports = new Route({
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,
       find: {isDeleted: false, ...filters},
-      sort: '-dateCreated'
+      sort: ctx.request.query.sort || '-dateCreated'
     })
 
     ctx.body = organization
