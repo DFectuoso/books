@@ -163,7 +163,7 @@ describe('Group CRUD', () => {
         .expect(404)
     })
 
-    it('should return a 200', async function () {
+    it.skip('should return a 200', async function () {
       const res = await test()
         .post('/api/admin/users/' + userUuid + '/add/group')
         .send({
