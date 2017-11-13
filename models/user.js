@@ -68,13 +68,6 @@ userSchema.methods.format = function () {
   }
 }
 
-userSchema.methods.getJwt = function () {
-  return jwt.sign({
-    uuid: this.uuid,
-    apiToken: this.apiToken
-  })
-}
-
 userSchema.methods.toPublic = function () {
   return {
     uuid: this.uuid,
@@ -99,6 +92,27 @@ userSchema.methods.toAdmin = function () {
     organizations: this.organizations,
     groups: this.groups
   }
+}
+
+userSchema.methods.validatePassword = async function (password) {
+  const isValid = await new Promise((resolve, reject) => {
+    bcrypt.compare(password, this.password, (err, compared) =>
+      (err ? reject(err) : resolve(compared))
+    )
+  })
+
+  return isValid
+}
+
+userSchema.methods.createToken = async function (options = {}) {
+  const UserToken = mongoose.model('UserToken')
+
+  const token = await UserToken.create({
+    user: this._id,
+    type: options.type || ''
+  })
+
+  return token
 }
 
 // Statics
@@ -157,10 +171,6 @@ userSchema.methods.validatePassword = async function (password) {
   })
 
   return isValid
-}
-
-userSchema.methods.setPassword = async function (password) {
-
 }
 
 userSchema.methods.sendInviteEmail = async function () {
