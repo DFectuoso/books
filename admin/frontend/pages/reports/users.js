@@ -10,6 +10,9 @@ class Reports extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      sortAscending: true,
+      sort: 'screenName',
+      sortable: true,
       filters: {},
       stats: {
         leads: {
@@ -40,13 +43,21 @@ class Reports extends Component {
     this.loadOrgs()
   }
 
-  async loadOrgs () {
-    var url = '/admin/users/'
+  async loadOrgs (sort = this.state.sort) {
+    const url = '/admin/users/'
+    const params = {
+      start: 0,
+      limit: 0
+    }
+
+    if (this.state.sortable) {
+      params.sort = (this.state.sortAscending ? '' : '-') + sort
+    }
+
     const body = await api.get(
       url,
       {
-        start: 0,
-        limit: 0
+        ...params
       }
     )
 
@@ -65,27 +76,38 @@ class Reports extends Component {
         'title': 'Screen name',
         'property': 'screenName',
         'default': 'N/A',
+        'sortable': true,
         'totals': false
       },
       {
         'title': 'Name',
         'property': 'name',
         'default': 'N/A',
+        'sortable': true,
         'totals': false
       },
       {
         'title': 'Email',
         'property': 'email',
         'default': 'N/A',
+        'sortable': true,
         'totals': false
       },
       {
         'title': 'Counts',
         'property': 'count',
         'default': 'N/A',
+        'sortable': false,
         'totals': true
       }
     ]
+  }
+
+  handleSort (sort) {
+    let sortAscending = sort !== this.state.sort ? false : !this.state.sortAscending
+    this.setState({sort, sortAscending}, function () {
+      this.loadOrgs()
+    })
   }
 
   handleOnFilter (filters) {
@@ -111,9 +133,12 @@ class Reports extends Component {
             <div className='card'>
               <div className='card-content is-paddingless'>
                 <BaseTable
+                  handleSort={(e) => this.handleSort(e)}
                   data={this.state.reports}
                   className='table is-striped is-fullwidth has-text-centered is-marginless'
                   columns={this.getColumns()}
+                  sortAscending={this.state.sortAscending}
+                  sortBy={this.state.sort}
                  />
               </div>
             </div>
