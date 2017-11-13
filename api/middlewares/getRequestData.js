@@ -1,4 +1,4 @@
-const { User } = require('models')
+const { UserToken } = require('models')
 const { server } = require('config')
 const jwt = require('lib/jwt')
 
@@ -14,16 +14,25 @@ module.exports = async function (ctx, next) {
         ctx.throw(401, 'Invalid JWT')
       }
 
-      let user = await User.findOne({
-        uuid: data.uuid,
-        apiToken: data.apiToken
-      })
+      console.log('=>', data)
+      let userToken = await UserToken.findOne({
+        key: data.key,
+        secret: data.secret
+      }).populate('user')
 
-      if (!user) {
-        ctx.throw(401, 'Invalid User')
+      if (!userToken) {
+        return ctx.throw(401, 'Invalid User')
       }
 
-      ctx.state.user = user
+      if (!userToken.user) {
+        return ctx.throw(401, 'Invalid User')
+      }
+
+      ctx.state.user = userToken.user
+      ctx.state.token = userToken
+
+      userToken.lastUse = new Date()
+      await userToken
     }
   }
 

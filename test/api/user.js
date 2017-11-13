@@ -69,7 +69,8 @@ describe('/user', () => {
 
     it('should return a 200', async function () {
       const user = await createUser({ password })
-      const jwt = user.getJwt()
+      const token = await user.createToken({type: 'session'})
+      const jwt = token.getJwt()
 
       const res = await test()
         .post('/api/user/me/update')
@@ -111,7 +112,8 @@ describe('/user', () => {
 
     it('should return a 200', async function () {
       const user = await createUser({ password })
-      const jwt = user.getJwt()
+      const token = await user.createToken({type: 'session'})
+      const jwt = token.getJwt()
       const newPassword = '123'
 
       const res = await test()
@@ -168,7 +170,8 @@ describe('/user', () => {
 
     it('should return user data', async function () {
       const user = await createUser({ password })
-      const jwt = user.getJwt()
+      const token = await user.createToken({type: 'session'})
+      const jwt = token.getJwt()
 
       const res = await test()
         .get('/api/user/me')
@@ -188,12 +191,36 @@ describe('/user', () => {
     })
 
     it('should return 401 for invalid user', async function () {
-      const user = await createUser({ password })
-      user.uuid = 'Invalid'
-      const jwt = user.getJwt()
+      const jwt = 'Invalid'
 
       await test()
         .get('/api/user/me')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(401)
+    })
+  })
+
+  describe('[delete] / Revoke token', () => {
+    it('should return user data', async function () {
+      const user = await createUser({ password })
+      const token = await user.createToken({type: 'session'})
+      const jwt = token.getJwt()
+
+      const res = await test()
+        .get('/api/user/me')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+
+      expect(res.body.loggedIn).equal(true)
+
+      await test().del('/api/user/')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+
+      await test().get('/api/user/me')
         .set('Accept', 'application/json')
         .set('Authorization', `Bearer ${jwt}`)
         .expect(401)
