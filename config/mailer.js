@@ -1,5 +1,3 @@
-console.log('active? =>', process.env.EMAIL_SEND === 'true')
-
 module.exports = {
   active: process.env.EMAIL_SEND === 'true',
   mailchimpKey: process.env.EMAIL_KEY,
