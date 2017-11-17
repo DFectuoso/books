@@ -62,17 +62,17 @@
     "underscore.string": "^3.3.4",
     "webpack": "^3.4.1",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-hot-middleware": "^2.18.2"
+    "webpack-hot-middleware": "^2.18.2",
+    "file-loader": "^0.11.2",
+    "url-loader": "^0.5.9"
   },
   "devDependencies": {
     "chai": "^4.1.1",
     "co-mocha": "^1.2.0",
     "co-supertest": "0.0.10",
-    "file-loader": "^0.11.2",
     "mocha": "^3.5.0",
     "nodemon": "^1.11.0",
     "supertest": "^1.0",
-    "url-loader": "^0.5.9",
     "@storybook/react": "^3.2.14",
     "@storybook/addon-actions": "^3.2.14",
     "@storybook/addon-links": "^3.2.14"
