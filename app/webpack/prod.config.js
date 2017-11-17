@@ -1,4 +1,5 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
+const MinifyPlugin = require('babel-minify-webpack-plugin')
 
 const config = require('../../config')
 
@@ -36,7 +37,9 @@ module.exports = {
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']
         })
-      }
+      },
+      { test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'url-loader?limit=10000&mimetype=application/font-woff' },
+      { test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: 'file-loader' }
     ]
   },
   plugins: [
@@ -49,16 +52,17 @@ module.exports = {
       'API_HOST': JSON.stringify(config.server.apiHost),
       'EMAIL_SEND': JSON.stringify(config.mailer.active)
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
       }
-    })
+    }),
+    new MinifyPlugin({}, {})
   ],
   resolve: {
     modules: ['node_modules'],
     alias: {
+      '~base': path.resolve('./lib/frontend/'),
       '~core': path.resolve('./app/frontend/core'),
       '~components': path.resolve('./app/frontend/components')
     }
