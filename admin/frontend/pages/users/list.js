@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
+
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
 import api from '~base/api'
+
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 
 import BaseFilterPanel from '~base/components/base-filters'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
@@ -183,4 +187,13 @@ Users.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({users: 'users'}, Users)
+const branchedUsers = branch({users: 'users'}, Users)
+
+export default Page({
+  path: '/manage/users',
+  title: 'User',
+  icon: 'user',
+  exact: true,
+  validate: loggedIn,
+  component: branchedUsers
+})

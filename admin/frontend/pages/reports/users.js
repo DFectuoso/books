@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import PropTypes from 'baobab-react/prop-types'
-import Link from '~base/router/link'
 import api from '~base/api'
+
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 
 import { BaseTable } from '~base/components/base-table'
 
@@ -153,4 +155,13 @@ Reports.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({users: 'users'}, Reports)
+const branchedReports = branch({users: 'users'}, Reports)
+
+export default Page({
+  path: '/reports/users',
+  title: 'User reports',
+  icon: 'users',
+  exact: true,
+  validate: loggedIn,
+  component: branchedReports
+})

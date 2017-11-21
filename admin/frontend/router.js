@@ -1,6 +1,8 @@
 import React from 'react'
 import {
-  BrowserRouter as Router
+  BrowserRouter as Router,
+  Switch,
+  Route
 } from 'react-router-dom'
 
 import AdminLayout from '~components/admin-layout'
@@ -23,25 +25,37 @@ import GroupDetail from './pages/groups/detail'
 import RequestLogs from './pages/request-logs/list'
 import Reports from './pages/reports/users'
 
+const NoMatch = () => {
+  return <div>Not Found</div>
+}
+
 const AppRouter = () => {
   return (<Router>
     <AdminLayout>
       <div className='c-flex-1 is-flex is-flex-column is-relative'>
-        {LogIn.asRouterItem()}
-        <LoginRoute exact path='/password/forgotten' component={ResetPassword} />
-        <LoginRoute exact path='/emails/reset' component={EmailResetLanding} />
-        {Dashboard.asRouterItem()}
-        <PrivateRoute exact path='/profile' component={Profile} />
-        <PrivateRoute exact path='/reports/users' component={Reports} />
-        <PrivateRoute exact path='/manage/users' component={Users} />
-        <PrivateRoute exact path='/manage/users/:uuid' component={UserDetail} />
-        <PrivateRoute exact path='/manage/organizations' component={Organizations} />
-        <PrivateRoute exact path='/manage/organizations/:uuid' component={OrganizationDetail} />
-        <PrivateRoute exact path='/manage/roles' component={Roles} />
-        <PrivateRoute exact path='/manage/roles/:uuid' component={RoleDetail} />
-        <PrivateRoute exact path='/manage/groups' component={Groups} />
-        <PrivateRoute exact path='/manage/groups/:uuid' component={GroupDetail} />
-        <PrivateRoute exact path='/devtools/request-logs' component={RequestLogs} />
+        <Switch>
+          {LogIn.asRouterItem()}
+          {ResetPassword.asRouterItem()}
+          {EmailResetLanding.asRouterItem()}
+          {Dashboard.asRouterItem()}
+          {Profile.asRouterItem()}
+
+          {Users.asRouterItem()}
+          {UserDetail.asRouterItem()}
+
+          {Organizations.asRouterItem()}
+          {OrganizationDetail.asRouterItem()}
+
+          {Roles.asRouterItem()}
+          {RoleDetail.asRouterItem()}
+
+          {Groups.asRouterItem()}
+          {GroupDetail.asRouterItem()}
+
+          {RequestLogs.asRouterItem()}
+          {Reports.asRouterItem()}
+          <Route component={NoMatch} />
+        </Switch>
       </div>
     </AdminLayout>
   </Router>)

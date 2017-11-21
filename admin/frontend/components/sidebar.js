@@ -2,6 +2,13 @@ import React, { Component } from 'react'
 import SidebarItem from '~components/sidebar-item'
 
 import Dashboard from '../pages/dashboard'
+import Users from '../pages/users/list'
+import Organizations from '../pages/organizations/list'
+import Roles from '../pages/roles/list'
+import Groups from '../pages/groups/list'
+
+import RequestLogs from '../pages/request-logs/list'
+import Reports from '../pages/reports/users'
 
 class Sidebar extends Component {
   constructor (props) {
@@ -25,48 +32,24 @@ class Sidebar extends Component {
         icon: 'users',
         to: '/manage',
         dropdown: [
-          {
-            title: 'Roles',
-            icon: 'address-book',
-            to: '/manage/roles'
-          },
-          {
-            title: 'Organizations',
-            icon: 'address-book',
-            to: '/manage/organizations'
-          },
-          {
-            title: 'Groups',
-            icon: 'users',
-            to: '/manage/groups'
-          },
-          {
-            title: 'Users',
-            icon: 'user',
-            to: '/manage/users'
-          }
+          Users.asSidebarItem(),
+          Organizations.asSidebarItem(),
+          Roles.asSidebarItem(),
+          Groups.asSidebarItem()
         ]
       }, {
         title: 'Developer Tools',
         icon: 'github-alt',
         to: '/devtools',
         dropdown: [
-          {
-            title: 'Request Logs',
-            icon: 'history',
-            to: '/devtools/request-logs'
-          }
+          RequestLogs.asSidebarItem()
         ]
       }, {
         title: 'Reports',
         icon: 'github-alt',
         to: '/reports',
         dropdown: [
-          {
-            title: 'Users',
-            icon: 'users',
-            to: '/reports/users'
-          }
+          Reports.asSidebarItem()
         ]
       }
     ]
@@ -84,6 +67,7 @@ class Sidebar extends Component {
     if (!this.props.burgerState) {
       divClass = divClass + ' is-hidden-touch'
     }
+
     return (<div className={divClass}>
       <aside className='menu'>
         <ul className='menu-list'>

@@ -152,8 +152,6 @@ class LogIn extends Component {
   }
 }
 
-// export default LogIn
-
 export default Page({
   path: '/log-in',
   exact: true,
