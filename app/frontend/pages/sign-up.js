@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import api from '~core/api'
 import tree from '~core/tree'
+import Page from '~base/page'
+import {forcePublic} from '~base/middlewares/'
 
 import {BaseForm, PasswordWidget, EmailWidget, TextWidget} from '~components/base-form'
 
@@ -79,4 +81,10 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp
+export default Page({
+  path: '/sign-up',
+  title: 'Sign Up',
+  exact: true,
+  validate: forcePublic,
+  component: SignUp
+})

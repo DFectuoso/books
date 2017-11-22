@@ -7,8 +7,6 @@ import {
 
 import AdminLayout from '~components/admin-layout'
 
-import {PrivateRoute, LoginRoute} from '~base/router'
-
 import LogIn from './pages/log-in'
 import Dashboard from './pages/dashboard'
 import ResetPassword from './pages/reset-password'
