@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 
+import Page from '~base/page'
 import api from '~base/api'
 import env from '~base/env-variables'
 import tree from '~core/tree'
 import Link from '~base/router/link'
+import {forcePublic} from '~base/middlewares/'
 
 import {BaseForm, PasswordWidget, EmailWidget} from '~components/base-form'
 
@@ -150,4 +152,9 @@ class LogIn extends Component {
   }
 }
 
-export default LogIn
+export default Page({
+  path: '/log-in',
+  exact: true,
+  validate: forcePublic,
+  component: LogIn
+})

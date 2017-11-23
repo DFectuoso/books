@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Page from '~base/page'
 
 import tree from '~core/tree'
 import api from '~base/api'
@@ -194,4 +195,9 @@ class EmailInviteLanding extends Component {
   }
 }
 
-export default EmailInviteLanding
+export default Page({
+  path: '/emails/invite',
+  title: 'Email invite',
+  exact: true,
+  component: EmailInviteLanding
+})

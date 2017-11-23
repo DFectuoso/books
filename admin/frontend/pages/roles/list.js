@@ -4,6 +4,8 @@ import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
 import moment from 'moment'
 
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import CreateCompany from './create'
 
@@ -138,4 +140,13 @@ Roles.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({roles: 'roles'}, Roles)
+const branchedRoles = branch({roles: 'roles'}, Roles)
+
+export default Page({
+  path: '/manage/roles',
+  title: 'Roles',
+  icon: 'address-book',
+  exact: true,
+  validate: loggedIn,
+  component: branchedRoles
+})

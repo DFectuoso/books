@@ -4,6 +4,8 @@ import PropTypes from 'baobab-react/prop-types'
 import Link from '~base/router/link'
 import moment from 'moment'
 
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 import CreateGroup from './create'
 
@@ -132,4 +134,13 @@ Groups.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({groups: 'groups'}, Groups)
+const branchedGroups = branch({groups: 'groups'}, Groups)
+
+export default Page({
+  path: '/manage/groups',
+  title: 'Groups',
+  icon: 'users',
+  exact: true,
+  validate: loggedIn,
+  component: branchedGroups
+})

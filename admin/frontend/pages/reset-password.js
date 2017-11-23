@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 
+import Page from '~base/page'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 import env from '~base/env-variables'
+import {forcePublic} from '~base/middlewares/'
 
 import {BaseForm, EmailWidget} from '~components/base-form'
 
@@ -142,4 +144,9 @@ class ResetPassword extends Component {
   }
 }
 
-export default ResetPassword
+export default Page({
+  path: '/password/forgotten',
+  exact: true,
+  validate: forcePublic,
+  component: ResetPassword
+})

@@ -5,6 +5,8 @@ import api from '~base/api'
 import Loader from '~base/components/spinner'
 import Link from '~base/router/link'
 import env from '~base/env-variables'
+import Page from '~base/page'
+import {forcePublic} from '~base/middlewares/'
 
 import {BaseForm, PasswordWidget, EmailWidget} from '~components/base-form'
 
@@ -153,4 +155,10 @@ class LogIn extends Component {
   }
 }
 
-export default LogIn
+export default Page({
+  path: '/log-in',
+  title: 'Log in',
+  exact: true,
+  validate: forcePublic,
+  component: LogIn
+})

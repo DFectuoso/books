@@ -4,6 +4,9 @@ import PropTypes from 'baobab-react/prop-types'
 import moment from 'moment'
 import classNames from 'classnames'
 
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
+
 class RequestLog extends Component {
   constructor (props) {
     super(props)
@@ -169,4 +172,13 @@ RequestLogs.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default RequestLogs
+// export default RequestLogs
+
+export default Page({
+  path: '/devtools/request-logs',
+  title: 'Request Logs',
+  icon: 'history',
+  exact: true,
+  validate: loggedIn,
+  component: RequestLogs
+})
