@@ -75,7 +75,8 @@ userSchema.methods.toPublic = function () {
     displayName: this.displayName,
     name: this.name,
     email: this.email,
-    validEmail: this.validEmail
+    validEmail: this.validEmail,
+    isAdmin: this.isAdmin
   }
 }
 
