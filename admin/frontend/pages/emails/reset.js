@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
 
+import Page from '~base/page'
 import tree from '~core/tree'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 import env from '~base/env-variables'
+import {forcePublic} from '~base/middlewares/'
 
 import {BaseForm, PasswordWidget} from '~base/components/base-form'
 
@@ -194,4 +196,9 @@ class EmailResetLanding extends Component {
   }
 }
 
-export default EmailResetLanding
+export default Page({
+  path: '/emails/reset',
+  exact: true,
+  validate: forcePublic,
+  component: EmailResetLanding
+})

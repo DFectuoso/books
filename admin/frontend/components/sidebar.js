@@ -1,6 +1,15 @@
 import React, { Component } from 'react'
 import SidebarItem from '~components/sidebar-item'
 
+import Dashboard from '../pages/dashboard'
+import Users from '../pages/users/list'
+import Organizations from '../pages/organizations/list'
+import Roles from '../pages/roles/list'
+import Groups from '../pages/groups/list'
+
+import RequestLogs from '../pages/request-logs/list'
+import Reports from '../pages/reports/users'
+
 class Sidebar extends Component {
   constructor (props) {
     super(props)
@@ -16,60 +25,34 @@ class Sidebar extends Component {
   }
 
   getMenuItems () {
-    return [{
-      title: 'Dashboard',
-      icon: 'github',
-      to: '/'
-    },
-    {
-      title: 'Manage Your Team',
-      icon: 'users',
-      to: '/manage',
-      dropdown: [
-        {
-          title: 'Roles',
-          icon: 'address-book',
-          to: '/manage/roles'
-        },
-        {
-          title: 'Organizations',
-          icon: 'address-book',
-          to: '/manage/organizations'
-        },
-        {
-          title: 'Groups',
-          icon: 'users',
-          to: '/manage/groups'
-        },
-        {
-          title: 'Users',
-          icon: 'user',
-          to: '/manage/users'
-        }
-      ]
-    }, {
-      title: 'Developer Tools',
-      icon: 'github-alt',
-      to: '/devtools',
-      dropdown: [
-        {
-          title: 'Request Logs',
-          icon: 'history',
-          to: '/devtools/request-logs'
-        }
-      ]
-    }, {
-      title: 'Reports',
-      icon: 'github-alt',
-      to: '/reports',
-      dropdown: [
-        {
-          title: 'Users',
-          icon: 'users',
-          to: '/reports/users'
-        }
-      ]
-    }]
+    return [
+      Dashboard.asSidebarItem(),
+      {
+        title: 'Manage Your Team',
+        icon: 'users',
+        to: '/manage',
+        dropdown: [
+          Users.asSidebarItem(),
+          Organizations.asSidebarItem(),
+          Roles.asSidebarItem(),
+          Groups.asSidebarItem()
+        ]
+      }, {
+        title: 'Developer Tools',
+        icon: 'github-alt',
+        to: '/devtools',
+        dropdown: [
+          RequestLogs.asSidebarItem()
+        ]
+      }, {
+        title: 'Reports',
+        icon: 'github-alt',
+        to: '/reports',
+        dropdown: [
+          Reports.asSidebarItem()
+        ]
+      }
+    ]
   }
 
   handleActiveLink (item, title) {
@@ -84,18 +67,20 @@ class Sidebar extends Component {
     if (!this.props.burgerState) {
       divClass = divClass + ' is-hidden-touch'
     }
+
     return (<div className={divClass}>
       <aside className='menu'>
         <ul className='menu-list'>
-          {this.getMenuItems().map(e => {
+          {this.getMenuItems().map(item => {
+            if(!item) { return }
             return <SidebarItem
-              title={e.title}
-              icon={e.icon}
-              to={e.to}
-              dropdown={e.dropdown}
+              title={item.title}
+              icon={item.icon}
+              to={item.to}
+              dropdown={item.dropdown}
               onClick={this.handleActiveLink}
               activeItem={this.state.active}
-              key={e.title.toLowerCase().replace(/\s/g, '')} />
+              key={item.title.toLowerCase().replace(/\s/g, '')} />
           })}
         </ul>
       </aside>

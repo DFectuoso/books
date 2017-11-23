@@ -5,6 +5,8 @@ import api from '~base/api'
 import moment from 'moment'
 import env from '~base/env-variables'
 
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 import Loader from '~base/components/spinner'
 import UserForm from './form'
 import Multiselect from '~base/components/base-multiselect'
@@ -304,4 +306,12 @@ UserDetail.contextTypes = {
   tree: PropTypes.baobab
 }
 
-export default branch({}, UserDetail)
+const branchedUserDetail = branch({}, UserDetail)
+
+export default Page({
+  path: '/manage/users/:uuid',
+  title: 'User details',
+  exact: true,
+  validate: loggedIn,
+  component: branchedUserDetail
+})

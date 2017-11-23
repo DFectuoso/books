@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import request from '~core/request'
 import { Redirect } from 'react-router-dom'
 import Loader from '~base/components/spinner'
+import Page from '~base/page'
+import {loggedIn} from '~base/middlewares/'
 
 class App extends Component {
   constructor (props) {
@@ -54,4 +56,10 @@ class App extends Component {
   }
 }
 
-export default App
+export default Page({
+  path: '/app',
+  title: 'App',
+  exact: true,
+  validate: loggedIn,
+  component: App
+})

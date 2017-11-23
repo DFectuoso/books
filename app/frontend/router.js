@@ -1,8 +1,9 @@
 import React from 'react'
 import {
   BrowserRouter as Router,
-  Route,
-  Redirect
+  Switch,
+  Redirect,
+  Route
 } from 'react-router-dom'
 
 import tree from '~core/tree'
@@ -43,20 +44,28 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   }} />
 }
 
+const NoMatch = () => {
+  return <div>Not Found</div>
+}
+
 const AppRouter = () => {
   return (<Router>
     <Layout>
-      <div>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/about' component={About} />
-        <Route exact path='/emails/invite' component={EmailInviteLanding} />
-        <Route exact path='/emails/reset' component={EmailResetLanding} />
-        <Route exact path='/password/forgotten' component={ResetPassword} />
-        <LoginRoute exact path='/sign-up' component={SignUp} />
-        <LoginRoute exact path='/log-in' component={LogIn} />
-        <PrivateRoute path='/app' component={App} />
-        <PrivateRoute path='/profile' component={Profile} />
-      </div>
+      <Switch>
+        {Home.asRouterItem()}
+        {About.asRouterItem()}
+        {EmailInviteLanding.asRouterItem()}
+        {EmailResetLanding.asRouterItem()}
+        {ResetPassword.asRouterItem()}
+
+        {SignUp.asRouterItem()}
+        {LogIn.asRouterItem()}
+
+        {App.asRouterItem()}
+        {Profile.asRouterItem()}
+
+        <Route component={NoMatch} />
+      </Switch>
     </Layout>
   </Router>)
 }
