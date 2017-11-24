@@ -4,6 +4,7 @@ const RequestLog = require('./requestLog')
 const Organization = require('./organization')
 const Role = require('./role')
 const Group = require('./group')
+// #Import
 
 module.exports = {
   User,
@@ -11,5 +12,5 @@ module.exports = {
   RequestLog,
   Organization,
   Role,
-  Group
+  Group// #end
 }
