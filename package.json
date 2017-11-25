@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {    
+  "scripts": {
     "test": "mocha",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
@@ -34,7 +34,9 @@
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
+    "fs-extra": "^4.0.2",
     "inline-css": "^2.2.2",
+    "inquirer": "^4.0.0",
     "jsonwebtoken": "^7.4.2",
     "koa": "^2.3.0",
     "koa-bodyparser": "^2.5.0",
@@ -56,6 +58,7 @@
     "react-router": "^4.1.2",
     "react-router-dom": "^4.1.2",
     "react-spinkit": "^3.0.0",
+    "replace": "^0.3.0",
     "sass-loader": "^6.0.6",
     "shortid": "^2.2.8",
     "style-loader": "^0.18.2",
