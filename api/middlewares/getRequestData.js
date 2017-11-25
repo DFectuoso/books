@@ -14,7 +14,6 @@ module.exports = async function (ctx, next) {
         ctx.throw(401, 'Invalid JWT')
       }
 
-      console.log('=>', data)
       let userToken = await UserToken.findOne({
         key: data.key,
         secret: data.secret
