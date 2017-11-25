@@ -99,8 +99,8 @@ const task = new Task(async function (argv) {
     } else {
       spawn('standard', ['--fix', filePath])
       replace({
-        regex: '// #end',
-        replacement: ',\n  ' + model.name.replace(/\b\w/g, l => l.toUpperCase()) + '// #end',
+        regex: '// #Exports',
+        replacement: ',\n  ' + model.name.replace(/\b\w/g, l => l.toUpperCase()) + '// #Exports',
         paths: [modelIndex],
         recursive: false,
         silent: true
@@ -119,7 +119,7 @@ const task = new Task(async function (argv) {
   })
 
   return true
-})
+}, 500)
 
 if (require.main === module) {
   task.setCliHandlers()

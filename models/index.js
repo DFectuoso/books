@@ -12,5 +12,5 @@ module.exports = {
   RequestLog,
   Organization,
   Role,
-  Group// #end
+  Group// #Exports
 }
