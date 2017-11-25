@@ -1,33 +1,24 @@
-import React, { Component } from 'react'
-import { branch } from 'baobab-react/higher-order'
-import PropTypes from 'baobab-react/prop-types'
+import React from 'react'
 import Link from '~base/router/link'
 import moment from 'moment'
 
-import Page from '~base/page'
+import ListPage from '~base/list-page'
 import {loggedIn} from '~base/middlewares/'
-import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
-import CreateCompany from './create'
+import CreateRole from './create'
 
-class Roles extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      className: ''
-    }
-  }
-
-  componentWillMount () {
-    this.context.tree.set('roles', {
-      page: 1,
-      totalItems: 0,
-      items: [],
-      pageLength: 10
-    })
-    this.context.tree.commit()
-  }
-
-  getColumns () {
+export default ListPage({
+  path: '/manage/roles',
+  title: 'Roles',
+  icon: 'address-book',
+  exact: true,
+  validate: loggedIn,
+  titleSingular: 'Role',
+  create: true,
+  createComponent: CreateRole,
+  baseUrl: '/admin/roles',
+  branchName: 'roles',
+  detailUrl: '/admin/manage/roles/',
+  getColumns: () => {
     return [
       {
         'title': 'Name',
@@ -72,81 +63,4 @@ class Roles extends Component {
       }
     ]
   }
-
-  showModal () {
-    this.setState({
-      className: ' is-active'
-    })
-  }
-
-  hideModal () {
-    this.setState({
-      className: ''
-    })
-  }
-
-  finishUp (object) {
-    this.setState({
-      className: ''
-    })
-    this.props.history.push('/admin/manage/roles/' + object.uuid)
-  }
-
-  render () {
-    return (
-      <div className='columns c-flex-1 is-marginless'>
-        <div className='column is-paddingless'>
-          <div className='section is-paddingless-top'>
-            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Roles</h1>
-            <div className='card'>
-              <header className='card-header'>
-                <p className='card-header-title'>
-                    Roles
-                </p>
-                <div className='card-header-select'>
-                  <button className='button is-primary' onClick={() => this.showModal()}>
-                    New Role
-                  </button>
-                  <CreateCompany
-                    className={this.state.className}
-                    hideModal={this.hideModal.bind(this)}
-                    finishUp={this.finishUp.bind(this)}
-                    branchName='roles'
-                    baseUrl='/admin/roles'
-                    url='/admin/roles'
-                  />
-                </div>
-              </header>
-              <div className='card-content'>
-                <div className='columns'>
-                  <div className='column'>
-                    <BranchedPaginatedTable
-                      branchName='roles'
-                      baseUrl='/admin/roles'
-                      columns={this.getColumns()}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-}
-
-Roles.contextTypes = {
-  tree: PropTypes.baobab
-}
-
-const branchedRoles = branch({roles: 'roles'}, Roles)
-
-export default Page({
-  path: '/manage/roles',
-  title: 'Roles',
-  icon: 'address-book',
-  exact: true,
-  validate: loggedIn,
-  component: branchedRoles
 })
