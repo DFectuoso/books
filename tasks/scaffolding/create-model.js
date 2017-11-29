@@ -23,7 +23,7 @@ const task = new Task(async function (argv) {
   const answers = await scaffolding.promt(INITPROMPT)
 
   const total = answers.totalFields
-  const model = {
+  var model = {
     name: answers.modelName.toLowerCase(),
     fields: []
   }
