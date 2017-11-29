@@ -31,7 +31,7 @@ module.exports = async function (ctx, next) {
       ctx.state.token = userToken
 
       userToken.lastUse = new Date()
-      await userToken
+      await userToken.save()
     }
   }
 
