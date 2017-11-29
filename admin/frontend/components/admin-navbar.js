@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
 
+import api from '~base/api'
 import Image from '~base/components/image'
 import Link from '~base/router/link'
 import tree from '~core/tree'
@@ -39,8 +40,14 @@ class NavBar extends Component {
     }
   }
 
-  handleLogout () {
+  async handleLogout () {
     const {history} = this.props
+
+    try {
+      await api.del('/user')
+    } catch (err) {
+      console.log('Error removing token, logging out anyway ...')
+    }
 
     window.localStorage.removeItem('jwt')
     tree.set('jwt', null)
