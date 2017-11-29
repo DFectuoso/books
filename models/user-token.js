@@ -10,6 +10,7 @@ const userTokenSchema = new Schema({
   uuid: { type: String, default: v4 },
   key: { type: String, default: v4 },
   secret: { type: String, default: v4 },
+  type: { type: String, default: 'session' },
   validUntil: { type: Date },
   lastUse: { type: Date },
   dateCreated: { type: Date, default: moment.utc }
