@@ -1,20 +1,13 @@
-// node tasks/scaffolding/create-model --model
+// node tasks/scaffolding/create-model
 require('../../config')
 require('lib/databases/mongo')
 
 const Task = require('lib/task')
-const inquirer = require('inquirer')
-const fs = require('fs-extra')
-const nunjucks = require('nunjucks')
-const { spawn } = require('child_process')
+const scaffolding = require('lib/scaffolding')
 const path = require('path')
-const replace = require('replace')
+const s = require('underscore.string')
 
 const task = new Task(async function (argv) {
-  if (!argv.model) {
-    throw new Error('model is required')
-  }
-
   const INITPROMPT = [
     {
       name: 'modelName',
@@ -27,12 +20,11 @@ const task = new Task(async function (argv) {
       message: 'How many fields are in the model?'
     }
   ]
-
-  const answers = await inquirer.prompt(INITPROMPT)
+  const answers = await scaffolding.promt(INITPROMPT)
 
   const total = answers.totalFields
   const model = {
-    name: answers.modelName,
+    name: answers.modelName.toLowerCase(),
     fields: []
   }
 
@@ -73,50 +65,26 @@ const task = new Task(async function (argv) {
       })
   }
 
-  const answersFields = await inquirer.prompt(QUESTIONFIELDS)
+  const dataModel = await scaffolding.promt(QUESTIONFIELDS)
 
   for (i = 0; i < total; i++) {
     model.fields.push({
-      name: answersFields['fieldName' + i],
-      type: answersFields['fieldType' + i],
-      isRequired: answersFields['fieldRequired' + i],
-      default: answersFields['fieldDefault' + i],
-      isArray: answersFields['fieldArray' + i]
+      name: dataModel['fieldName' + i],
+      type: dataModel['fieldType' + i],
+      isRequired: dataModel['fieldRequired' + i],
+      default: dataModel['fieldDefault' + i],
+      isArray: dataModel['fieldArray' + i]
     })
   }
 
-  const currDirProyect = path.resolve('.')
+  const templatePath = path.join('./tasks/scaffolding/templates/model.js')
+  const filePath = path.join('./models/' + model.name + '.js')
+  const fileModel = await scaffolding.createFileFromTemplate(filePath, templatePath, model)
 
-  const file = fs.readFileSync(currDirProyect + '/tasks/scaffolding/templates/model.js', 'utf8')
-  const template = nunjucks.compile(file)
-  const content = template.render(model)
-  const filePath = currDirProyect + '/models/' + model.name + '.js'
-  const modelIndex = currDirProyect + '/models/index.js'
+  const modelIndexPath = path.join('./models/index.js')
 
-  fs.writeFile(filePath, content, function (err) {
-    if (err) {
-      return console.log(err)
-    } else {
-      spawn('standard', ['--fix', filePath])
-      replace({
-        regex: '// #Exports',
-        replacement: ',\n  ' + model.name.replace(/\b\w/g, l => l.toUpperCase()) + '// #Exports',
-        paths: [modelIndex],
-        recursive: false,
-        silent: true
-      })
-
-      replace({
-        regex: '// #Import',
-        replacement: 'const ' + model.name.replace(/\b\w/g, l => l.toUpperCase()) + ' = require(\'./' + model.name + '\')\n// #Import',
-        paths: [modelIndex],
-        recursive: false,
-        silent: true
-      })
-      spawn('standard', ['--fix', modelIndex])
-      console.log('Created successfully')
-    }
-  })
+  scaffolding.replaceInFile(modelIndexPath, '// #Exports', ',\n  ' + s.capitalize(model.name) + '// #Exports')
+  scaffolding.replaceInFile(modelIndexPath, '// #Import', 'const ' + s.capitalize(model.name) + ' = require(\'./' + model.name + '\')\n// #Import')
 
   return true
 }, 500)
