@@ -5,20 +5,86 @@ require('lib/databases/mongo')
 const Task = require('lib/task')
 const scaffolding = require('lib/scaffolding')
 const path = require('path')
+const s = require('underscore.string')
 
 const task = new Task(async function (argv) {
-  const answers = await scaffolding.promtModel()
-  const model = await scaffolding.askModelData(answers)
-  const currDirProyect = path.resolve('.')
+  const INITPROMPT = [
+    {
+      name: 'modelName',
+      type: 'input',
+      message: 'Whats is the name of the model?'
+    },
+    {
+      name: 'totalFields',
+      type: 'input',
+      message: 'How many fields are in the model?'
+    }
+  ]
+  const answers = await scaffolding.promt(INITPROMPT)
 
-  const template = await scaffolding.readTemplate(currDirProyect + '/tasks/scaffolding/templates/model.js')
-  const content = scaffolding.compileTemplate(template, model)
-  const filePath = currDirProyect + '/models/' + model.name + '.js'
-  const fileModel = await scaffolding.createFile(filePath, content)
+  const total = answers.totalFields
+  const model = {
+    name: answers.modelName.toLowerCase(),
+    fields: []
+  }
 
-  const modelIndex = currDirProyect + '/models/index.js'
+  var QUESTIONFIELDS = []
 
-  scaffolding.addModelToIndex(model.name, modelIndex)
+  for (var i = 0; i < total; i++) {
+    QUESTIONFIELDS.push(
+      {
+        name: 'fieldName' + i,
+        type: 'input',
+        message: 'Name of the field ' + (i + 1) + ':'
+      },
+      {
+        name: 'fieldType' + i,
+        type: 'list',
+        message: 'Type of the field ' + (i + 1) + ':',
+        choices: [
+          'string',
+          'number',
+          'boolean',
+          'date'
+        ]
+      },
+      {
+        name: 'fieldRequired' + i,
+        type: 'confirm',
+        message: 'the field ' + (i + 1) + ' is required?'
+      },
+      {
+        name: 'fieldDefault' + i,
+        type: 'input',
+        message: 'Default value for field ' + (i + 1) + ' (leave blank if not):'
+      },
+      {
+        name: 'fieldArray' + i,
+        type: 'confirm',
+        message: 'Field ' + (i + 1) + ' is Array of objects?:'
+      })
+  }
+
+  const dataModel = await scaffolding.promt(QUESTIONFIELDS)
+
+  for (i = 0; i < total; i++) {
+    model.fields.push({
+      name: dataModel['fieldName' + i],
+      type: dataModel['fieldType' + i],
+      isRequired: dataModel['fieldRequired' + i],
+      default: dataModel['fieldDefault' + i],
+      isArray: dataModel['fieldArray' + i]
+    })
+  }
+
+  const templatePath = path.join('./tasks/scaffolding/templates/model.js')
+  const filePath = path.join('./models/' + model.name + '.js')
+  const fileModel = await scaffolding.createFileFromTemplate(filePath, templatePath, model)
+
+  const modelIndexPath = path.join('./models/index.js')
+
+  scaffolding.replaceInFile(modelIndexPath, '// #Exports', ',\n  ' + s.capitalize(model.name) + '// #Exports')
+  scaffolding.replaceInFile(modelIndexPath, '// #Import', 'const ' + s.capitalize(model.name) + ' = require(\'./' + model.name + '\')\n// #Import')
 
   return true
 }, 500)
