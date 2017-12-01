@@ -20,10 +20,10 @@ const task = new Task(async function (argv) {
 
   const modelSchema = scaffolding.getModelSchemaForTemplate(model)
 
-  const templatePathIndex = path.join('./tasks/scaffolding/templates/api/admin/api-admin/index.js')
-  const dirPathIndex = path.join('./api/routers/admin/' + modelSchema.name + '/')
-  const fileIndex = 'index.js'
-  const fileApiIndex = await scaffolding.createFileFromTemplate(dirPathIndex, fileIndex, templatePathIndex, modelSchema)
+  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/index.js')
+  const dirPath = path.join('./api/routers/admin/' + modelSchema.name + '/')
+  const filePath = dirPath + 'index.js'
+  const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   return true
 }, 500)

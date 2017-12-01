@@ -22,8 +22,8 @@ const task = new Task(async function (argv) {
 
   const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/list.js')
   const dirPath = path.join('./api/routers/admin/' + modelSchema.name + '/')
-  const fileName = 'list.js'
-  const fileApi = await scaffolding.createFileFromTemplate(dirPath, fileName, templatePath, modelSchema)
+  const filePath = dirPath + 'list.js'
+  const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   return true
 }, 500)
