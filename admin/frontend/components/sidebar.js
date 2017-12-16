@@ -21,7 +21,9 @@ class Sidebar extends Component {
   }
 
   componentWillMount () {
-    this.handleActiveLink(window.location.pathname.split('/').splice(-1, 1).pop())
+    var pathToArray = window.location.pathname.split('/')
+    var url = pathToArray.slice((pathToArray.findIndex(function (item) { return item === 'admin' })) + 1, pathToArray.length)
+    this.handleActiveLink(url.pop() || '')
   }
 
   getMenuItems () {

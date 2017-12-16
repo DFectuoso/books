@@ -26,7 +26,7 @@ class SidebarItem extends Component {
   }
 
   getDropdownButton (to, icon, title, toggle) {
-    var mainPath = new RegExp(to)
+    var mainPath = new RegExp(to.replace(/\//g, ''))
     return (<a href='javascript:void(0)' className={mainPath.test(this.props.activeItem) ? 'is-active' : ''} onClick={() => toggle()}>
       <span className='icon'>
         <FontAwesome name={icon} />
