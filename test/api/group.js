@@ -85,8 +85,13 @@ describe('Group CRUD', () => {
     })
 
     it('should return a 200 and the group updated', async function () {
+      const baseGroup = await Group.create({
+        name: 'Un group',
+        description: 'Una descripción'
+      })
+
       await test()
-        .post('/api/admin/groups/' + groupUuid)
+        .post('/api/admin/groups/' + baseGroup.uuid)
         .send({
           name: 'Un group',
           description: 'Otra descripción'
@@ -94,7 +99,7 @@ describe('Group CRUD', () => {
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newGroup = await Group.findOne({'uuid': groupUuid})
+      const newGroup = await Group.findOne({'uuid': baseGroup.uuid})
       expect(newGroup.name).equal('Un group')
       expect(newGroup.description).equal('Otra descripción')
     })
@@ -109,13 +114,18 @@ describe('Group CRUD', () => {
     })
 
     it('should return a 200 and the group requested', async function () {
+      const baseGroup = await Group.create({
+        name: 'Un group',
+        description: 'Una descripción'
+      })
+
       const res = await test()
-        .get('/api/admin/groups/' + groupUuid)
+        .get('/api/admin/groups/' + baseGroup.uuid)
         .set('Accept', 'application/json')
         .expect(200)
 
       expect(res.body.data.name).equal('Un group')
-      expect(res.body.data.description).equal('Otra descripción')
+      expect(res.body.data.description).equal('Una descripción')
     })
   })
 

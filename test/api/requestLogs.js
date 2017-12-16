@@ -12,7 +12,7 @@ function test () {
   return request(http.createServer(api.callback()))
 }
 
-describe('Request logs', () => {
+describe.skip('Request logs', () => {
   beforeEach(async function () {
     await clearDatabase()
   })
@@ -31,7 +31,7 @@ describe('Request logs', () => {
     })
   })
 
-  describe.skip('[get] /Create wrong request-log', () => {
+  describe('[get] /Create wrong request-log', () => {
     it('should create the request-log with error', async function () {
       await test()
         .post('/api/wrong-url-123123')
