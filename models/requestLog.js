@@ -22,6 +22,8 @@ const requestLogSchema = new Schema({
   timestamps: true
 })
 
+requestLogSchema.index({createdAt: 1, uuid: 1, status: 1})
+
 requestLogSchema.plugin(dataTables)
 
 module.exports = mongoose.model('RequestLog', requestLogSchema)
