@@ -1,4 +1,4 @@
-// node tasks/scaffolding/admin-frontend-list --model foo
+// node tasks/scaffolding/admin-frontend-deletedlist --model foo
 require('../../config')
 require('lib/databases/mongo')
 
@@ -20,7 +20,7 @@ const task = new Task(async function (argv) {
     {
       name: 'properties',
       type: 'checkbox',
-      message: 'Select properties to use in list:',
+      message: 'Select properties to use in deleted list:',
       choices: scaffolding.getModelProperties(model)
     }
   ]
@@ -31,15 +31,15 @@ const task = new Task(async function (argv) {
 
   const modelSchema = scaffolding.getModelSchemaForTemplate(model, properties)
 
-  const templatePath = path.join('./tasks/scaffolding/templates/admin/frontend/pages/pages-admin/list.js')
+  const templatePath = path.join('./tasks/scaffolding/templates/admin/frontend/pages/pages-admin/deleted-list.js')
   const dirPath = path.join('./admin/frontend/pages/' + modelSchema.name + 's/')
-  const filePath = dirPath + 'list.js'
+  const filePath = dirPath + 'deleted-list.js'
   const fileList = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   const routerPath = path.join('./admin/frontend/router.js')
 
-  scaffolding.replaceInFile(routerPath, '// #Import', 'import ' + s.capitalize(modelSchema.name) + 's from \'./pages/' + modelSchema.name + 's/list\'\n// #Import')
-  scaffolding.replaceInFile(routerPath, '<div id=\'route\' />', '{' + s.capitalize(modelSchema.name) + 's.asRouterItem()}\n          <div id=\'route\' />')
+  scaffolding.replaceInFile(routerPath, '// #Import', 'import Deleted' + s.capitalize(modelSchema.name) + 's from \'./pages/' + modelSchema.name + 's/deleted-list\'\n// #Import')
+  scaffolding.replaceInFile(routerPath, '<div id=\'route\' />', '{Deleted' + s.capitalize(modelSchema.name) + 's.asRouterItem()}\n          <div id=\'route\' />')
 
   return true
 }, 500)

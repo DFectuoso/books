@@ -42,7 +42,7 @@ export default ListPage({
       {
         'title': 'Actions',
         formatter: (row) => {
-          return <Link className='button' to={'/manage/{{ name }}s/' + row.uuid}>
+          return <Link className='button' to={'/{{ name }}s/' + row.uuid}>
             Detalle
           </Link>
         }
