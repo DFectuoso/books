@@ -1,7 +1,6 @@
 const config = require('config')
 
 const Koa = require('koa')
-const bodyParser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const convert = require('koa-convert')
 const cors = require('koa-cors')
@@ -19,7 +18,6 @@ if (env !== 'test') {
 }
 
 app.use(convert(cors()))
-app.use(convert(bodyParser({strict: false})))
 
 app.use(sanitizeBody)
 app.use(errorHandler)
