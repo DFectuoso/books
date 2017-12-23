@@ -3,6 +3,7 @@ import SidebarItem from '~components/sidebar-item'
 
 import Dashboard from '../pages/dashboard'
 import Users from '../pages/users/list'
+import UsersImport from '../pages/users/import'
 import Organizations from '../pages/organizations/list'
 import Roles from '../pages/roles/list'
 import Groups from '../pages/groups/list'
@@ -35,6 +36,7 @@ class Sidebar extends Component {
         to: '/manage',
         dropdown: [
           Users.asSidebarItem(),
+          UsersImport.asSidebarItem(),
           Organizations.asSidebarItem(),
           Roles.asSidebarItem(),
           Groups.asSidebarItem()
@@ -74,7 +76,7 @@ class Sidebar extends Component {
       <aside className='menu'>
         <ul className='menu-list'>
           {this.getMenuItems().map(item => {
-            if(!item) { return }
+            if (!item) { return }
             return <SidebarItem
               title={item.title}
               icon={item.icon}

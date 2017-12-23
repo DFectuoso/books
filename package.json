@@ -27,6 +27,7 @@
     "bull": "^3.3.7",
     "bulma": "^0.5.1",
     "css-loader": "^0.28.5",
+    "csv-parse": "^2.0.0",
     "debug": "^2.6.8",
     "dotenv": "^4.0.0",
     "es6-requireindex": "^0.3.10",
