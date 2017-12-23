@@ -7,10 +7,6 @@ const createModel = require('./create-model')
 const Task = require('lib/task')
 
 const task = new Task(async function (argv) {
-  if (!argv.model) {
-    throw new Error('Model name is required')
-  }
-
   const model = await createModel.run()
 
   for (const api in commands.admin.api) {
