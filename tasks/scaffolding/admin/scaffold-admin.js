@@ -1,8 +1,8 @@
-// node tasks/scaffolding/scaffold
-require('../../config')
+// node tasks/scaffolding/admin/scaffold-admin
+require('../../../config')
 require('lib/databases/mongo')
 const commands = require('./commands')
-const createModel = require('./create-model')
+const createModel = require('../create-model')
 
 const Task = require('lib/task')
 

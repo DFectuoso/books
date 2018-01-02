@@ -1,5 +1,5 @@
 // node tasks/scaffolding/admin-frontend-detail --model foo
-require('../../config')
+require('../../../config')
 require('lib/databases/mongo')
 
 const Task = require('lib/task')
