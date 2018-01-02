@@ -36,10 +36,16 @@ class Sidebar extends Component {
         to: '/manage',
         dropdown: [
           Users.asSidebarItem(),
-          UsersImport.asSidebarItem(),
           Organizations.asSidebarItem(),
           Roles.asSidebarItem(),
           Groups.asSidebarItem()
+        ]
+      }, {
+        title: 'Load Data',
+        icon: 'file-o',
+        to: '/import',
+        dropdown: [
+          UsersImport.asSidebarItem()
         ]
       }, {
         title: 'Developer Tools',

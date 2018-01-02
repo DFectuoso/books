@@ -25,6 +25,7 @@ class ImportUsers extends Component {
     this.state = {
       apiCallMessage: 'is-hidden',
       apiCallErrorMessage: 'is-hidden',
+      message: '',
       formData: {
         file: undefined
       }
@@ -49,14 +50,14 @@ class ImportUsers extends Component {
       })
     }
 
-    this.setState({apiCallMessage: 'message is-success'})
+    this.setState({apiCallMessage: 'message is-success', message: data.message})
   }
 
   render () {
     var error
     if (this.state.error) {
       error = <div>
-        Error: {this.state.error}
+        {this.state.error}
       </div>
     }
 
@@ -67,30 +68,55 @@ class ImportUsers extends Component {
             <h1
               className='is-size-3 is-padding-top-small is-padding-bottom-small'
             >
-              Import users
+              Load users
             </h1>
             <div className='card'>
               <div className='card-content'>
-                <BaseForm schema={schema}
-                  uiSchema={uiSchema}
-                  formData={this.state.formData}
-                  onChange={(e) => { this.changeHandler(e) }}
-                  onSubmit={(e) => { this.submitHandler(e) }}
-                  onError={(e) => { this.errorHandler(e) }}
-                  className='has-text-centered'>
-
-                  <div className={this.state.apiCallMessage}>
-                    <div className='message-body is-size-7 has-text-centered'>Tus datos se han modificado correctamente</div>
+                <div className='columns'>
+                  <div className='column'>
+                    <BaseForm schema={schema}
+                      uiSchema={uiSchema}
+                      formData={this.state.formData}
+                      onChange={(e) => { this.changeHandler(e) }}
+                      onSubmit={(e) => { this.submitHandler(e) }}
+                      onError={(e) => { this.errorHandler(e) }}
+                      className='has-text-centered'
+                    >
+                      <div className={this.state.apiCallMessage}>
+                        <div
+                          className='message-body is-size-7 has-text-centered'
+                        >
+                          {this.state.message}
+                        </div>
+                      </div>
+                      <div className={this.state.apiCallErrorMessage}>
+                        <div
+                          className='message-body is-size-7 has-text-centered'
+                        >
+                          {error}
+                        </div>
+                      </div>
+                      <div>
+                        <button
+                          className='button is-primary'
+                          type='submit'
+                        >
+                          Importar
+                        </button>
+                      </div>
+                    </BaseForm>
                   </div>
-
-                  <div className={this.state.apiCallErrorMessage}>
-                    <div className='message-body is-size-7 has-text-centered'>{error}</div>
+                  <div className='column'>
+                    <h4>
+                      The <strong>.csv</strong> file should have the same format
+                      as the example below:
+                    </h4>
+                    <pre style={{marginTop: '1em'}}>
+                      "name","screenName","email","password"<br />
+                      "Juan Perez","Juan","juan@coporation.com","password"
+                    </pre>
                   </div>
-
-                  <div>
-                    <button className='button is-primary' type='submit'>Importar</button>
-                  </div>
-                </BaseForm>
+                </div>
               </div>
             </div>
           </div>
@@ -101,9 +127,9 @@ class ImportUsers extends Component {
 }
 
 export default Page({
-  path: '/users/import',
-  title: 'Users import',
-  icon: 'users',
+  path: '/import/users',
+  title: 'Load users',
+  icon: 'user',
   exact: true,
   validate: loggedIn,
   component: ImportUsers
