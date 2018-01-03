@@ -1,11 +1,10 @@
-// node tasks/scaffolding/admin-frontend-list --model foo
+// node tasks/scaffolding/admin-frontend-create --model foo
 require('../../config')
 require('lib/databases/mongo')
 
 const Task = require('lib/task')
 const scaffolding = require('lib/scaffolding')
 const path = require('path')
-const s = require('underscore.string')
 
 const task = new Task(async function (argv) {
   if (!argv.model) {
@@ -16,6 +15,7 @@ const task = new Task(async function (argv) {
   if (!model) {
     throw new Error('Model ' + argv.model + ' doesn\'t exits')
   }
+
   const QUESTIONS = [
     {
       name: 'properties',
@@ -31,15 +31,15 @@ const task = new Task(async function (argv) {
 
   const modelSchema = scaffolding.getModelSchemaForTemplate(model, properties)
 
-  const templatePath = path.join('./tasks/scaffolding/templates/admin/frontend/pages/pages-admin/list.js')
+  const templatePath = path.join('./tasks/scaffolding/templates/admin/frontend/pages/pages-admin/create.js')
   const dirPath = path.join('./admin/frontend/pages/' + modelSchema.name + 's/')
-  const filePath = dirPath + 'list.js'
-  const fileList = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
+  const filePath = dirPath + 'create.js'
+  const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
-  const routerPath = path.join('./admin/frontend/router.js')
-
-  scaffolding.replaceInFile(routerPath, '// #Import', 'import ' + s.capitalize(modelSchema.name) + 's from \'./pages/' + modelSchema.name + 's/list\'\n// #Import')
-  scaffolding.replaceInFile(routerPath, '<div id=\'route\' />', '{' + s.capitalize(modelSchema.name) + 's.asRouterItem()}\n          <div id=\'route\' />')
+  const templatePath2 = path.join('./tasks/scaffolding/templates/admin/frontend/pages/pages-admin/create-form.js')
+  const dirPath2 = path.join('./admin/frontend/pages/' + modelSchema.name + 's/')
+  const filePath2 = dirPath + 'create-form.js'
+  const fileApi2 = await scaffolding.createFileFromTemplate(dirPath2, filePath2, templatePath2, modelSchema)
 
   return true
 }, 500)

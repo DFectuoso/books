@@ -1,4 +1,4 @@
-// node tasks/scaffolding/admin-api-list --model foo
+// node tasks/scaffolding/admin-api-update --model foo
 require('../../config')
 require('lib/databases/mongo')
 
@@ -16,11 +16,24 @@ const task = new Task(async function (argv) {
     throw new Error('Model ' + argv.model + ' doesn\'t exits')
   }
 
-  const modelSchema = scaffolding.getModelSchemaForTemplate(model)
+  const QUESTIONS = [
+    {
+      name: 'properties',
+      type: 'checkbox',
+      message: 'Select properties to update:',
+      choices: scaffolding.getModelProperties(model)
+    }
+  ]
 
-  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/list.js')
+  const answers = await scaffolding.prompt(QUESTIONS)
+
+  const properties = answers.properties
+
+  const modelSchema = scaffolding.getModelSchemaForTemplate(model, properties)
+
+  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/update.js')
   const dirPath = path.join('./api/routers/admin/' + modelSchema.name + '/')
-  const filePath = dirPath + 'list.js'
+  const filePath = dirPath + 'update.js'
   const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   return true
