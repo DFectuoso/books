@@ -3,6 +3,7 @@ import SidebarItem from '~components/sidebar-item'
 
 import Dashboard from '../pages/dashboard'
 import Users from '../pages/users/list'
+import UsersImport from '../pages/users/import'
 import Organizations from '../pages/organizations/list'
 import Roles from '../pages/roles/list'
 import Groups from '../pages/groups/list'
@@ -40,6 +41,13 @@ class Sidebar extends Component {
           Groups.asSidebarItem()
         ]
       }, {
+        title: 'Load Data',
+        icon: 'file-o',
+        to: '/import',
+        dropdown: [
+          UsersImport.asSidebarItem()
+        ]
+      }, {
         title: 'Developer Tools',
         icon: 'github-alt',
         to: '/devtools',
@@ -74,7 +82,7 @@ class Sidebar extends Component {
       <aside className='menu'>
         <ul className='menu-list'>
           {this.getMenuItems().map(item => {
-            if(!item) { return }
+            if (!item) { return }
             return <SidebarItem
               title={item.title}
               icon={item.icon}
