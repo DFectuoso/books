@@ -1,5 +1,6 @@
 const sampleQueue = require('./sample-queue')
+// #Requires
 
 module.exports = {
-  'sample-queue': sampleQueue
+  'sample-queue': sampleQueue// #Exports
 }
