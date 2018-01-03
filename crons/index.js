@@ -1,5 +1,6 @@
 const sampleCron = require('./sample-cron')
+// #Requires
 
 module.exports = {
-  'sample-cron': sampleCron
+  'sample-cron': sampleCron// #Exports
 }
