@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import api from '~base/api'
+import Loader from '~base/components/spinner'
 import PropTypes from 'baobab-react/prop-types'
 import moment from 'moment'
 import classNames from 'classnames'
@@ -12,12 +13,32 @@ class RequestLog extends Component {
     super(props)
 
     this.state = {
-      toggled: true
+      toggled: true,
+      log: undefined,
+      jsonString: undefined
     }
   }
 
-  showLog () {
+  async loadLog (uuid) {
+    if (this.state.log) return
+
+    const body = await api.get('/request-logs/' + uuid)
+
+    var jsonString = JSON.stringify(body.data, null, 2)
+    this.setState({log: body.data, jsonString: jsonString})
+  }
+
+  async showLog () {
     this.setState({ toggled: !this.state.toggled })
+    await this.loadLog(this.props.log.uuid)
+  }
+
+  getBody () {
+    if (this.state.log && this.state.jsonString) {
+      return (<pre className='json'>{this.state.jsonString}</pre>)
+    }
+
+    return (<Loader />)
   }
 
   render () {
@@ -46,7 +67,7 @@ class RequestLog extends Component {
           </p>
         </div>
         <div className={classNameBody}>
-          <pre className='json'>{JSON.stringify(log, null, 2)}</pre>
+          {this.getBody()}
         </div>
       </article>
     )
@@ -158,6 +179,8 @@ class RequestLogs extends Component {
               <a className='button is-danger is-small' onClick={() => this.setStatusFilter('error')}>500</a>
             </div>
 
+            {loading && <Loader />}
+
             {this.list()}
 
             {more && <a className={classNameLoadLink} onClick={this.loadMore}>more</a>}
@@ -171,8 +194,6 @@ class RequestLogs extends Component {
 RequestLogs.contextTypes = {
   tree: PropTypes.baobab
 }
-
-// export default RequestLogs
 
 export default Page({
   path: '/devtools/request-logs',
