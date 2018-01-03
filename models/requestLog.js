@@ -8,6 +8,7 @@ const requestLogSchema = new Schema({
   query: { type: String },
   host: { type: String },
   path: { type: String },
+  type: { type: String },
   body: { type: Object },
   ip: { type: String },
   method: { type: String },
@@ -20,6 +21,8 @@ const requestLogSchema = new Schema({
 }, {
   timestamps: true
 })
+
+requestLogSchema.index({createdAt: 1, uuid: 1, status: 1})
 
 requestLogSchema.plugin(dataTables)
 
