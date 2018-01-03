@@ -1,5 +1,5 @@
-// node tasks/scaffolding/admin-api-deletedlist --model foo
-require('../../config')
+// node tasks/scaffolding/admin-api-detail --model foo
+require('../../../config')
 require('lib/databases/mongo')
 
 const Task = require('lib/task')
@@ -18,9 +18,9 @@ const task = new Task(async function (argv) {
 
   const modelSchema = scaffolding.getModelSchemaForTemplate(model)
 
-  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/deleted-list.js')
+  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/detail.js')
   const dirPath = path.join('./api/routers/admin/' + modelSchema.name + '/')
-  const filePath = dirPath + 'deleted-list.js'
+  const filePath = dirPath + 'detail.js'
   const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   return true

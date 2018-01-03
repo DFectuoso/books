@@ -1,10 +1,12 @@
-// node tasks/scaffolding/admin-api-list --model foo
-require('../../config')
+// node tasks/scaffolding/admin-api-index --model foo
+require('../../../config')
 require('lib/databases/mongo')
 
 const Task = require('lib/task')
 const scaffolding = require('lib/scaffolding')
 const path = require('path')
+const s = require('underscore.string')
+const _ = require('lodash')
 
 const task = new Task(async function (argv) {
   if (!argv.model) {
@@ -18,9 +20,9 @@ const task = new Task(async function (argv) {
 
   const modelSchema = scaffolding.getModelSchemaForTemplate(model)
 
-  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/list.js')
+  const templatePath = path.join('./tasks/scaffolding/templates/api/admin/api-admin/index.js')
   const dirPath = path.join('./api/routers/admin/' + modelSchema.name + '/')
-  const filePath = dirPath + 'list.js'
+  const filePath = dirPath + 'index.js'
   const fileApi = await scaffolding.createFileFromTemplate(dirPath, filePath, templatePath, modelSchema)
 
   return true

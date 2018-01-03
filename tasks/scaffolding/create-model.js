@@ -87,7 +87,7 @@ const task = new Task(async function (argv) {
   scaffolding.replaceInFile(modelIndexPath, '// #Exports', ',\n  ' + s.capitalize(model.name) + '// #Exports')
   scaffolding.replaceInFile(modelIndexPath, '// #Import', 'const ' + s.capitalize(model.name) + ' = require(\'./' + model.name + '\')\n// #Import')
 
-  return true
+  return model.name
 }, 500)
 
 if (require.main === module) {
