@@ -19,7 +19,7 @@ module.exports = new Route({
 
     data.slug = slugify(data.name)
     group.set(data)
-    group.save()
+    await group.save()
 
     ctx.body = {
       data: group.format()
