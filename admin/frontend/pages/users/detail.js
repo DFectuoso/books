@@ -4,6 +4,7 @@ import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 import moment from 'moment'
 import env from '~base/env-variables'
+import FontAwesome from 'react-fontawesome'
 
 import Page from '~base/page'
 import {loggedIn} from '~base/middlewares/'
@@ -23,7 +24,13 @@ class UserDetail extends Component {
       user: {},
       roles: [],
       orgs: [],
-      groups: []
+      groups: [],
+      selectedGroups: [],
+      savingGroup: false,
+      savedGroup: false,
+      selectedOrgs: [],
+      savingOrg: false,
+      savedOrg: false
     }
   }
 
@@ -41,7 +48,9 @@ class UserDetail extends Component {
     await this.setState({
       loading: false,
       loaded: true,
-      user: body.data
+      user: body.data,
+      selectedGroups: [...body.data.groups],
+      selectedOrgs: [...body.data.organizations]
     })
   }
 
@@ -66,7 +75,6 @@ class UserDetail extends Component {
     const body = await api.get(
       url,
       {
-        user: this.props.match.params.uuid,
         start: 0,
         limit: 0
       }
@@ -83,7 +91,6 @@ class UserDetail extends Component {
     const body = await api.get(
       url,
       {
-        user: this.props.match.params.uuid,
         start: 0,
         limit: 0
       }
@@ -106,6 +113,23 @@ class UserDetail extends Component {
   }
 
   async availableOrgOnClick (uuid) {
+    this.setState({
+      savingOrg: true
+    })
+
+    var selected = this.state.selectedOrgs
+    var group = this.state.orgs.find(item => { return item.uuid === uuid })
+
+    if (selected.findIndex(item => { return item.uuid === uuid }) !== -1) {
+      return
+    }
+
+    selected.push(group)
+
+    this.setState({
+      selectedOrgs: selected
+    })
+
     var url = '/admin/users/' + this.props.match.params.uuid + '/add/organization'
     await api.post(url,
       {
@@ -113,11 +137,32 @@ class UserDetail extends Component {
       }
     )
 
-    this.load()
-    this.loadOrgs()
+    setTimeout(() => {
+      this.setState({
+        savingOrg: false,
+        savedOrg: true
+      })
+    }, 300)
   }
 
   async assignedOrgOnClick (uuid) {
+    this.setState({
+      savingOrg: true
+    })
+
+    var index = this.state.selectedOrgs.findIndex(item => { return item.uuid === uuid })
+    var selected = this.state.selectedOrgs
+
+    if (index === -1) {
+      return
+    }
+
+    selected.splice(index, 1)
+
+    this.setState({
+      selectedOrgs: selected
+    })
+
     var url = '/admin/users/' + this.props.match.params.uuid + '/remove/organization'
     await api.post(url,
       {
@@ -125,11 +170,32 @@ class UserDetail extends Component {
       }
     )
 
-    this.load()
-    this.loadOrgs()
+    setTimeout(() => {
+      this.setState({
+        savingOrg: false,
+        savedOrg: true
+      })
+    }, 300)
   }
 
   async availableGroupOnClick (uuid) {
+    this.setState({
+      savingGroup: true
+    })
+
+    var selected = this.state.selectedGroups
+    var group = this.state.groups.find(item => { return item.uuid === uuid })
+
+    if (selected.findIndex(item => { return item.uuid === uuid }) !== -1) {
+      return
+    }
+
+    selected.push(group)
+
+    this.setState({
+      selectedGroups: selected
+    })
+
     var url = '/admin/users/' + this.props.match.params.uuid + '/add/group'
     await api.post(url,
       {
@@ -137,11 +203,32 @@ class UserDetail extends Component {
       }
     )
 
-    this.load()
-    this.loadGroups()
+    setTimeout(() => {
+      this.setState({
+        savingGroup: false,
+        savedGroup: true
+      })
+    }, 300)
   }
 
   async assignedGroupOnClick (uuid) {
+    this.setState({
+      savingGroup: true
+    })
+
+    var index = this.state.selectedGroups.findIndex(item => { return item.uuid === uuid })
+    var selected = this.state.selectedGroups
+
+    if (index === -1) {
+      return
+    }
+
+    selected.splice(index, 1)
+
+    this.setState({
+      selectedGroups: selected
+    })
+
     var url = '/admin/users/' + this.props.match.params.uuid + '/remove/group'
     await api.post(url,
       {
@@ -149,8 +236,12 @@ class UserDetail extends Component {
       }
     )
 
-    this.load()
-    this.loadGroups()
+    setTimeout(() => {
+      this.setState({
+        savingGroup: false,
+        savedGroup: true
+      })
+    }, 300)
   }
 
   async resetOnClick () {
@@ -189,12 +280,78 @@ class UserDetail extends Component {
     // this.load()
   }
 
+  getSavingMessage (saving, saved) {
+    if (saving) {
+      return (
+        <p className='card-header-title' style={{fontWeight: '200', color: 'grey'}}>
+          Saving <span style={{paddingLeft: '5px'}}><FontAwesome className='fa-spin' name='spinner' /></span>
+        </p>
+      )
+    }
+
+    if (saved) {
+      return (
+        <p className='card-header-title' style={{fontWeight: '200', color: 'grey'}}>
+          Saved
+        </p>
+      )
+    }
+  }
+
+  getSavingGroupMessage () {
+    let { savingGroup, savedGroup } = this.state
+
+    if (savedGroup) {
+      if (this.savedGroupTimeout) {
+        clearTimeout(this.savedGroupTimeout)
+      }
+
+      this.savedGroupTimeout = setTimeout(() => {
+        this.setState({
+          savedGroup: false
+        })
+      }, 500)
+    }
+
+    return this.getSavingMessage(savingGroup, savedGroup)
+  }
+
+  getSavingOrgMessage () {
+    let { savingOrg, savedOrg } = this.state
+
+    if (savedOrg) {
+      if (this.savedOrgTimeout) {
+        clearTimeout(this.savedOrgTimeout)
+      }
+
+      this.savedOrgTimeout = setTimeout(() => {
+        this.setState({
+          savedOrg: false
+        })
+      }, 500)
+    }
+
+    return this.getSavingMessage(savingOrg, savedOrg)
+  }
+
   render () {
     const { user } = this.state
 
     if (!user.uuid) {
       return <Loader />
     }
+
+    const availableGroupsList = this.state.groups.filter(item => {
+      return (this.state.selectedGroups.findIndex(group => {
+        return group.uuid === item.uuid
+      }) === -1)
+    })
+
+    const availableOrgsList = this.state.orgs.filter(item => {
+      return (this.state.selectedOrgs.findIndex(org => {
+        return org.uuid === item.uuid
+      }) === -1)
+    })
 
     var resetButton
     if (env.EMAIL_SEND) {
@@ -260,11 +417,14 @@ class UserDetail extends Component {
                         <p className='card-header-title'>
                           Organizations
                         </p>
+                        <div>
+                          {this.getSavingOrgMessage()}
+                        </div>
                       </header>
                       <div className='card-content'>
                         <Multiselect
-                          assignedList={user.organizations}
-                          availableList={this.state.orgs}
+                          assignedList={this.state.selectedOrgs}
+                          availableList={availableOrgsList}
                           dataFormatter={(item) => { return item.name || 'N/A' }}
                           availableClickHandler={this.availableOrgOnClick.bind(this)}
                           assignedClickHandler={this.assignedOrgOnClick.bind(this)}
@@ -280,11 +440,14 @@ class UserDetail extends Component {
                         <p className='card-header-title'>
                           Groups
                         </p>
+                        <div>
+                          {this.getSavingGroupMessage()}
+                        </div>
                       </header>
                       <div className='card-content'>
                         <Multiselect
-                          assignedList={user.groups}
-                          availableList={this.state.groups}
+                          assignedList={this.state.selectedGroups}
+                          availableList={availableGroupsList}
                           dataFormatter={(item) => { return item.name || 'N/A' }}
                           availableClickHandler={this.availableGroupOnClick.bind(this)}
                           assignedClickHandler={this.assignedGroupOnClick.bind(this)}

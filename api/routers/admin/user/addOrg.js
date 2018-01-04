@@ -13,11 +13,15 @@ module.exports = new Route({
     const org = await Organization.findOne({'uuid': ctx.request.body.organization})
     ctx.assert(org, 404, 'Organization not found')
 
+    if (user.organizations.find(item => { return String(item) === String(org._id) })) {
+      ctx.throw(400, 'You can only add the user to an organization once!')
+    }
+
     user.organizations.push(org)
-    user.save()
+    await user.save()
 
     org.users.push(user)
-    org.save()
+    await org.save()
 
     ctx.body = {
       data: user.toAdmin()
