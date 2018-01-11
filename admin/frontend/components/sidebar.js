@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import SidebarItem from '~components/sidebar-item'
+import classNames from 'classnames'
 
 import Dashboard from '../pages/dashboard'
 import Users from '../pages/users/list'
@@ -16,15 +17,27 @@ class Sidebar extends Component {
     super(props)
     this.state = {
       dropdown: true,
-      active: ''
+      active: '',
+      collapsed: false,
+      menuItems: []
     }
     this.handleActiveLink = this.handleActiveLink.bind(this)
   }
 
   componentWillMount () {
-    var pathToArray = window.location.pathname.split('/')
-    var url = pathToArray.slice((pathToArray.findIndex(function (item) { return item === 'admin' })) + 1, pathToArray.length)
-    this.handleActiveLink(url.pop() || '')
+    const activeItem = window.location.pathname.split('/').filter(String).slice(1).join('')
+    let menuItems = this.getMenuItems()
+    let IndexOfActive = menuItems.findIndex(function (item) {
+      const mainPath = new RegExp(item.to.replace(/\//g, ''))
+      if (!item.hasOwnProperty('dropdown')) return false
+      return mainPath.test(activeItem)
+    })
+    if (IndexOfActive >= 0) {
+      menuItems[IndexOfActive].open = true
+    }
+    this.setState({ menuItems }, function () {
+      this.handleActiveLink(activeItem)
+    })
   }
 
   getMenuItems () {
@@ -34,6 +47,7 @@ class Sidebar extends Component {
         title: 'Manage Your Team',
         icon: 'users',
         to: '/manage',
+        open: false,
         dropdown: [
           Users.asSidebarItem(),
           Organizations.asSidebarItem(),
@@ -44,6 +58,7 @@ class Sidebar extends Component {
         title: 'Load Data',
         icon: 'file-o',
         to: '/import',
+        open: false,
         dropdown: [
           UsersImport.asSidebarItem()
         ]
@@ -51,6 +66,7 @@ class Sidebar extends Component {
         title: 'Developer Tools',
         icon: 'github-alt',
         to: '/devtools',
+        open: false,
         dropdown: [
           RequestLogs.asSidebarItem()
         ]
@@ -58,6 +74,7 @@ class Sidebar extends Component {
         title: 'Reports',
         icon: 'github-alt',
         to: '/reports',
+        open: false,
         dropdown: [
           Reports.asSidebarItem()
         ]
@@ -72,23 +89,56 @@ class Sidebar extends Component {
     this.setState({active: item})
   }
 
+  handleCollapse () {
+    const menuItems = [...this.state.menuItems]
+    this.setState({
+      collapsed: !this.state.collapsed,
+      menuItems: menuItems.map(item => {
+        item.open = false
+        return item
+      })
+    })
+  }
+
+  handleToggle (index) {
+    const menuItems = [...this.state.menuItems]
+    menuItems[index].open = !menuItems[index].open
+    this.setState({menuItems})
+  }
+
   render () {
     let divClass = 'offcanvas column is-narrow is-narrow-mobile is-narrow-tablet is-narrow-desktop  is-paddingless'
+    const menuClass = classNames('menu', {
+      'menu-collapsed': this.state.collapsed
+    })
+    const collapseBtn = classNames('fa', {
+      'fa-expand': this.state.collapsed,
+      'fa-compress': !this.state.collapsed
+    })
     if (!this.props.burgerState) {
       divClass = divClass + ' is-hidden-touch'
     }
 
     return (<div className={divClass}>
-      <aside className='menu'>
+      <aside className={menuClass}>
+        <a onClick={() => this.handleCollapse()} className='button is-primary collapse-btn'>
+          <span className='icon is-small'>
+            <i className={collapseBtn} />
+          </span>
+        </a>
         <ul className='menu-list'>
-          {this.getMenuItems().map(item => {
+          {this.state.menuItems.map((item, index) => {
             if (!item) { return }
             return <SidebarItem
               title={item.title}
+              index={index}
+              status={item.open}
+              collapsed={this.state.collapsed}
               icon={item.icon}
               to={item.to}
               dropdown={item.dropdown}
               onClick={this.handleActiveLink}
+              dropdownOnClick={(i) => this.handleToggle(i)}
               activeItem={this.state.active}
               key={item.title.toLowerCase().replace(/\s/g, '')} />
           })}

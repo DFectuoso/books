@@ -1,0 +1,67 @@
+.navbar-menu-container {
+    background-color: whitesmoke;
+    align-items: stretch;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+.navbar {
+	align-items: stretch;
+	display: flex;
+}
+.navbar-start, .navbar-end {
+	align-items: stretch;
+    display: flex;
+}
+
+.navbar-start {
+	justify-content: flex-start;
+	margin-right: auto;
+}
+.navbar-end {
+	justify-content: flex-end;
+    margin-left: auto;
+}
+
+.navbar-item {
+	align-items: center;
+    display: flex;
+}
+
+.burger-desktop {
+    cursor: pointer;
+    display: block;
+    height: 3.25rem;
+    position: relative;
+    width: 3.25rem;
+    margin-left: auto;
+}
+
+.navbar-brand.collapsed {
+  width: 50px;
+  .navbar-item {
+    padding: 0px;
+    img {
+      margin: auto;
+      max-height: none;
+    }
+    h3 {
+      display: none;
+    }
+  }
+}
+
+a.navbar-item:hover {
+  background-color: #272727;
+}
+
+a .navbar-item:hover {
+  background-color: transparent;
+}
+
+.avatar {
+  max-height: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  min-width: 40px;
+}
