@@ -13,11 +13,15 @@ module.exports = new Route({
     const group = await Group.findOne({'uuid': ctx.request.body.group})
     ctx.assert(group, 404, 'Group not found')
 
+    if (user.groups.find(item => { return String(item) === String(group._id) })) {
+      ctx.throw(400, 'You can only add the user to a group once!')
+    }
+
     user.groups.push(group)
-    user.save()
+    await user.save()
 
     group.users.push(user)
-    group.save()
+    await group.save()
 
     ctx.body = {
       data: user.toAdmin()
