@@ -183,35 +183,6 @@ a.navbar-item:hover {
   background-color: black
 }
 
-.menu {
-  width: 250px;
-  height: 100%;
-
-  .icon {
-    margin-right: 5px;
-  }  
-}
-
-.menu li {
-  background-color: #f1f1f1;
-}
-
-.menu ul li > ul {
-  margin: 0px;
-  padding: 0px;
-
-  li {
-    background-color: #f7f7f7;
-    a {
-      padding-left: 1.8em;
-      &.is-active {
-        background: #f7f7f7;
-        color: $primary;
-      }
-    }
-  }
-}
-
 footer {
   padding: 20px;
   width: 100%;
