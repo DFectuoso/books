@@ -110,7 +110,8 @@ userSchema.methods.createToken = async function (options = {}) {
 
   const token = await UserToken.create({
     user: this._id,
-    type: options.type
+    type: options.type,
+    name: options.name
   })
 
   return token
