@@ -163,17 +163,19 @@ describe('Organization CRUD', () => {
         .expect(404)
     })
 
-    it.skip('should return a 200', async function () {
+    it('should add a user to an organzation and return a 200', async function () {
+      const organization = await Organization.create({name: 'new organization'})
       const res = await test()
         .post('/api/admin/users/' + userUuid + '/add/organization')
         .send({
-          organization: orgUuid
+          organization: organization.uuid
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newOrg = await Organization.findOne({'uuid': orgUuid}).populate('users')
-      expect(res.body.data.organizations[0]._id).equal('' + newOrg._id)
+      const newOrg = await Organization.findOne({'uuid': organization.uuid}).populate('users')
+
+      expect(res.body.data.organizations[0].uuid).equal(newOrg.uuid)
       expect(newOrg.users[0].uuid).equal(userUuid)
     })
   })

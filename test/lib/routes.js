@@ -140,7 +140,7 @@ describe('lib/routes', () => {
         }
       })
 
-      const priotityRoute = new Route({
+      const priorityRoute = new Route({
         method: 'get',
         path: '/:uuid',
         handler: async function (ctx) {
@@ -151,7 +151,7 @@ describe('lib/routes', () => {
       const router = new Router({
         routes: {
           base: baseRoute,
-          priority: priotityRoute
+          priority: priorityRoute
         },
         prefix: '/test'
       })
@@ -177,7 +177,7 @@ describe('lib/routes', () => {
         }
       })
 
-      const priotityRoute = new Route({
+      const priorityRoute = new Route({
         method: 'get',
         path: '/:uuid',
         priority: 10,
@@ -189,7 +189,7 @@ describe('lib/routes', () => {
       const router = new Router({
         routes: {
           base: baseRoute,
-          priority: priotityRoute
+          priority: priorityRoute
         },
         prefix: '/test'
       })

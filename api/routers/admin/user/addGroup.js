@@ -7,7 +7,7 @@ module.exports = new Route({
   handler: async function (ctx) {
     const userId = ctx.params.uuid
 
-    const user = await User.findOne({'uuid': userId})
+    const user = await User.findOne({'uuid': userId}).populate('groups')
     ctx.assert(user, 404, 'User not found')
 
     const group = await Group.findOne({'uuid': ctx.request.body.group})
