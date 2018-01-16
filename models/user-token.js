@@ -29,7 +29,8 @@ userTokenSchema.methods.toPrivate = function () {
     name: this.name,
     uuid: this.uuid,
     key: this.key,
-    secret: this.secret
+    secret: this.secret,
+    lastUse: this.lastUse
   }
 }
 
@@ -37,7 +38,8 @@ userTokenSchema.methods.toPublic = function () {
   return {
     name: this.name,
     uuid: this.uuid,
-    key: this.key
+    key: this.key,
+    lastUse: this.lastUse
   }
 }
 

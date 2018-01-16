@@ -5,6 +5,7 @@ import {loggedIn} from '~base/middlewares/'
 
 import UpdateProfileForm from '~base/components/update-profile'
 import UpdatePasswordForm from '~base/components/update-password'
+import TokensList from './tokenList'
 
 export default Page({
   path: '/profile',
@@ -38,18 +39,7 @@ export default Page({
             </div>
 
             <div className='column is-two-thirds'>
-              <div className='card'>
-                <header className='card-header'>
-                  <p className='card-header-title'>
-                    Data
-                  </p>
-                </header>
-                <div className='card-content'>
-                  <div className='content'>
-                    Hola mundo
-                  </div>
-                </div>
-              </div>
+              <TokensList />
             </div>
           </div>
         </section>
