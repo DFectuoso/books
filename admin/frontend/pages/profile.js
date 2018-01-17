@@ -5,7 +5,7 @@ import {loggedIn} from '~base/middlewares/'
 
 import UpdateProfileForm from '~base/components/update-profile'
 import UpdatePasswordForm from '~base/components/update-password'
-import TokensList from './tokenList'
+import TokensList from '~base/components/tokenList'
 
 export default Page({
   path: '/profile',
