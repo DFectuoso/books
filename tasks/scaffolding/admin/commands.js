@@ -1,6 +1,6 @@
 module.exports = {
   createModel: {
-    file: 'crete-model',
+    file: 'create-model',
     command: 'tasks/scaffolding/create-model'
   },
   admin: {
