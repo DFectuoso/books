@@ -10,6 +10,10 @@ module.exports = new Route({
       return ctx.throw(401)
     }
 
+    if (ctx.state.authMethod !== 'Bearer') {
+      return ctx.throw(403)
+    }
+
     await token.remove()
 
     ctx.body = {
