@@ -173,17 +173,20 @@ describe('Group CRUD', () => {
         .expect(404)
     })
 
-    it.skip('should return a 200', async function () {
+    it('should return a 200', async function () {
+      const group = await Group.create({name: 'new group'})
+
       const res = await test()
         .post('/api/admin/users/' + userUuid + '/add/group')
         .send({
-          group: groupUuid
+          group: group.uuid
         })
         .set('Accept', 'application/json')
         .expect(200)
 
-      const newGroup = await Group.findOne({'uuid': groupUuid}).populate('users')
-      expect(res.body.data.groups[0]._id).equal('' + newGroup._id)
+      const newGroup = await Group.findOne({'uuid': group.uuid}).populate('users')
+
+      expect(res.body.data.groups[0].uuid).equal(group.uuid)
       expect(newGroup.users[0].uuid).equal(userUuid)
     })
   })
