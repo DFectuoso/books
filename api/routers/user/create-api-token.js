@@ -19,7 +19,7 @@ module.exports = new Route({
       return ctx.throw(403)
     }
 
-    const token = await await user.createToken({
+    const token = await user.createToken({
       type: 'api',
       name
     })

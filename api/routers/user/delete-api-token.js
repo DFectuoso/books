@@ -1,5 +1,5 @@
 const Route = require('lib/router/route')
-const {UserToken} = require("models")
+const {UserToken} = require('models')
 
 module.exports = new Route({
   method: 'del',
@@ -21,8 +21,8 @@ module.exports = new Route({
       return ctx.throw(403)
     }
 
-    const token = UserToken.findOne({'uuid': tokenUUId})
-    ctx.assert(token, 404, "Token not found")
+    const token = await UserToken.findOne({'uuid': tokenUUId})
+    ctx.assert(token, 404, 'Token not found')
 
     await token.remove()
 

@@ -3,6 +3,8 @@ const { server } = require('config')
 const jwt = require('lib/jwt')
 
 module.exports = async function (ctx, next) {
+  let userToken
+
   if (ctx.req.headers.authorization) {
     const [ method, token ] = ctx.req.headers.authorization.split(' ')
 
@@ -14,7 +16,7 @@ module.exports = async function (ctx, next) {
         ctx.throw(401, 'Invalid JWT')
       }
 
-      let userToken = await UserToken.findOne({
+      userToken = await UserToken.findOne({
         key: data.key,
         secret: data.secret
       }).populate('user')
@@ -27,12 +29,7 @@ module.exports = async function (ctx, next) {
         return ctx.throw(401, 'Invalid User')
       }
 
-      ctx.state.user = userToken.user
-      ctx.state.token = userToken
       ctx.state.authMethod = 'Bearer'
-
-      userToken.lastUse = new Date()
-      await userToken.save()
     }
 
     if (method === 'Basic') {
@@ -41,7 +38,7 @@ module.exports = async function (ctx, next) {
       const key = decodedStr.split(':')[0]
       const secret = decodedStr.split(':')[1]
 
-      let userToken = await UserToken.findOne({
+      userToken = await UserToken.findOne({
         key: key,
         secret: secret
       }).populate('user')
@@ -54,17 +51,20 @@ module.exports = async function (ctx, next) {
         return ctx.throw(401, 'Invalid User')
       }
 
-      ctx.state.user = userToken.user
-      ctx.state.token = userToken
       ctx.state.authMethod = 'Basic'
-
-      userToken.lastUse = new Date()
-      await userToken.save()
     }
   }
 
   ctx.state.appHost = server.appHost
   ctx.state.apiHost = server.apiHost
+
+  if (userToken) {
+    ctx.state.user = userToken.user
+    ctx.state.token = userToken
+
+    userToken.lastUse = new Date()
+    await userToken.save()
+  }
 
   await next()
 }
