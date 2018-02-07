@@ -41,7 +41,7 @@ class {{ name | capitalize }}Detail extends Component {
 
 
   render () {
-    const { {{ name | lower }} } = this.state.{{ name | lower }}
+    const { {{ name | lower }} } = this.state
 
     if (!this.state.loaded) {
       return <Loader />
