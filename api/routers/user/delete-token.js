@@ -14,7 +14,8 @@ module.exports = new Route({
       return ctx.throw(403)
     }
 
-    await token.remove()
+    token.isDeleted = true
+    await token.save()
 
     ctx.body = {
       data: 'OK'

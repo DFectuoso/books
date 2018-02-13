@@ -17,6 +17,7 @@ module.exports = new Route({
     }
 
     const tokens = await UserToken.find({
+      isDeleted: {$ne: true},
       user: user._id,
       type: 'api'
     })

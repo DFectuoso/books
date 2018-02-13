@@ -6,7 +6,7 @@ const http = require('http')
 const { clearDatabase, createUser } = require('../utils')
 const api = require('api/')
 const request = require('supertest')
-const {User} = require('models')
+const {User, UserToken} = require('models')
 const lov = require('lov')
 
 function test () {
@@ -356,6 +356,35 @@ describe('/user', () => {
         .expect(401)
     })
 
+    it('should have one deleted token in the DB', async function () {
+      const user = await createUser({ password })
+      const token = await user.createToken({type: 'session'})
+      const jwt = token.getJwt()
+
+      const res = await test()
+        .get('/api/user/me')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+
+      expect(res.body.loggedIn).equal(true)
+
+      expect(await UserToken.count({isDeleted: {$ne: true}})).equal(1)
+
+      await test().del('/api/user/')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(200)
+
+      await test().get('/api/user/me')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Bearer ${jwt}`)
+        .expect(401)
+
+      expect(await UserToken.count()).equal(1)
+      expect(await UserToken.count({isDeleted: {$ne: true}})).equal(0)
+    })
+
     it('should return 403 is a api token tries to be revoked this way', async function () {
       const user = await createUser({ password })
 
@@ -451,6 +480,28 @@ describe('/user', () => {
 
       expect(secondRes.body.tokens.length).equal(1)
       expect(secondRes.body.tokens[0].name).equal('bar')
+    })
+
+    it('should return be removed from the token list', async function () {
+      const user = await createUser({ password })
+
+      const apiToken = await user.createToken({type: 'api', name: 'foo'})
+      const basicAuth = Buffer.from(apiToken.key + ':' + apiToken.secret).toString('base64')
+
+      await test()
+        .del(`/api/user/tokens/${apiToken.uuid}`)
+        .set('Accept', 'application/json')
+        .set('Authorization', `Basic ${basicAuth}`)
+        .expect(200)
+
+      await test()
+        .get('/api/user/me')
+        .set('Accept', 'application/json')
+        .set('Authorization', `Basic ${basicAuth}`)
+        .expect(401)
+
+      expect(await UserToken.count()).equal(1)
+      expect(await UserToken.count({isDeleted: {$ne: true}})).equal(0)
     })
   })
 })
