@@ -9,7 +9,7 @@ import { loggedIn } from '~base/middlewares/'
 import { BaseTable } from '~base/components/base-table'
 
 class Reports extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       sortAscending: true,
@@ -34,7 +34,7 @@ class Reports extends Component {
     this.handleOnFilter = this.handleOnFilter.bind(this)
   }
 
-  componentWillMount() {
+  componentWillMount () {
     this.context.tree.set('users', {
       page: 1,
       totalItems: 0,
@@ -45,7 +45,7 @@ class Reports extends Component {
     this.loadOrgs()
   }
 
-  async loadOrgs(sort = this.state.sort) {
+  async loadOrgs (sort = this.state.sort) {
     const url = '/admin/users/'
     const params = {
       start: 0,
@@ -72,7 +72,7 @@ class Reports extends Component {
     })
   }
 
-  getColumns() {
+  getColumns () {
     return [
       {
         'title': 'Screen name',
@@ -105,24 +105,24 @@ class Reports extends Component {
     ]
   }
 
-  handleSort(sort) {
+  handleSort (sort) {
     let sortAscending = sort !== this.state.sort ? false : !this.state.sortAscending
     this.setState({ sort, sortAscending }, function () {
       this.loadOrgs()
     })
   }
 
-  handleOnFilter(filters) {
+  handleOnFilter (filters) {
     this.setState({ filters })
   }
 
-  showModal() {
+  showModal () {
     this.setState({
       className: ' is-active'
     })
   }
 
-  render() {
+  render () {
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
