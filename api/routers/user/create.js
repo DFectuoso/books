@@ -13,13 +13,20 @@ module.exports = new Route({
     displayName: lov.string()
   }),
   handler: async function (ctx) {
+    let user
+    let error
     const { screenName, displayName, email, password } = ctx.request.body
-    const user = await User.register({
-      screenName,
-      displayName,
-      email,
-      password
-    })
+
+    try {
+      user = await User.register({
+        screenName,
+        displayName,
+        email,
+        password
+      })
+    } catch (e) {
+      return ctx.throw(422, e.message)
+    }
 
     let defaultRole = await Role.findOne({isDefault: true})
     if (!defaultRole) {

@@ -30,6 +30,10 @@ module.exports = async function (ctx, next) {
         return ctx.throw(401, 'Invalid User')
       }
 
+      if (userToken.user.isDeleted) {
+        return ctx.throw(401, 'Invalid User')
+      }
+
       ctx.state.authMethod = 'Bearer'
     }
 
@@ -50,6 +54,10 @@ module.exports = async function (ctx, next) {
       }
 
       if (!userToken.user) {
+        return ctx.throw(401, 'Invalid User')
+      }
+
+      if (userToken.user.isDeleted) {
         return ctx.throw(401, 'Invalid User')
       }
 

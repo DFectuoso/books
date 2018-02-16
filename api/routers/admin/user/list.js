@@ -58,7 +58,7 @@ module.exports = new Route({
     var users = await User.dataTables({
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,
-      find: {isDeleted: false, ...filters},
+      find: {isDeleted: {$ne: true}, ...filters},
       sort: ctx.request.query.sort || '-email'
     })
 
