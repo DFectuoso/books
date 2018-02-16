@@ -4,7 +4,7 @@ import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 
 import Page from '~base/page'
-import {loggedIn} from '~base/middlewares/'
+import { loggedIn } from '~base/middlewares/'
 
 import { BaseTable } from '~base/components/base-table'
 
@@ -107,13 +107,13 @@ class Reports extends Component {
 
   handleSort (sort) {
     let sortAscending = sort !== this.state.sort ? false : !this.state.sortAscending
-    this.setState({sort, sortAscending}, function () {
+    this.setState({ sort, sortAscending }, function () {
       this.loadOrgs()
     })
   }
 
   handleOnFilter (filters) {
-    this.setState({filters})
+    this.setState({ filters })
   }
 
   showModal () {
@@ -141,7 +141,7 @@ class Reports extends Component {
                   columns={this.getColumns()}
                   sortAscending={this.state.sortAscending}
                   sortBy={this.state.sort}
-                 />
+                />
               </div>
             </div>
           </div>
@@ -155,7 +155,7 @@ Reports.contextTypes = {
   tree: PropTypes.baobab
 }
 
-const branchedReports = branch({users: 'users'}, Reports)
+const branchedReports = branch({ users: 'users' }, Reports)
 
 export default Page({
   path: '/reports/users',
