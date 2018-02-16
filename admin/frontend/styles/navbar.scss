@@ -65,3 +65,16 @@ a .navbar-item:hover {
   min-height: 40px;
   min-width: 40px;
 }
+
+.navbar-burger {
+  height: 3.35rem;
+  width: 3.35rem;
+
+  span {
+    background: #ffffff
+  }
+
+  &:hover span {
+    background: $primary
+  }
+}
