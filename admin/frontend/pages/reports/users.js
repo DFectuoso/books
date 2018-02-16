@@ -7,6 +7,8 @@ import Page from '~base/page'
 import {loggedIn} from '~base/middlewares/'
 
 import { BaseTable } from '~base/components/base-table'
+import Checkbox from '~base/components/base-checkbox'
+import Editable from '~base/components/base-editable'
 
 class Reports extends Component {
   constructor (props) {
@@ -28,7 +30,9 @@ class Reports extends Component {
           appointments: 0,
           days: []
         }
-      }
+      },
+      selectedAll: false,
+      selectedCheckboxes: new Set()
     }
 
     this.handleOnFilter = this.handleOnFilter.bind(this)
@@ -101,7 +105,52 @@ class Reports extends Component {
         'default': 'N/A',
         'sortable': false,
         'totals': true
-      }
+      },
+      {
+        'title': 'Editable',
+        'default': 0,
+        'type': 'number',
+        formatter: (row) => {
+          return (
+            <Editable
+              value={row.count}
+              handleChange={this.changeCount}
+              type='number'
+              obj={row}
+              width={80}
+            />
+          )
+        }
+      },
+      {
+        'title': 'Seleccionar Todo',
+        'abbreviate': true,
+        'abbr': (() => {
+          return (
+            <Checkbox
+              label='checkAll'
+              handleCheckboxChange={(e) => this.checkAll(!this.state.selectedAll)}
+              key='checkAll'
+              checked={this.state.selectedAll}
+              hideLabel />
+          )
+        })(),
+        'property': 'checkbox',
+        'default': '',
+        formatter: (row) => {
+          if (!row.selected) {
+            row.selected = false
+          }
+          return (
+            <Checkbox
+              label={row}
+              handleCheckboxChange={this.toggleCheckbox}
+              key={row}
+              checked={row.selected}
+              hideLabel />
+          )
+        }
+      },
     ]
   }
 
@@ -120,6 +169,31 @@ class Reports extends Component {
     this.setState({
       className: ' is-active'
     })
+  }
+
+  checkAll = (check) => {
+    for (let row of this.state.reports) {
+      this.toggleCheckbox(row, check)
+    }
+    this.setState({ selectedAll: check })
+  }
+
+  toggleCheckbox = (row, all) => {
+    if (this.state.selectedCheckboxes.has(row) && !all) {
+      this.state.selectedCheckboxes.delete(row)
+      row.selected = false
+    }
+    else {
+      this.state.selectedCheckboxes.add(row)
+      row.selected = true
+    }
+    console.log('Selected: ' + row.screenName)
+    console.log('Total: ' + this.state.selectedCheckboxes.size)
+  }
+
+  changeCount = async (value, row) => {
+    row.count = value
+    return value
   }
 
   render () {
