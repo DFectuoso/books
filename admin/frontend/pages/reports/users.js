@@ -4,14 +4,12 @@ import PropTypes from 'baobab-react/prop-types'
 import api from '~base/api'
 
 import Page from '~base/page'
-import {loggedIn} from '~base/middlewares/'
+import { loggedIn } from '~base/middlewares/'
 
 import { BaseTable } from '~base/components/base-table'
-import Checkbox from '~base/components/base-checkbox'
-import Editable from '~base/components/base-editable'
 
 class Reports extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       sortAscending: true,
@@ -30,15 +28,13 @@ class Reports extends Component {
           appointments: 0,
           days: []
         }
-      },
-      selectedAll: false,
-      selectedCheckboxes: new Set()
+      }
     }
 
     this.handleOnFilter = this.handleOnFilter.bind(this)
   }
 
-  componentWillMount () {
+  componentWillMount() {
     this.context.tree.set('users', {
       page: 1,
       totalItems: 0,
@@ -49,7 +45,7 @@ class Reports extends Component {
     this.loadOrgs()
   }
 
-  async loadOrgs (sort = this.state.sort) {
+  async loadOrgs(sort = this.state.sort) {
     const url = '/admin/users/'
     const params = {
       start: 0,
@@ -76,7 +72,7 @@ class Reports extends Component {
     })
   }
 
-  getColumns () {
+  getColumns() {
     return [
       {
         'title': 'Screen name',
@@ -105,98 +101,28 @@ class Reports extends Component {
         'default': 'N/A',
         'sortable': false,
         'totals': true
-      },
-      {
-        'title': 'Editable',
-        'default': 0,
-        'type': 'number',
-        formatter: (row) => {
-          return (
-            <Editable
-              value={row.count}
-              handleChange={this.changeCount}
-              type='number'
-              obj={row}
-              width={80}
-            />
-          )
-        }
-      },
-      {
-        'title': 'Seleccionar Todo',
-        'abbreviate': true,
-        'abbr': (() => {
-          return (
-            <Checkbox
-              label='checkAll'
-              handleCheckboxChange={(e) => this.checkAll(!this.state.selectedAll)}
-              key='checkAll'
-              checked={this.state.selectedAll}
-              hideLabel />
-          )
-        })(),
-        'property': 'checkbox',
-        'default': '',
-        formatter: (row) => {
-          if (!row.selected) {
-            row.selected = false
-          }
-          return (
-            <Checkbox
-              label={row}
-              handleCheckboxChange={this.toggleCheckbox}
-              key={row}
-              checked={row.selected}
-              hideLabel />
-          )
-        }
-      },
+      }
     ]
   }
 
-  handleSort (sort) {
+  handleSort(sort) {
     let sortAscending = sort !== this.state.sort ? false : !this.state.sortAscending
-    this.setState({sort, sortAscending}, function () {
+    this.setState({ sort, sortAscending }, function () {
       this.loadOrgs()
     })
   }
 
-  handleOnFilter (filters) {
-    this.setState({filters})
+  handleOnFilter(filters) {
+    this.setState({ filters })
   }
 
-  showModal () {
+  showModal() {
     this.setState({
       className: ' is-active'
     })
   }
 
-  checkAll = (check) => {
-    for (let row of this.state.reports) {
-      this.toggleCheckbox(row, check)
-    }
-    this.setState({ selectedAll: check })
-  }
-
-  toggleCheckbox = (row, all) => {
-    if (this.state.selectedCheckboxes.has(row) && !all) {
-      this.state.selectedCheckboxes.delete(row)
-      row.selected = false
-    }
-    else {
-      this.state.selectedCheckboxes.add(row)
-      row.selected = true
-    }
-    console.log('Selected: ' + row.screenName)
-    console.log('Total: ' + this.state.selectedCheckboxes.size)
-  }
-
-  changeCount = async (value, row) => {
-    row.count = value
-    return value
-  }
-
-  render () {
+  render() {
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
@@ -215,7 +141,7 @@ class Reports extends Component {
                   columns={this.getColumns()}
                   sortAscending={this.state.sortAscending}
                   sortBy={this.state.sort}
-                 />
+                />
               </div>
             </div>
           </div>
@@ -229,7 +155,7 @@ Reports.contextTypes = {
   tree: PropTypes.baobab
 }
 
-const branchedReports = branch({users: 'users'}, Reports)
+const branchedReports = branch({ users: 'users' }, Reports)
 
 export default Page({
   path: '/reports/users',
