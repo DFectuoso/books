@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { root } from 'baobab-react/higher-order'
 
+import api from '~base/api'
 import tree from '~core/tree'
-import api from '~core/api'
 
 import NavBar from '~components/navbar'
 

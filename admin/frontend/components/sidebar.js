@@ -4,6 +4,7 @@ import classNames from 'classnames'
 
 import Dashboard from '../pages/dashboard'
 import Users from '../pages/users/list'
+import DeletedUsers from '../pages/users/list-deleted'
 import UsersImport from '../pages/users/import'
 import Organizations from '../pages/organizations/list'
 import Roles from '../pages/roles/list'
@@ -50,6 +51,7 @@ class Sidebar extends Component {
         open: false,
         dropdown: [
           Users.asSidebarItem(),
+          DeletedUsers.asSidebarItem(),
           Organizations.asSidebarItem(),
           Roles.asSidebarItem(),
           Groups.asSidebarItem()

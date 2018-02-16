@@ -23,6 +23,8 @@ const userSchema = new Schema({
   role: { type: Schema.Types.ObjectId, ref: 'Role' },
   groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }],
 
+  isDeleted: { type: Boolean, default: false },
+
   resetPasswordToken: { type: String, default: v4 },
   inviteToken: { type: String, default: v4 },
 
@@ -64,7 +66,8 @@ userSchema.methods.format = function () {
     screenName: this.screenName,
     displayName: this.displayName,
     email: this.email,
-    validEmail: this.validEmail
+    validEmail: this.validEmail,
+    isDeleted: this.isDeleted
   }
 }
 
@@ -76,7 +79,8 @@ userSchema.methods.toPublic = function () {
     name: this.name,
     email: this.email,
     validEmail: this.validEmail,
-    isAdmin: this.isAdmin
+    isAdmin: this.isAdmin,
+    isDeleted: this.isDeleted
   }
 }
 
@@ -91,7 +95,8 @@ userSchema.methods.toAdmin = function () {
     validEmail: this.validEmail,
     role: this.role,
     organizations: this.organizations,
-    groups: this.groups
+    groups: this.groups,
+    isDeleted: this.isDeleted
   }
 }
 
@@ -138,10 +143,10 @@ userSchema.statics.register = async function (options) {
   const {screenName, email} = options
 
   const emailTaken = await this.findOne({ email })
-  assert(!emailTaken, 401, 'Email already in use')
+  assert(!emailTaken, 422, 'Email already in use')
 
   const screenTaken = await this.findOne({ screenName })
-  assert(!screenTaken, 401, 'Username already taken')
+  assert(!screenTaken, 422, 'Username already taken')
 
   // create in mongoose
   const createdUser = await this.create(options)

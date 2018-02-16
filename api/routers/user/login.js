@@ -9,6 +9,10 @@ module.exports = new Route({
     const { email, password } = ctx.request.body
     const user = await User.auth(email, password)
 
+    if (user.isDeleted) {
+      return ctx.throw(401, 'User has been suspended')
+    }
+
     const token = await user.createToken({
       type: 'session'
     })

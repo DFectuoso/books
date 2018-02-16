@@ -57,7 +57,7 @@ class LogIn extends Component {
   async submitHandler ({formData}) {
     this.setState({loading: true})
 
-    var data
+    let data
     try {
       data = await api.post('/user/login', formData)
     } catch (e) {

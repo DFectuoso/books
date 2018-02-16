@@ -18,7 +18,8 @@ module.exports = async function (ctx, next) {
 
       userToken = await UserToken.findOne({
         key: data.key,
-        secret: data.secret
+        secret: data.secret,
+        isDeleted: {$ne: true}
       }).populate('user')
 
       if (!userToken) {
@@ -26,6 +27,10 @@ module.exports = async function (ctx, next) {
       }
 
       if (!userToken.user) {
+        return ctx.throw(401, 'Invalid User')
+      }
+
+      if (userToken.user.isDeleted) {
         return ctx.throw(401, 'Invalid User')
       }
 
@@ -40,7 +45,8 @@ module.exports = async function (ctx, next) {
 
       userToken = await UserToken.findOne({
         key: key,
-        secret: secret
+        secret: secret,
+        isDeleted: {$ne: true}
       }).populate('user')
 
       if (!userToken) {
@@ -48,6 +54,10 @@ module.exports = async function (ctx, next) {
       }
 
       if (!userToken.user) {
+        return ctx.throw(401, 'Invalid User')
+      }
+
+      if (userToken.user.isDeleted) {
         return ctx.throw(401, 'Invalid User')
       }
 

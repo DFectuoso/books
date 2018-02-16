@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import api from '~core/api'
+import api from '~base/api'
 import tree from '~core/tree'
 import Page from '~base/page'
 import {forcePublic} from '~base/middlewares/'
@@ -28,14 +28,39 @@ class SignUp extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      formData: {}
+      formData: {
+        password: '',
+        email: '',
+        screenName: '',
+        displayName: ''
+      },
+      apiCallErrorMessage: 'is-hidden',
+      error: ''
     }
   }
 
   errorHandler (e) {}
 
+  changeHandler ({formData}) {
+    this.setState({
+      formData,
+      apiCallErrorMessage: 'is-hidden',
+      error: ''
+    })
+  }
+
   async submitHandler ({formData}) {
-    const data = await api.post('/user', formData)
+    let data
+
+    try {
+      data = await api.post('/user/', formData)
+    } catch (e) {
+      return this.setState({
+        error: e.message,
+        apiCallErrorMessage: 'message is-danger',
+        loading: false
+      })
+    }
 
     window.localStorage.setItem('jwt', data.jwt)
     tree.set('jwt', data.jwt)
@@ -50,6 +75,13 @@ class SignUp extends Component {
   }
 
   render () {
+    var error
+    if (this.state.error) {
+      error = <div>
+        Error: {this.state.error}
+      </div>
+    }
+
     return (
       <div className='SignUp single-form'>
         <div className='card'>
@@ -67,10 +99,23 @@ class SignUp extends Component {
             <div className='content'>
               <BaseForm schema={schema}
                 uiSchema={uiSchema}
+                formData={this.state.formData}
                 onSubmit={(e) => { this.submitHandler(e) }}
-                onError={(e) => { this.errorHandler(e) }}>
+                onError={(e) => { this.errorHandler(e) }}
+                onChange={(e) => { this.changeHandler(e) }}>
                 <div>
-                  <button className='button is-primary is-fullwidth' type='submit'>Sign up</button>
+                  <div className={this.state.apiCallErrorMessage}>
+                    <div className='message-body is-size-7 has-text-centered'>
+                      {error}
+                    </div>
+                  </div>
+                  <button
+                    className='button is-primary is-fullwidth'
+                    type='submit'
+                    disabled={!!error}
+                  >
+                    Sign up
+                  </button>
                 </div>
               </BaseForm>
             </div>

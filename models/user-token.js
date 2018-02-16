@@ -14,6 +14,7 @@ const userTokenSchema = new Schema({
   type: { type: String, default: 'generic' },
   validUntil: { type: Date },
   lastUse: { type: Date },
+  isDeleted: { type: Boolean },
   dateCreated: { type: Date, default: moment.utc }
 })
 

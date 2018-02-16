@@ -24,7 +24,8 @@ module.exports = new Route({
     const token = await UserToken.findOne({'uuid': tokenUUId})
     ctx.assert(token, 404, 'Token not found')
 
-    await token.remove()
+    token.isDeleted = true
+    await token.save()
 
     ctx.body = {success: true}
   }
