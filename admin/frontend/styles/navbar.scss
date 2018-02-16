@@ -69,4 +69,12 @@ a .navbar-item:hover {
 .navbar-burger {
   height: 3.35rem;
   width: 3.35rem;
+
+  span {
+    background: #ffffff
+  }
+
+  &:hover span {
+    background: $primary
+  }
 }
