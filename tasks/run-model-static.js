@@ -20,6 +20,25 @@ const task = new Task(async function (argv) {
     throw new Error(`Document with ${argv.uuid} doesnt have static ${argv.method}`)
   }
 
+  if (argv.hydrate) {
+    const hydrate = argv.hydrate.split(',')
+
+    for (const item of hydrate) {
+      const match = item.trim().match(/(\w+) from (\w+)/)
+
+      if (match) {
+        const arg = match[1]
+        const hidrateModel = match[2]
+
+        if (arg && hidrateModel && argv[arg] && models[hidrateModel]) {
+          argv[arg] = await models[hidrateModel].findOne({uuid: argv[arg]})
+        }
+      } else {
+        throw new Error(`Invalid replacement for ${item}`)
+      }
+    }
+  }
+
   return model[argv.static](argv)
 })
 
