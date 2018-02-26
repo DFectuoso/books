@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import { NavLink } from '~base/router'
 import { branch } from 'baobab-react/higher-order'
 import { withRouter } from 'react-router'
 
@@ -108,7 +108,7 @@ class NavBar extends Component {
           <div className={this.state.profileDropdown}>
             <div className='dropdown-menu' id='dropdown-menu' role='menu'>
               <div className='dropdown-content'>
-                <Link className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/profile'>Profile</Link>
+                <NavLink className='dropdown-item' onClick={() => this.toggleBtnClass()} to='/profile'>Profile</NavLink>
                 <a className='dropdown-item' onClick={() => this.handleLogout()}>
                   Logout
                 </a>
@@ -122,10 +122,10 @@ class NavBar extends Component {
         <div className='navbar-item'>
           <div className='field is-grouped'>
             <p className='control'>
-              <Link className='bd-tw-button button' to='/log-in'>Log in</Link>
+              <NavLink className='bd-tw-button button' to='/log-in'>Log in</NavLink>
             </p>
             <p className='control'>
-              <Link className='bd-tw-button button is-primary' to='/sign-up'>Sign up</Link>
+              <NavLink className='bd-tw-button button is-primary' to='/sign-up'>Sign up</NavLink>
             </p>
           </div>
         </div>
@@ -135,9 +135,9 @@ class NavBar extends Component {
     return (
       <nav className='navbar'>
         <div className='navbar-brand'>
-          <Link className='navbar-item' to='/'>
+          <NavLink className='navbar-item' to='/'>
             <h1>Marble Seeds</h1>
-          </Link>
+          </NavLink>
 
           <div className='navbar-burger burger' onClick={(e) => this.handleNavbarBurgerClick(e)}>
             <span />
@@ -147,9 +147,9 @@ class NavBar extends Component {
         </div>
         <div className={navbarMenuClassName}>
           <div className='navbar-start'>
-            <Link className='navbar-item' to='/about'>
+            <NavLink className='navbar-item' to='/about'>
               About
-            </Link>
+            </NavLink>
           </div>
           {navButtons}
         </div>
