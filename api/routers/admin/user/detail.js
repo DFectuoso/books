@@ -7,7 +7,7 @@ module.exports = new Route({
   handler: async function (ctx) {
     const userId = ctx.params.uuid
 
-    const user = await User.findOne({'uuid': userId, 'isDeleted': false})
+    const user = await User.findOne({'uuid': userId, 'isDeleted': {$ne: true}})
       .populate('organizations')
       .populate('groups')
 
