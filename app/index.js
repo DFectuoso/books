@@ -3,6 +3,7 @@ const express = require('express')
 const webpack = require('webpack')
 const config = require('config')
 const expressNunjucks = require('express-nunjucks')
+const expressStaticGzip = require('express-static-gzip')
 
 const webpackConfig = require('./webpack/dev.config')
 
@@ -28,7 +29,7 @@ if (config.env === 'development') {
   }))
 } else {
   console.log(`Starting server in ${config.env} with static assets`)
-  app.use('/assets', express.static('app/dist'))
+  app.use('/assets', expressStaticGzip('app/dist'))
 }
 
 app.get('*', function (req, res) {
