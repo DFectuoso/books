@@ -1,12 +1,12 @@
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const MinifyPlugin = require('babel-minify-webpack-plugin')
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin')
+const CompressionPlugin = require('compression-webpack-plugin')
 
 const config = require('../../config')
 
 const path = require('path')
 const webpack = require('webpack')
 
-console.log('=>', path.resolve('../dist'))
 module.exports = {
   context: __dirname,
   entry: [
@@ -23,16 +23,12 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: ['es2015', 'stage-0', 'react']
         }
       },
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.scss$/,
+        test: /\.(css|scss)/,
         use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: ['css-loader', 'sass-loader']
@@ -57,7 +53,10 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new MinifyPlugin({}, {})
+    new UglifyWebpackPlugin({
+      parallel: true
+    }),
+    new CompressionPlugin({algorithm: 'gzip'})
   ],
   resolve: {
     modules: ['node_modules'],

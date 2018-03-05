@@ -3,6 +3,7 @@ const express = require('express')
 const webpack = require('webpack')
 const config = require('config')
 const expressNunjucks = require('express-nunjucks')
+const expressStaticGzip = require('express-static-gzip')
 
 const webpackConfig = require('./webpack/dev.config')
 
@@ -13,14 +14,14 @@ expressNunjucks(app, {
   noCache: false
 })
 
-if (config.server.adminPrefix) {
-  app.use(config.server.adminPrefix + '/public', express.static('admin/public'))
-} else {
-  app.use('/public', express.static('admin/public'))
-}
 
 if (config.env === 'development') {
   console.log('Starting server in development with webpack hot reload')
+  if (config.server.adminPrefix) {
+    app.use(config.server.adminPrefix + '/public', express.static('admin/public'))
+  } else {
+    app.use('/public', express.static('admin/public'))
+  }
 
   const compiler = webpack(webpackConfig)
   app.use(require('webpack-dev-middleware')(compiler, {
@@ -34,10 +35,13 @@ if (config.env === 'development') {
   }))
 } else {
   console.log(`Starting server in ${config.env} with static assets`)
+
   if (config.server.adminPrefix) {
-    app.use(config.server.adminPrefix + '/assets', express.static('admin/dist'))
+    app.use(config.server.adminPrefix + '/public', expressStaticGzip('admin/public'))
+    app.use(config.server.adminPrefix + '/assets', expressStaticGzip('admin/dist'))
   } else {
-    app.use('/assets', express.static('admin/dist'))
+    app.use('/public', expressStaticGzip('admin/public'))
+    app.use('/assets', expressStaticGzip('admin/dist'))
   }
 }
 

@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 const config = require('config')
 
-console.log('Building with config.mailer.active =>', config.mailer.active)
 module.exports = {
   context: __dirname,
   entry: [
