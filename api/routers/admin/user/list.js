@@ -6,8 +6,8 @@ module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
-    var filters = {}
-    for (var filter in ctx.request.query) {
+    const filters = {}
+    for (const filter in ctx.request.query) {
       if (filter === 'limit' || filter === 'start' || filter === 'sort') {
         continue
       }
@@ -48,6 +48,14 @@ module.exports = new Route({
         continue
       }
 
+      if (filter === 'isDeleted') {
+        if (ctx.request.query[filter] === 'true') {
+          filter.isDeleted = true
+        } else {
+          filter.isDeleted = {$ne: true}
+        }
+      }
+
       if (!isNaN(parseInt(ctx.request.query[filter]))) {
         filters[filter] = parseInt(ctx.request.query[filter])
       } else {
@@ -55,14 +63,13 @@ module.exports = new Route({
       }
     }
 
-    var users = await User.dataTables({
+    const users = await User.dataTables({
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,
       find: {isDeleted: {$ne: true}, ...filters},
-      sort: ctx.request.query.sort || '-email'
+      sort: ctx.request.query.sort || '-email',
+      format: 'toAdmin'
     })
-
-    users.data = users.data.map((user) => { return user.toAdmin() })
 
     ctx.body = users
   }

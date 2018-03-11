@@ -12,7 +12,7 @@ module.exports = new Route({
     ctx.assert(role, 404, 'Role not found')
 
     ctx.body = {
-      data: role.format()
+      data: role.toAdmin()
     }
   }
 })

@@ -15,8 +15,6 @@ const groupSchema = new Schema({
   isDeleted: { type: Boolean, default: false }
 })
 
-groupSchema.plugin(dataTables)
-
 groupSchema.methods.toPublic = function () {
   return {
     uuid: this.uuid,
@@ -27,13 +25,21 @@ groupSchema.methods.toPublic = function () {
   }
 }
 
-groupSchema.methods.format = function () {
+groupSchema.methods.toAdmin = function () {
   return {
     uuid: this.uuid,
     name: this.name,
     description: this.description,
+    slug: this.slug,
     dateCreated: this.dateCreated
   }
 }
+
+groupSchema.plugin(dataTables, {
+  formatters: {
+    toAdmin: (group) => group.toAdmin(),
+    toPublic: (group) => group.toPublic()
+  }
+})
 
 module.exports = mongoose.model('Group', groupSchema)
