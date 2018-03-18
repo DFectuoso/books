@@ -15,8 +15,6 @@ const roleSchema = new Schema({
   isDeleted: { type: Boolean, default: false }
 })
 
-roleSchema.plugin(dataTables)
-
 roleSchema.methods.toPublic = function () {
   return {
     uuid: this.uuid,
@@ -27,7 +25,7 @@ roleSchema.methods.toPublic = function () {
   }
 }
 
-roleSchema.methods.format = function () {
+roleSchema.methods.toAdmin = function () {
   return {
     uuid: this.uuid,
     name: this.name,
@@ -37,5 +35,12 @@ roleSchema.methods.format = function () {
     isDefault: this.isDefault
   }
 }
+
+roleSchema.plugin(dataTables, {
+  formatters: {
+    toAdmin: (role) => role.toAdmin(),
+    toPublic: (role) => role.toPublic()
+  }
+})
 
 module.exports = mongoose.model('Role', roleSchema)

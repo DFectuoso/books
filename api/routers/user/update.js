@@ -20,7 +20,7 @@ module.exports = new Route({
     await user.save()
 
     ctx.body = {
-      user: user.format(),
+      user: user.toPublic(),
       data: 'OK'
     }
   }

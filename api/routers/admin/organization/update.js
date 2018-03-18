@@ -22,7 +22,7 @@ module.exports = new Route({
     org.save()
 
     ctx.body = {
-      data: org.format()
+      data: org.toAdmin()
     }
   }
 })

@@ -12,7 +12,7 @@ module.exports = new Route({
     ctx.assert(group, 404, 'Group not found')
 
     ctx.body = {
-      data: group.format()
+      data: group.toAdmin()
     }
   }
 })

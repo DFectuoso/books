@@ -15,7 +15,7 @@ module.exports = new Route({
     const user = await User.validateInvite(email, token)
 
     ctx.body = {
-      user: user.format()
+      user: user.toPublic()
     }
   }
 })

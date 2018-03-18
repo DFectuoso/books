@@ -12,7 +12,7 @@ module.exports = new Route({
     ctx.assert(org, 404, 'Organization not found')
 
     ctx.body = {
-      data: org.format()
+      data: org.toAdmin()
     }
   }
 })

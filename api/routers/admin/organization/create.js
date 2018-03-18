@@ -17,7 +17,7 @@ module.exports = new Route({
     const org = await Organization.create(data)
 
     ctx.body = {
-      data: org.format()
+      data: org.toAdmin()
     }
   }
 })

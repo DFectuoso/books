@@ -22,7 +22,7 @@ module.exports = new Route({
     role.save()
 
     ctx.body = {
-      data: role.format()
+      data: role.toAdmin()
     }
   }
 })

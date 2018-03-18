@@ -19,7 +19,7 @@ module.exports = new Route({
     user.save()
 
     ctx.body = {
-      user: user.format(),
+      user: user.toPublic(),
       isAdmin: user.isAdmin,
       jwt: jwt.sign({
         uuid: user.uuid,

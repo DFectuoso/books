@@ -15,8 +15,6 @@ const organizationSchema = new Schema({
   isDeleted: { type: Boolean, default: false }
 })
 
-organizationSchema.plugin(dataTables)
-
 organizationSchema.methods.toPublic = function () {
   return {
     uuid: this.uuid,
@@ -27,13 +25,21 @@ organizationSchema.methods.toPublic = function () {
   }
 }
 
-organizationSchema.methods.format = function () {
+organizationSchema.methods.toAdmin = function () {
   return {
     uuid: this.uuid,
     name: this.name,
     description: this.description,
+    slug: this.slug,
     dateCreated: this.dateCreated
   }
 }
+
+organizationSchema.plugin(dataTables, {
+  formatters: {
+    toAdmin: (organization) => organization.toAdmin(),
+    toPublic: (organization) => organization.toPublic()
+  }
+})
 
 module.exports = mongoose.model('Organization', organizationSchema)
