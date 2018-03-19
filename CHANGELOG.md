@@ -13,3 +13,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 - Change name on branched-paginadedTable to branched-paginaded-table
 - Changed user details, user list and user deleted list to use Page component and List page component
+
+### Fixed
+- Fix bug on page change within the same page component. Didn't do a reload.
+

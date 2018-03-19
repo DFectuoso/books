@@ -321,9 +321,9 @@ class UserDetail extends PageComponent {
   }
 
   render () {
-    const { user } = this.state
+    const {user, loaded} = this.state
 
-    if (!user.uuid) {
+    if (!loaded) {
       return <Loader />
     }
 
