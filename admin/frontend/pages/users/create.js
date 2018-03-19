@@ -19,6 +19,7 @@ var initialState = {
 class CreateUser extends Component {
   constructor (props) {
     super(props)
+
     this.hideModal = this.props.hideModal.bind(this)
     this.state = {
       roles: []
@@ -50,13 +51,10 @@ class CreateUser extends Component {
 
   async loadRoles () {
     var url = '/admin/roles/'
-    const body = await api.get(
-      url,
-      {
-        start: 0,
-        limit: 0
-      }
-    )
+    const body = await api.get(url, {
+      start: 0,
+      limit: 0
+    })
 
     this.setState({
       ...this.state,
@@ -70,7 +68,7 @@ class CreateUser extends Component {
         baseUrl='/admin/users'
         url={this.props.url}
         initialState={initialState}
-        finishUp={this.props.finishUp}
+        finishUp={(data) => this.props.finishUp(data)}
         load={this.load.bind(this)}
         roles={this.state.roles || []}
       >

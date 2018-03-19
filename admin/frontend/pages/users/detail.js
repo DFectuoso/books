@@ -1,23 +1,22 @@
-import React, { Component } from 'react'
-import { branch } from 'baobab-react/higher-order'
-import PropTypes from 'baobab-react/prop-types'
+import React from 'react'
+
+import PageComponent from '~base/page-component'
 import api from '~base/api'
 import moment from 'moment'
 import env from '~base/env-variables'
 import FontAwesome from 'react-fontawesome'
 
-import Page from '~base/page'
 import {loggedIn} from '~base/middlewares/'
 import Loader from '~base/components/spinner'
 import UserForm from './form'
 import Multiselect from '~base/components/base-multiselect'
 
-class UserDetail extends Component {
+class UserDetail extends PageComponent {
   constructor (props) {
     super(props)
+
     this.state = {
-      loaded: false,
-      loading: true,
+      ...this.baseState,
       resetLoading: false,
       resetText: 'Reset password',
       resetClass: 'button is-danger',
@@ -34,82 +33,59 @@ class UserDetail extends Component {
     }
   }
 
-  componentWillMount () {
-    this.load()
-    this.loadRoles()
-    this.loadOrgs()
-    this.loadGroups()
+  async onFirstPageEnter () {
+    const roles = await this.loadRoles()
+    const orgs = await this.loadOrgs()
+    const groups = await this.loadGroups()
+
+    return {roles, orgs, groups}
   }
 
-  async load () {
+  async onPageEnter () {
+    const data = await this.loadCurrentUser()
+
+    return {
+      user: data,
+      selectedGroups: data.groups,
+      selectedOrgs: data.organizations
+    }
+  }
+
+  async loadCurrentUser () {
     var url = '/admin/users/' + this.props.match.params.uuid
     const body = await api.get(url)
 
-    await this.setState({
-      loading: false,
-      loaded: true,
-      user: body.data,
-      selectedGroups: [...body.data.groups],
-      selectedOrgs: [...body.data.organizations]
-    })
+    return body.data
   }
 
   async loadRoles () {
     var url = '/admin/roles/'
-    const body = await api.get(
-      url,
-      {
-        start: 0,
-        limit: 0
-      }
-    )
-
-    this.setState({
-      ...this.state,
-      roles: body.data
+    const body = await api.get(url, {
+      start: 0,
+      limit: 0
     })
+
+    return body.data
   }
 
   async loadOrgs () {
     var url = '/admin/organizations/'
-    const body = await api.get(
-      url,
-      {
-        start: 0,
-        limit: 0
-      }
-    )
-
-    this.setState({
-      ...this.state,
-      orgs: body.data
+    const body = await api.get(url, {
+      start: 0,
+      limit: 0
     })
+
+    return body.data
   }
 
   async loadGroups () {
     var url = '/admin/groups/'
-    const body = await api.get(
-      url,
-      {
-        start: 0,
-        limit: 0
-      }
-    )
-
-    this.setState({
-      ...this.state,
-      groups: body.data
+    const body = await api.get(url, {
+      start: 0,
+      limit: 0
     })
-  }
 
-  getDateCreated () {
-    if (this.state.user.dateCreated) {
-      return moment.utc(
-        this.state.user.dateCreated
-      ).format('DD/MM/YYYY hh:mm a')
-    }
-
-    return 'N/A'
+    return body.data
   }
 
   async availableOrgOnClick (uuid) {
@@ -280,6 +256,16 @@ class UserDetail extends Component {
     // this.load()
   }
 
+  getDateCreated () {
+    if (this.state.user.dateCreated) {
+      return moment.utc(
+        this.state.user.dateCreated
+      ).format('DD/MM/YYYY hh:mm a')
+    }
+
+    return 'N/A'
+  }
+
   getSavingMessage (saving, saved) {
     if (saving) {
       return (
@@ -395,7 +381,7 @@ class UserDetail extends Component {
                           baseUrl='/admin/users'
                           url={'/admin/users/' + this.props.match.params.uuid}
                           initialState={this.state.user}
-                          load={this.load.bind(this)}
+                          load={() => this.reload()}
                           roles={this.state.roles || []}
                         >
                           <div className='field is-grouped'>
@@ -465,16 +451,12 @@ class UserDetail extends Component {
   }
 }
 
-UserDetail.contextTypes = {
-  tree: PropTypes.baobab
-}
-
-const branchedUserDetail = branch({}, UserDetail)
-
-export default Page({
+UserDetail.config({
+  name: 'user-details',
   path: '/manage/users/:uuid',
   title: 'User details',
   exact: true,
-  validate: loggedIn,
-  component: branchedUserDetail
+  validate: loggedIn
 })
+
+export default UserDetail

@@ -1,7 +1,7 @@
 const Route = require('lib/router/route')
 const lov = require('lov')
 
-const {User} = require('models')
+const {User, Role} = require('models')
 
 module.exports = new Route({
   method: 'post',
@@ -14,14 +14,24 @@ module.exports = new Route({
     var userId = ctx.params.uuid
     var data = ctx.request.body
 
-    const user = await User.findOne({'uuid': userId, 'isDeleted': false})
+    const user = await User.findOne({'uuid': userId, 'isDeleted': {$ne: true}})
     ctx.assert(user, 404, 'User not found')
+
+    if (data.role) {
+      const role = await Role.findOne({uuid: data.role})
+      ctx.assert(role, 404, 'Role not found')
+
+      user.role = role
+      delete data.role
+    } else {
+      user.role = null
+    }
 
     user.set(data)
     user.save()
 
     ctx.body = {
-      data: user.toPublic()
+      data: user.toAdmin()
     }
   }
 })

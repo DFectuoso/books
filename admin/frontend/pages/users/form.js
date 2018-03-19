@@ -44,8 +44,18 @@ const uiSchema = {
 class UserForm extends Component {
   constructor (props) {
     super(props)
+
+    const initialState = this.props.initialState || {}
+
+    const formData = {}
+    formData.name = initialState.name || ''
+    formData.email = initialState.email || ''
+    formData.screenName = initialState.screenName || ''
+    formData.isAdmin = initialState.isAdmin || false
+    formData.role = initialState.role || ''
+
     this.state = {
-      formData: this.props.initialState,
+      formData,
       apiCallMessage: 'is-hidden',
       apiCallErrorMessage: 'is-hidden'
     }
@@ -73,9 +83,10 @@ class UserForm extends Component {
     try {
       var data = await api.post(this.props.url, formData)
       await this.props.load()
-      this.clearState()
       this.setState({...this.state, apiCallMessage: 'message is-success'})
-      if (this.props.finishUp) this.props.finishUp(data.data)
+      if (this.props.finishUp) {
+        this.props.finishUp(data.data)
+      }
       return
     } catch (e) {
       return this.setState({
@@ -94,11 +105,7 @@ class UserForm extends Component {
       </div>
     }
 
-    if (this.props.roles.length === 0) {
-      return <Loader />
-    }
-
-    schema.properties.role.enum = this.props.roles.map(item => { return item._id })
+    schema.properties.role.enum = this.props.roles.map(item => { return item.uuid })
     schema.properties.role.enumNames = this.props.roles.map(item => { return item.name })
 
     if (this.state.formData.email) {

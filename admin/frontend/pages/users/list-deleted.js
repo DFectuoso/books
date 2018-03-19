@@ -1,35 +1,56 @@
-import React, { Component } from 'react'
-import { branch } from 'baobab-react/higher-order'
-import PropTypes from 'baobab-react/prop-types'
-import Link from '~base/router/link'
+import React from 'react'
+
+import env from '~base/env-variables'
 import api from '~base/api'
-
-import Page from '~base/page'
+import ListPageComponent from '~base/list-page-component'
 import {loggedIn} from '~base/middlewares/'
-import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
 
-class DeletedUsers extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      className: ''
-    }
+class UserDeletedList extends ListPageComponent {
+  async onFirstPageEnter () {
+    const organizations = await this.loadOrgs()
+
+    return {organizations}
   }
 
-  componentWillMount () {
-    this.context.tree.set('deletedDatasets', {
-      page: 1,
-      totalItems: 0,
-      items: [],
-      pageLength: 10
+  async loadOrgs () {
+    var url = '/admin/organizations/'
+    const body = await api.get(url, {
+      start: 0,
+      limit: 0
     })
-    this.context.tree.commit()
+
+    return body.data
   }
 
   async restoreOnClick (uuid) {
     var url = '/admin/users/deleted/' + uuid
     await api.post(url)
-    this.props.history.push('/admin/manage/users/' + uuid)
+    this.props.history.push(env.PREFIX + '/manage/users/' + uuid)
+  }
+
+  getFilters () {
+    const data = {
+      schema: {
+        type: 'object',
+        required: [],
+        properties: {
+          screenName: {type: 'text', title: 'Por nombre'},
+          email: {type: 'text', title: 'Por email'},
+          organization: {type: 'text', title: 'Por organización', values: []}
+        }
+      },
+      uiSchema: {
+        screenName: {'ui:widget': 'SearchFilter'},
+        email: {'ui:widget': 'SearchFilter'},
+        organization: {'ui:widget': 'SelectSearchFilter'}
+      }
+    }
+
+    if (this.state.organizations) {
+      data.schema.properties.organization.values = this.state.organizations.map(item => { return {uuid: item.uuid, name: item.name} })
+    }
+
+    return data
   }
 
   getColumns () {
@@ -58,49 +79,20 @@ class DeletedUsers extends Component {
       }
     ]
   }
-
-  render () {
-    return (
-      <div className='columns c-flex-1 is-marginless'>
-        <div className='column is-paddingless'>
-          <div className='section is-paddingless-top'>
-            <h1 className='is-size-3 is-padding-top-small is-padding-bottom-small'>Deleted users</h1>
-            <div className='card'>
-              <header className='card-header'>
-                <p className='card-header-title'>
-                  Deleted users
-                </p>
-              </header>
-              <div className='card-content'>
-                <div className='columns'>
-                  <div className='column'>
-                    <BranchedPaginatedTable
-                      branchName='deletedUsers'
-                      baseUrl='/admin/users/?isDeleted=true'
-                      columns={this.getColumns()}
-                       />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
 }
 
-DeletedUsers.contextTypes = {
-  tree: PropTypes.baobab
-}
-
-const branchedDeletedUsers = branch({deletedUsers: 'deletedUsers'}, DeletedUsers)
-
-export default Page({
+UserDeletedList.config({
+  name: 'user-deleted-list',
   path: '/manage/users/deleted',
   title: 'Deactivated users',
-  icon: 'trash',
+  icon: 'user',
   exact: true,
   validate: loggedIn,
-  component: branchedDeletedUsers
+  defaultFilters: {
+    isDeleted: true
+  },
+
+  apiUrl: '/admin/users'
 })
+
+export default UserDeletedList
