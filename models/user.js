@@ -73,7 +73,7 @@ userSchema.methods.toPublic = function () {
 }
 
 userSchema.methods.toAdmin = function () {
-  return {
+  const data = {
     uuid: this.uuid,
     screenName: this.screenName,
     displayName: this.displayName,
@@ -81,11 +81,16 @@ userSchema.methods.toAdmin = function () {
     email: this.email,
     isAdmin: this.isAdmin,
     validEmail: this.validEmail,
-    role: this.role,
     organizations: this.organizations,
     groups: this.groups,
     isDeleted: this.isDeleted
   }
+
+  if (this.role && this.role.toAdmin) {
+    data.role = this.role.uuid
+  }
+
+  return data
 }
 
 userSchema.methods.validatePassword = async function (password) {

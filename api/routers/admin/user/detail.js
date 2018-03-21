@@ -10,6 +10,7 @@ module.exports = new Route({
     const user = await User.findOne({'uuid': userId, 'isDeleted': {$ne: true}})
       .populate('organizations')
       .populate('groups')
+      .populate('role')
 
     ctx.assert(user, 404, 'User not found')
 

@@ -7,7 +7,7 @@ import Loader from '~base/components/spinner'
 
 import Page from '~base/page'
 import {loggedIn} from '~base/middlewares/'
-import { BranchedPaginatedTable } from '~base/components/base-paginatedTable'
+import { BranchedPaginatedTable } from '~base/components/base-paginated-table'
 import GroupForm from './form'
 
 class GroupDetail extends Component {
