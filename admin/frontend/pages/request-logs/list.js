@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import FileSaver from 'file-saver'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 import PropTypes from 'baobab-react/prop-types'
@@ -49,9 +50,6 @@ class RequestLog extends Component {
 
     try {
       let res = await api.get(url)
-      console.log(JSON.stringify(res, null, '  '))
-
-      var FileSaver = require('file-saver')
       var blob = new Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
       FileSaver.saveAs(blob, `${this.props.log.path}.json`)
       this.setState({isDownloading: ''})
