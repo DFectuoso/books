@@ -268,12 +268,21 @@ pre.json {
   display: block;
   padding: 1em;
   margin: 0;
+  white-space: pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+  word-break: break-all;
 }
+
 .request-log {
   margin-bottom: 0.5rem !important;
 
   .message-header {
     cursor: pointer;
+  }
+
+  .message-body {
+    background-color: white;
   }
 }
 .show-log { display: block; }
@@ -323,9 +332,11 @@ pre.json {
 .notification {
   padding: 0.6em 0.8em !important;
 }
+
 .notification:not(:last-child){
   margin-bottom: 0 !important;
 }
+
 .secret{
   border-color: #00d1b2 !important;
   border-style: solid;
@@ -333,4 +344,14 @@ pre.json {
   border-radius: 5px;
   background-color: #d5fff7 !important;
   padding: 0 2px;
+}
+
+.postman-export {
+  margin-bottom: 0px !important;
+  margin-right: 0px;
+  padding-top: .5em;
+
+  .column {
+    padding-bottom: 0px;
+  }
 }

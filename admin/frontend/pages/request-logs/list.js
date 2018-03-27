@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import FileSaver from 'file-saver'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
 import PropTypes from 'baobab-react/prop-types'
@@ -15,7 +16,8 @@ class RequestLog extends Component {
     this.state = {
       toggled: true,
       log: undefined,
-      jsonString: undefined
+      jsonString: undefined,
+      isDownloading: ''
     }
   }
 
@@ -39,6 +41,29 @@ class RequestLog extends Component {
     }
 
     return (<Loader />)
+  }
+
+  async downloadReport () {
+    this.setState({isDownloading: ' is-loading'})
+
+    let url = '/request-logs/export/' + this.props.log.uuid
+
+    try {
+      let res = await api.get(url)
+      var blob = new Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
+      FileSaver.saveAs(blob, `${this.props.log.path}.json`)
+      this.setState({isDownloading: ''})
+    } catch (e) {
+      console.log('error', e.message)
+
+      this.setState({
+        isLoading: '',
+        noSalesData: e.message + ', intente más tarde',
+        isDownloading: ''
+      })
+
+      alert('Error ' + e.message)
+    }
   }
 
   render () {
@@ -67,7 +92,27 @@ class RequestLog extends Component {
           </p>
         </div>
         <div className={classNameBody}>
-          {this.getBody()}
+          <div className='columns postman-export'>
+            <div className='column'>
+              <div className='is-pulled-right'>
+                <button
+                  className={'button' + this.state.isDownloading}
+                  disabled={!!this.state.isDownloading}
+                  onClick={e => this.downloadReport()}
+                >
+                  <span className='icon'>
+                    <i className='fa fa-download' />
+                  </span>
+                  <span>Postman</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className='columns'>
+            <div className='column' style={{paddingTop: '0px'}}>
+              {this.getBody()}
+            </div>
+          </div>
         </div>
       </article>
     )
