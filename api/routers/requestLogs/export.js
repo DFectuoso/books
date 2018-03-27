@@ -23,6 +23,12 @@ module.exports = new Route({
       })
     }
 
+    let url = request.host + request.path
+
+    if (request.method === 'GET' && request.query) {
+      url = `${url}?${request.query}`
+    }
+
     var collection = {
       info: {
         name: `Collection ${request.path}`,
@@ -32,7 +38,7 @@ module.exports = new Route({
         {
           name: request.host + request.path,
           request: {
-            url: request.host + request.path,
+            url: url,
             method: request.method,
             header: headers,
             body: request.body
