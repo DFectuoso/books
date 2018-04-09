@@ -454,7 +454,7 @@ class UserDetail extends PageComponent {
 UserDetail.config({
   name: 'user-details',
   path: '/manage/users/:uuid',
-  title: 'User details',
+  title: '<%= state.user.name %> | User details',
   exact: true,
   validate: loggedIn
 })
