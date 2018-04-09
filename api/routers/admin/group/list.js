@@ -1,4 +1,4 @@
-const ObjectId = require('mongodb').ObjectID
+const ObjectId = require('mongoose').ObjectID
 const Route = require('lib/router/route')
 
 const {Group, User} = require('models')
