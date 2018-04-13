@@ -13,6 +13,7 @@ const requestLogSchema = new Schema({
   ip: { type: String },
   method: { type: String },
   status: { type: Number },
+  replayFrom: { type: Schema.Types.ObjectId, ref: 'RequestLog' },
   uuid: { type: String, default: v4 },
   error: {
     message: { type: String },
