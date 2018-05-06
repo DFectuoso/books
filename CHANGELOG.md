@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Query params to make filter functionality easier on list routers
 - Added csv exports to ListPageComponents when `exportFormatter` function is present
+- Added breadcrumbs component to lib
+- Added breadcrumbs functionality to PageComponent
 
 ### Changed
 - Updated Role, Organization and Group list pages
