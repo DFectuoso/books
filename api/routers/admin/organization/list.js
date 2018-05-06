@@ -17,8 +17,9 @@ module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
-    const filters = queryParams.toFilters(ctx.request.query)
+    const filters = await queryParams.toFilters(ctx.request.query)
 
+    console.log('filters =>', filters)
     var organization = await Organization.dataTables({
       limit: ctx.request.query.limit || 20,
       skip: ctx.request.query.start,

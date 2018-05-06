@@ -68,7 +68,7 @@ class GroupDetail extends Component {
   async deleteOnClick () {
     var url = '/admin/groups/' + this.props.match.params.uuid
     await api.del(url)
-    this.props.history.push('/admin/groups')
+    this.props.history.push('/admin/manage/groups')
   }
 
   render () {

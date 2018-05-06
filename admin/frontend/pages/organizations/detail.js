@@ -67,8 +67,8 @@ class OrganizationDetail extends Component {
 
   async deleteOnClick () {
     var url = '/admin/organizations/' + this.props.match.params.uuid
-    const body = await api.del(url)
-    this.props.history.push('/admin/organizations')
+    await api.del(url)
+    this.props.history.push('/admin/manage/organizations')
   }
 
   render () {

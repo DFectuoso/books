@@ -60,8 +60,8 @@ class RoleDetail extends Component {
 
   async deleteOnClick () {
     var url = '/admin/roles/' + this.props.match.params.uuid
-    const body = await api.del(url)
-    this.props.history.push('/admin/roles')
+    await api.del(url)
+    this.props.history.push('/admin/manage/roles')
   }
 
   async defaultOnClick () {

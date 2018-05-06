@@ -17,7 +17,7 @@ module.exports = new Route({
   method: 'get',
   path: '/',
   handler: async function (ctx) {
-    const filters = queryParams.toFilters(ctx.request.query)
+    const filters = await queryParams.toFilters(ctx.request.query)
 
     var groups = await Group.dataTables({
       limit: ctx.request.query.limit || 20,

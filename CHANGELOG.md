@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Query params to make filter functionality easier on list routers
 - Added csv exports to ListPageComponents when `exportFormatter` function is present
 
+### Changed
+- Updated Role, Organization and Group list pages
+
 ### Fixed
 - Mongoose models need `usePushEach: true` on all models with array attributes to prevent `Unknown modifier: $pushAll` error
 
