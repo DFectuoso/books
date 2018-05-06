@@ -1,8 +1,8 @@
 import React from 'react'
+import moment from 'moment'
 
 import PageComponent from '~base/page-component'
 import api from '~base/api'
-import moment from 'moment'
 import env from '~base/env-variables'
 import FontAwesome from 'react-fontawesome'
 

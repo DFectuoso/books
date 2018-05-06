@@ -24,7 +24,7 @@ queryParams.addFilter('organization', async function (filters, value) {
   const organization = await Organization.findOne({'uuid': value})
 
   if (organization) {
-    filters.organization = { $in: [organization._id] }
+    filters.organizations = { $in: [organization._id] }
   }
 })
 
