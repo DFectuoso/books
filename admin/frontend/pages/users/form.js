@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import Loader from '~base/components/spinner'
 
 import api from '~base/api'
 
@@ -21,7 +20,6 @@ var schema = {
     name: {type: 'string', title: 'Name'},
     email: {type: 'string', title: 'Email'},
     screenName: {type: 'string', title: 'Screen Name'},
-    displayName: {type: 'string', title: 'Display Name'},
     isAdmin: {type: 'boolean', title: 'Is Admin?', default: false},
     role: {
       type: 'string',
@@ -36,7 +34,6 @@ const uiSchema = {
   name: {'ui:widget': TextWidget},
   email: {'ui:widget': EmailWidget},
   screenName: {'ui:widget': TextWidget},
-  displayName: {'ui:widget': TextWidget},
   isAdmin: {'ui:widget': CheckboxWidget},
   role: {'ui:widget': SelectWidget}
 }
