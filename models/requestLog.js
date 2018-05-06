@@ -19,7 +19,8 @@ const requestLogSchema = new Schema({
     stack: { type: String }
   }
 }, {
-  timestamps: true
+  timestamps: true,
+  usePushEach: true
 })
 
 requestLogSchema.index({createdAt: 1, uuid: 1, status: 1})
