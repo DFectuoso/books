@@ -1,3 +1,4 @@
+const config = require('config')
 const mongoose = require('mongoose')
 const { Schema } = require('mongoose')
 const { v4 } = require('uuid')
@@ -13,6 +14,7 @@ const requestLogSchema = new Schema({
   ip: { type: String },
   method: { type: String },
   status: { type: Number },
+  replayFrom: { type: Schema.Types.ObjectId, ref: 'RequestLog' },
   uuid: { type: String, default: v4 },
   error: {
     message: { type: String },
@@ -22,6 +24,54 @@ const requestLogSchema = new Schema({
   timestamps: true,
   usePushEach: true
 })
+
+requestLogSchema.methods.replay = async function () {
+  const request = require('lib/request')
+  const RequestLog = mongoose.model('RequestLog')
+  const replayFrom = this
+  console.log('=> Hi', replayFrom)
+
+  replayFrom.headers.replayFrom = replayFrom.uuid
+
+  // Remove content lenght so its calculated again
+  delete replayFrom.headers['content-length']
+
+  var options = {
+    method: replayFrom.method,
+    headers: replayFrom.headers,
+    body: replayFrom.body
+  }
+
+  if (replayFrom.type === 'inbound') {
+    options.url = config.server.apiHost + replayFrom.path
+  }
+
+  if (replayFrom.type === 'outbound') {
+    options.url = replayFrom.host + replayFrom.path
+    options.persist = true
+  }
+
+  if (options.headers['content-type'] && options.headers['content-type'] === 'application/json') {
+    options.json = true
+  }
+
+  const res = await request(options)
+
+  let requestLog
+  if (replayFrom.type === 'inbound') {
+    requestLog = await RequestLog.findOne({
+      replayFrom: replayFrom._id
+    }).sort('-createdAt')
+
+    console.log('=>', replayFrom.type, requestLog)
+  }
+
+  if (replayFrom.type === 'outbound') {
+    requestLog = res.requestLog
+  }
+
+  return requestLog
+}
 
 requestLogSchema.index({createdAt: 1, uuid: 1, status: 1})
 
