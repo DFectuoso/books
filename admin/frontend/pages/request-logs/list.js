@@ -24,7 +24,7 @@ class RequestLog extends Component {
   async loadLog (uuid) {
     if (this.state.log) return
 
-    const body = await api.get('/request-logs/' + uuid)
+    const body = await api.get('/admin/request-logs/' + uuid)
 
     var jsonString = JSON.stringify(body.data, null, 2)
     this.setState({log: body.data, jsonString: jsonString})
@@ -46,23 +46,19 @@ class RequestLog extends Component {
   async downloadReport () {
     this.setState({isDownloading: ' is-loading'})
 
-    let url = '/request-logs/export/' + this.props.log.uuid
+    let url = '/admin/request-logs/export/' + this.props.log.uuid
 
     try {
       let res = await api.get(url)
-      var blob = new Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
+      var blob = new window.Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
       FileSaver.saveAs(blob, `${this.props.log.path}.json`)
       this.setState({isDownloading: ''})
     } catch (e) {
-      console.log('error', e.message)
-
       this.setState({
         isLoading: '',
         noSalesData: e.message + ', intente más tarde',
         isDownloading: ''
       })
-
-      alert('Error ' + e.message)
     }
   }
 
@@ -126,7 +122,11 @@ class RequestLogs extends Component {
     this.state = {
       loaded: false,
       loading: true,
-      filters: {}
+      filters: {},
+      metadata: {
+        pathnames: [],
+        methods: []
+      }
     }
 
     this.setStatusFilter = this.setStatusFilter.bind(this)
@@ -145,7 +145,8 @@ class RequestLogs extends Component {
   }
 
   async load () {
-    const body = await api.get('/request-logs', {
+    const metadata = await api.get('/admin/request-logs/metadata')
+    const body = await api.get('/admin/request-logs', {
       ...this.state.filters,
       start: 0,
       limit: this.cursor.get('pageLength')
@@ -159,7 +160,11 @@ class RequestLogs extends Component {
     })
     this.context.tree.commit()
 
-    this.setState({loading: false, loaded: true})
+    this.setState({
+      loading: false,
+      loaded: true,
+      metadata
+    })
   }
 
   async loadMore () {
@@ -187,15 +192,31 @@ class RequestLogs extends Component {
     this.setState({loading: false, loaded: true})
   }
 
-  async setStatusFilter (status) {
-    await this.setState({
+  setStatusFilter (status) {
+    this.setState({
       filters: {
         ...this.state.filters,
         status
       }
     })
 
-    await this.load()
+    this.load()
+  }
+
+  handleSelectChange (type, e) {
+    const value = e.currentTarget.value
+
+    const filter = {}
+    filter[type] = value
+
+    this.setState({
+      filters: {
+        ...this.state.filters,
+        ...filter
+      }
+    })
+
+    this.load()
   }
 
   list () {
@@ -205,7 +226,8 @@ class RequestLogs extends Component {
   }
 
   render () {
-    const { loading } = this.state
+    const { loading, metadata } = this.state
+    const { pathnames } = metadata
 
     const items = this.cursor.get('items') || []
     const more = (this.cursor.get('totalItems') / items.length) > 1
@@ -217,11 +239,26 @@ class RequestLogs extends Component {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='buttons is-padding-bottom-small'>
-              <a className='button is-white is-small' onClick={() => this.setStatusFilter('')}>ALL</a>
-              <a className='button is-success is-small' onClick={() => this.setStatusFilter('success')}>200</a>
-              <a className='button is-warning is-small' onClick={() => this.setStatusFilter('warning')}>400</a>
-              <a className='button is-danger is-small' onClick={() => this.setStatusFilter('error')}>500</a>
+            <div class='header columns'>
+              <div class='column is-narrow'>
+                <p class='subtitle is-marginless'>Status codes</p>
+                <div className='field has-addons is-padding-bottom-small'>
+                  <div className='control'><a className='button is-white' onClick={() => this.setStatusFilter('')}>ALL</a></div>
+                  <div className='control'><a className='button is-success' onClick={() => this.setStatusFilter('success')}>200</a></div>
+                  <div className='control'><a className='button is-warning' onClick={() => this.setStatusFilter('warning')}>400</a></div>
+                  <div className='control'><a className='button is-danger' onClick={() => this.setStatusFilter('error')}>500</a></div>
+                </div>
+              </div>
+
+              <div class='column is-narrow'>
+                <p class='subtitle is-marginless'>Path</p>
+                <div className='select'>
+                  <select onChange={e => this.handleSelectChange('pathname', e)}>
+                    <option key='empty' />
+                    {pathnames.map((pathname, key) => <option key={key} value={pathname}>{pathname}</option>)}
+                  </select>
+                </div>
+              </div>
             </div>
 
             {loading && <Loader />}

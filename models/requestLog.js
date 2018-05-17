@@ -9,6 +9,7 @@ const requestLogSchema = new Schema({
   query: { type: String },
   host: { type: String },
   path: { type: String },
+  pathname: { type: String },
   type: { type: String },
   body: { type: Object },
   ip: { type: String },

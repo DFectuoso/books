@@ -31,6 +31,10 @@ module.exports = new Route({
       }
     }
 
+    if (ctx.query.pathname) {
+      query.find.pathname = ctx.query.pathname
+    }
+
     ctx.body = await RequestLog.dataTables(query)
   }
 })
