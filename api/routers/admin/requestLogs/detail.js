@@ -8,7 +8,7 @@ module.exports = new Route({
   handler: async function (ctx) {
     var requestId = ctx.params.uuid
 
-    const request = await RequestLog.findOne({'uuid': requestId})
+    const request = await RequestLog.findOne({'uuid': requestId}).populate('replayFrom')
     ctx.assert(request, 404, 'RequestLog not found')
 
     ctx.body = {

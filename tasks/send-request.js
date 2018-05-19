@@ -5,7 +5,6 @@ require('lib/databases/mongo')
 
 const Task = require('lib/task')
 const { RequestLog } = require('models')
-const request = require('lib/request')
 
 const task = new Task(async function (argv) {
   const requestLog = await RequestLog.findOne({'uuid': argv.uuid})

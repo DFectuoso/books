@@ -12,6 +12,7 @@ const requestLogSchema = new Schema({
   pathname: { type: String },
   type: { type: String },
   body: { type: Object },
+  response: { type: Object },
   ip: { type: String },
   method: { type: String },
   status: { type: Number },
@@ -30,7 +31,6 @@ requestLogSchema.methods.replay = async function () {
   const request = require('lib/request')
   const RequestLog = mongoose.model('RequestLog')
   const replayFrom = this
-  console.log('=> Hi', replayFrom)
 
   replayFrom.headers.replayFrom = replayFrom.uuid
 
@@ -39,8 +39,7 @@ requestLogSchema.methods.replay = async function () {
 
   var options = {
     method: replayFrom.method,
-    headers: replayFrom.headers,
-    body: replayFrom.body
+    headers: replayFrom.headers
   }
 
   if (replayFrom.type === 'inbound') {
@@ -63,8 +62,6 @@ requestLogSchema.methods.replay = async function () {
     requestLog = await RequestLog.findOne({
       replayFrom: replayFrom._id
     }).sort('-createdAt')
-
-    console.log('=>', replayFrom.type, requestLog)
   }
 
   if (replayFrom.type === 'outbound') {
