@@ -32,6 +32,7 @@ requestLogSchema.methods.replay = async function () {
   const RequestLog = mongoose.model('RequestLog')
   const replayFrom = this
 
+  replayFrom.headers = replayFrom.headers || {}
   replayFrom.headers.replayFrom = replayFrom.uuid
 
   // Remove content lenght so its calculated again
@@ -39,7 +40,9 @@ requestLogSchema.methods.replay = async function () {
 
   var options = {
     method: replayFrom.method,
-    headers: replayFrom.headers
+    headers: replayFrom.headers,
+    body: replayFrom.body,
+    pathname: replayFrom.pathname
   }
 
   if (replayFrom.type === 'inbound') {

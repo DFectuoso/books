@@ -1,6 +1,6 @@
 const User = require('./user')
 const UserToken = require('./user-token')
-const RequestLog = require('./requestLog')
+const RequestLog = require('./request-log')
 const Organization = require('./organization')
 const Role = require('./role')
 const Group = require('./group')

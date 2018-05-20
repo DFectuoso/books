@@ -54,7 +54,7 @@ class RequestLog extends Component {
 
       this.props.handleReplayRequest({
         uuid: this.props.log.uuid,
-        replayUuid: res.data.uuid
+        replayUuid: res.requestLog.uuid
       })
     } catch (e) {
       this.setState({
@@ -238,6 +238,7 @@ class RequestLogs extends PageComponent {
   async setReplayRequest (data) {
     this.setState({
       newReplay: data.replayUuid,
+      currentUuid: data.replayUuid,
       loadingLogs: true
     })
 
@@ -260,6 +261,14 @@ class RequestLogs extends PageComponent {
         uuid: e.currentTarget.value
       })
     }
+  }
+
+  reload () {
+    this.setState({
+      loadingLogs: true
+    })
+
+    this.load(this.state.filters)
   }
 
   handleSelectChange (type, e) {
@@ -320,6 +329,20 @@ class RequestLogs extends PageComponent {
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
+            <div className='header columns'>
+              <div className='column is-narrow'>
+                <div className='field has-addons is-padding-bottom-small'>
+                  <div className='control'>
+                    <a className='button is-white' onClick={() => this.reload()}>
+                      <span className='icon'>
+                        <i className='fa fa-refresh' />
+                      </span>
+                      <span>Reload</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div className='header columns'>
               <div className='column is-narrow'>
                 <p className='subtitle is-marginless'>Status codes</p>

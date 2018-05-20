@@ -15,10 +15,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added csv exports to ListPageComponents when `exportFormatter` function is present
 - Added breadcrumbs component to lib
 - Added breadcrumbs functionality to PageComponent
+- Added pathname to request logs
 
 ### Changed
 - Updated Role, Organization and Group list pages to use ListPageComponent
 - Updated Role, Organization and Group detials page to use PageComponent
+- Improve request logs page with more filters and reload button
 
 ### Fixed
 - Mongoose models need `usePushEach: true` on all models with array attributes to prevent `Unknown modifier: $pushAll` error
