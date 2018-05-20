@@ -9,8 +9,10 @@ const requestLogSchema = new Schema({
   query: { type: String },
   host: { type: String },
   path: { type: String },
+  pathname: { type: String },
   type: { type: String },
   body: { type: Object },
+  response: { type: Object },
   ip: { type: String },
   method: { type: String },
   status: { type: Number },
@@ -29,8 +31,8 @@ requestLogSchema.methods.replay = async function () {
   const request = require('lib/request')
   const RequestLog = mongoose.model('RequestLog')
   const replayFrom = this
-  console.log('=> Hi', replayFrom)
 
+  replayFrom.headers = replayFrom.headers || {}
   replayFrom.headers.replayFrom = replayFrom.uuid
 
   // Remove content lenght so its calculated again
@@ -39,7 +41,8 @@ requestLogSchema.methods.replay = async function () {
   var options = {
     method: replayFrom.method,
     headers: replayFrom.headers,
-    body: replayFrom.body
+    body: replayFrom.body,
+    pathname: replayFrom.pathname
   }
 
   if (replayFrom.type === 'inbound') {
@@ -62,8 +65,6 @@ requestLogSchema.methods.replay = async function () {
     requestLog = await RequestLog.findOne({
       replayFrom: replayFrom._id
     }).sort('-createdAt')
-
-    console.log('=>', replayFrom.type, requestLog)
   }
 
   if (replayFrom.type === 'outbound') {

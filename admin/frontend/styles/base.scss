@@ -284,6 +284,22 @@ pre.json {
   .message-body {
     background-color: white;
   }
+  
+  &.highlight {
+    border: 1px solid black;
+    
+    .message-header {
+      background-color: rgb(50, 115, 220);
+    }
+
+    .message-body {
+      border: 0;
+    }    
+  }
+
+  .controls {
+    padding: 5px 10px 0;
+  }  
 }
 .show-log { display: block; }
 .hide-log { display: none; }
@@ -344,14 +360,4 @@ pre.json {
   border-radius: 5px;
   background-color: #d5fff7 !important;
   padding: 0 2px;
-}
-
-.postman-export {
-  margin-bottom: 0px !important;
-  margin-right: 0px;
-  padding-top: .5em;
-
-  .column {
-    padding-bottom: 0px;
-  }
 }
