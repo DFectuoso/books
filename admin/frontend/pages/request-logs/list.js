@@ -158,8 +158,6 @@ class RequestLogs extends PageComponent {
       currentUuid: '',
       newReplay: ''
     }
-
-    // 5860c238-023e-4c18-b85e-a338e89fc350
   }
 
   async onFirstPageEnter () {
@@ -171,7 +169,7 @@ class RequestLogs extends PageComponent {
   async onPageEnter () {
     const logs = await api.get('/admin/request-logs', {
       start: 0,
-      limit: 20
+      limit: this.state.logsPerPage
     })
 
     return {logs}

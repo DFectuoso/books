@@ -16,12 +16,7 @@ const task = new Task(async function (argv) {
     persist: true
   }
 
-  let res
-  try {
-    res = await request(options)
-  } catch (error) {
-    console.log('=>', error.message)
-  }
+  const res = await request(options)
 
   return res
 })

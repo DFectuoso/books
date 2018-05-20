@@ -8,7 +8,7 @@ const request = require('lib/request')
 
 const task = new Task(async function (argv) {
   if (!argv.bin) {
-    return console.log('Error: this task requires a bin name')
+    return console.error('Error: this task requires a bin name')
   }
 
   var options = {
