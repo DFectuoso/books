@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import FileSaver from 'file-saver'
 import api from '~base/api'
 import Loader from '~base/components/spinner'
-import PropTypes from 'baobab-react/prop-types'
 import moment from 'moment'
 import classNames from 'classnames'
 
-import Page from '~base/page'
+import PageComponent from '~base/page-component'
 import {loggedIn} from '~base/middlewares/'
 
 class RequestLog extends Component {
@@ -17,21 +16,22 @@ class RequestLog extends Component {
       toggled: true,
       log: undefined,
       jsonString: undefined,
-      isDownloading: ''
+      isDownloading: '',
+      isReplaying: ''
     }
   }
 
   async loadLog (uuid) {
     if (this.state.log) return
 
-    const body = await api.get('/request-logs/' + uuid)
+    const body = await api.get('/admin/request-logs/' + uuid)
 
     var jsonString = JSON.stringify(body.data, null, 2)
     this.setState({log: body.data, jsonString: jsonString})
   }
 
   async showLog () {
-    this.setState({ toggled: !this.state.toggled })
+    this.setState({toggled: !this.state.toggled})
     await this.loadLog(this.props.log.uuid)
   }
 
@@ -43,26 +43,40 @@ class RequestLog extends Component {
     return (<Loader />)
   }
 
-  async downloadReport () {
+  async replayRequest () {
+    this.setState({isReplaying: ' is-loading'})
+
+    const url = `/admin/request-logs/${this.props.log.uuid}/replay`
+    try {
+      let res = await api.post(url)
+
+      this.setState({isReplaying: ''})
+
+      this.props.handleReplayRequest({
+        uuid: this.props.log.uuid,
+        replayUuid: res.requestLog.uuid
+      })
+    } catch (e) {
+      this.setState({
+        isReplaying: ''
+      })
+    }
+  }
+
+  async downloadRequest () {
     this.setState({isDownloading: ' is-loading'})
 
-    let url = '/request-logs/export/' + this.props.log.uuid
+    const url = `/admin/request-logs/export/${this.props.log.uuid}`
 
     try {
       let res = await api.get(url)
-      var blob = new Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
+      var blob = new window.Blob([JSON.stringify(res, null, '  ')], {type: 'application/json;charset=utf-8'})
       FileSaver.saveAs(blob, `${this.props.log.path}.json`)
       this.setState({isDownloading: ''})
     } catch (e) {
-      console.log('error', e.message)
-
       this.setState({
-        isLoading: '',
-        noSalesData: e.message + ', intente más tarde',
         isDownloading: ''
       })
-
-      alert('Error ' + e.message)
     }
   }
 
@@ -73,7 +87,8 @@ class RequestLog extends Component {
     const className = classNames('request-log message is-small', {
       'is-danger': log.status >= 500,
       'is-warning': log.status >= 400 && log.status < 500,
-      'is-success': log.status >= 200 && log.status < 400
+      'is-success': log.status >= 200 && log.status < 400,
+      'highlight': this.props.highlight
     })
 
     const classNameBody = classNames('message-body is-paddingless', {
@@ -92,20 +107,28 @@ class RequestLog extends Component {
           </p>
         </div>
         <div className={classNameBody}>
-          <div className='columns postman-export'>
-            <div className='column'>
-              <div className='is-pulled-right'>
-                <button
-                  className={'button' + this.state.isDownloading}
-                  disabled={!!this.state.isDownloading}
-                  onClick={e => this.downloadReport()}
-                >
-                  <span className='icon'>
-                    <i className='fa fa-download' />
-                  </span>
-                  <span>Postman</span>
-                </button>
-              </div>
+          <div className='columns controls'>
+            <div className='column has-text-right'>
+              <button
+                className={'button' + this.state.isReplaying}
+                disabled={!!this.state.isReplaying}
+                onClick={e => this.replayRequest()}
+              >
+                <span className='icon'>
+                  <i className='fa fa-reply' />
+                </span>
+                <span>Replay</span>
+              </button>
+              <button
+                className={'button' + this.state.isDownloading}
+                disabled={!!this.state.isDownloading}
+                onClick={e => this.downloadRequest()}
+              >
+                <span className='icon'>
+                  <i className='fa fa-download' />
+                </span>
+                <span>Postman</span>
+              </button>
             </div>
           </div>
           <div className='columns'>
@@ -119,116 +142,258 @@ class RequestLog extends Component {
   }
 }
 
-class RequestLogs extends Component {
+class RequestLogs extends PageComponent {
   constructor (props) {
     super(props)
 
     this.state = {
       loaded: false,
-      loading: true,
-      filters: {}
+      loadingLogs: false,
+      logsPerPage: 20,
+      filters: {},
+      metadata: {
+        pathnames: [],
+        methods: []
+      },
+      currentUuid: '',
+      newReplay: ''
     }
-
-    this.setStatusFilter = this.setStatusFilter.bind(this)
-    this.loadMore = this.loadMore.bind(this)
   }
 
-  componentWillMount () {
-    this.cursor = this.context.tree.select('requestLogs')
-    this.cursor.set({
-      page: 1,
-      totalItems: 0,
-      items: [],
-      pageLength: 20
-    })
-    this.load()
+  async onFirstPageEnter () {
+    const metadata = await api.get('/admin/request-logs/metadata')
+
+    return {metadata}
   }
 
-  async load () {
-    const body = await api.get('/request-logs', {
-      ...this.state.filters,
+  async onPageEnter () {
+    const logs = await api.get('/admin/request-logs', {
       start: 0,
-      limit: this.cursor.get('pageLength')
+      limit: this.state.logsPerPage
     })
 
-    this.cursor.set({
-      page: 1,
-      totalItems: body.total,
-      items: body.data,
-      pageLength: this.cursor.get('pageLength')
-    })
-    this.context.tree.commit()
+    return {logs}
+  }
 
-    this.setState({loading: false, loaded: true})
+  async load (filters) {
+    try {
+      const logs = await api.get('/admin/request-logs', {
+        ...filters,
+        start: 0,
+        limit: this.state.logsPerPage
+      })
+
+      this.setState({
+        page: 0,
+        loadingLogs: false,
+        filters,
+        logs
+      })
+    } catch (e) {
+      this.setState({
+        page: 0,
+        loadingLogs: false,
+        filters,
+        error: e.message,
+        logs: {data: [], total: 0}
+      })
+    }
   }
 
   async loadMore () {
-    this.setState({loading: true, loaded: false})
+    this.setState({
+      loadingLogs: true
+    })
 
-    const page = this.cursor.get('page') + 1
+    const page = this.state.page + 1
 
-    const body = await api.get('/request-logs', {
+    const body = await api.get('/admin/request-logs', {
       ...this.state.filters,
-      start: (page - 1) * this.cursor.get('pageLength'),
-      limit: this.cursor.get('pageLength')
+      start: page * this.state.logsPerPage,
+      limit: this.state.logsPerPage
     })
 
-    let items = this.cursor.get('items') || []
-    items = items.concat(body.data)
-
-    this.cursor.set({
-      page: page,
-      totalItems: body.total,
-      items,
-      pageLength: this.cursor.get('pageLength')
-    })
-    this.context.tree.commit()
-
-    this.setState({loading: false, loaded: true})
-  }
-
-  async setStatusFilter (status) {
-    await this.setState({
-      filters: {
-        ...this.state.filters,
-        status
+    this.setState({
+      page,
+      loadingLogs: false,
+      logs: {
+        data: this.state.logs.data.concat(body.data)
       }
     })
+  }
 
-    await this.load()
+  setStatusFilter (status) {
+    this.setState({
+      loadingLogs: true
+    })
+
+    this.load({
+      ...this.state.filters,
+      status
+    })
+  }
+
+  async setReplayRequest (data) {
+    this.setState({
+      newReplay: data.replayUuid,
+      currentUuid: data.replayUuid,
+      loadingLogs: true
+    })
+
+    const filters = {
+      ...this.state.filters,
+      uuid: data.uuid
+    }
+
+    this.load(filters)
+  }
+
+  async handleUuuiChange (e) {
+    if (e.which === 13) {
+      this.setState({
+        loadingLogs: true
+      })
+
+      this.load({
+        ...this.state.filters,
+        uuid: e.currentTarget.value
+      })
+    }
+  }
+
+  reload () {
+    this.setState({
+      loadingLogs: true
+    })
+
+    this.load(this.state.filters)
+  }
+
+  handleSelectChange (type, e) {
+    this.setState({
+      loadingLogs: true
+    })
+
+    const value = e.currentTarget.value
+
+    const filter = {}
+    filter[type] = value
+
+    this.load({
+      ...this.state.filters,
+      ...filter
+    })
+  }
+
+  handleInputChange (type, e) {
+    const newState = {}
+    newState[type] = e.currentTarget.value
+
+    this.setState(newState)
   }
 
   list () {
-    return (
-      this.cursor.get('items').map(log => <RequestLog log={log} key={'log-' + log.uuid} />)
-    )
+    const {logs, newReplay} = this.state
+
+    return logs.data.map(log => {
+      return <RequestLog
+        key={'log-' + log.uuid}
+        highlight={log.uuid === newReplay}
+        log={log}
+        handleReplayRequest={(data) => this.setReplayRequest(data)} />
+    })
   }
 
   render () {
-    const { loading } = this.state
+    const { loaded, metadata, logs, error } = this.state
+    const { pathnames } = metadata
 
-    const items = this.cursor.get('items') || []
-    const more = (this.cursor.get('totalItems') / items.length) > 1
+    if (!loaded) {
+      return <Loader />
+    }
+
+    const loading = this.state.loadingLogs
+    const more = (logs.total / logs.data.length) > 1
     const classNameLoadLink = classNames('button is-white is-small', {
-      'is-loading': loading
+      'is-loading': this.state.loadingLogs
     })
+
+    let errorElement
+    if (error) {
+      errorElement = (<div>{error}</div>)
+    }
 
     return (
       <div className='columns c-flex-1 is-marginless'>
         <div className='column is-paddingless'>
           <div className='section'>
-            <div className='buttons is-padding-bottom-small'>
-              <a className='button is-white is-small' onClick={() => this.setStatusFilter('')}>ALL</a>
-              <a className='button is-success is-small' onClick={() => this.setStatusFilter('success')}>200</a>
-              <a className='button is-warning is-small' onClick={() => this.setStatusFilter('warning')}>400</a>
-              <a className='button is-danger is-small' onClick={() => this.setStatusFilter('error')}>500</a>
+            <div className='header columns'>
+              <div className='column is-narrow'>
+                <div className='field has-addons is-padding-bottom-small'>
+                  <div className='control'>
+                    <a className='button is-white' onClick={() => this.reload()}>
+                      <span className='icon'>
+                        <i className='fa fa-refresh' />
+                      </span>
+                      <span>Reload</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className='header columns'>
+              <div className='column is-narrow'>
+                <p className='subtitle is-marginless'>Status codes</p>
+                <div className='field has-addons is-padding-bottom-small'>
+                  <div className='control'><a className='button is-white' onClick={() => this.setStatusFilter('')}>ALL</a></div>
+                  <div className='control'><a className='button is-success' onClick={() => this.setStatusFilter('success')}>200</a></div>
+                  <div className='control'><a className='button is-warning' onClick={() => this.setStatusFilter('warning')}>400</a></div>
+                  <div className='control'><a className='button is-danger' onClick={() => this.setStatusFilter('error')}>500</a></div>
+                </div>
+              </div>
+
+              <div className='column is-narrow'>
+                <p className='subtitle is-marginless'>Type</p>
+                <div className='select'>
+                  <select onChange={e => this.handleSelectChange('type', e)}>
+                    <option />
+                    <option value='inbound'>Inbound</option>
+                    <option value='outbound'>Oubound</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className='column is-narrow'>
+                <p className='subtitle is-marginless'>Path</p>
+                <div className='select'>
+                  <select onChange={e => this.handleSelectChange('pathname', e)}>
+                    <option key='empty' />
+                    {pathnames.map((pathname, key) => <option key={key} value={pathname}>{pathname}</option>)}
+                  </select>
+                </div>
+              </div>
+
+              <div className='column is-narrow'>
+                <p className='subtitle is-marginless'>Log UUID</p>
+                <div className=''>
+                  <input
+                    className='input'
+                    type='text'
+                    placeholder=''
+                    value={this.state.currentUuid}
+                    onChange={e => this.handleInputChange('currentUuid', e)}
+                    onKeyUp={e => this.handleUuuiChange(e)} />
+                </div>
+              </div>
             </div>
 
             {loading && <Loader />}
 
+            {errorElement}
+
             {this.list()}
 
-            {more && <a className={classNameLoadLink} onClick={this.loadMore}>more</a>}
+            {more && <a className={classNameLoadLink} onClick={() => this.loadMore()}>more</a>}
           </div>
         </div>
       </div>
@@ -236,11 +401,7 @@ class RequestLogs extends Component {
   }
 }
 
-RequestLogs.contextTypes = {
-  tree: PropTypes.baobab
-}
-
-export default Page({
+RequestLogs.config({
   path: '/devtools/request-logs',
   title: 'Request Logs',
   icon: 'history',
@@ -248,3 +409,5 @@ export default Page({
   validate: loggedIn,
   component: RequestLogs
 })
+
+export default RequestLogs

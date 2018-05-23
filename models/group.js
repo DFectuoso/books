@@ -13,6 +13,8 @@ const groupSchema = new Schema({
   dateCreated: { type: Date, default: moment.utc },
   uuid: { type: String, default: v4 },
   isDeleted: { type: Boolean, default: false }
+}, {
+  usePushEach: true
 })
 
 groupSchema.methods.toPublic = function () {
