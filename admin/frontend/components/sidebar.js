@@ -9,6 +9,7 @@ import UsersImport from '../pages/users/import'
 import Organizations from '../pages/organizations/list'
 import Roles from '../pages/roles/list'
 import Groups from '../pages/groups/list'
+import Books from '../pages/books/list'
 
 import RequestLogs from '../pages/request-logs/list'
 import Reports from '../pages/reports/users'
@@ -63,6 +64,14 @@ class Sidebar extends Component {
         open: false,
         dropdown: [
           UsersImport.asSidebarItem()
+        ]
+      }, {
+        title: 'Contenido',
+        icon: 'book',
+        to: '/import',
+        open: false,
+        dropdown: [
+          Books.asSidebarItem()
         ]
       }, {
         title: 'Developer Tools',

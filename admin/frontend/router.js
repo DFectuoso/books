@@ -24,6 +24,8 @@ import Groups from './pages/groups/list'
 import GroupDetail from './pages/groups/detail'
 import RequestLogs from './pages/request-logs/list'
 import Reports from './pages/reports/users'
+import Books from './pages/books/list'
+import BookDetail from './pages/books/detail'
 // #Import
 
 const NoMatch = () => {
@@ -58,6 +60,8 @@ const AppRouter = () => {
           {RequestLogs.asRouterItem()}
           {Reports.asRouterItem()}
 
+          {Books.asRouterItem()}
+          {BookDetail.asRouterItem()}
           <div id='route' />
           <Route component={NoMatch} />
         </Switch>
