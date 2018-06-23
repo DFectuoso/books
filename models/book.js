@@ -23,4 +23,13 @@ bookSchema.methods.toAdmin = function () {
   }
 }
 
+bookSchema.methods.toPublic = function () {
+  return {
+    uuid: this.uuid,
+    title: this.title,
+    description: this.description,
+    dateCreated: this.dateCreated
+  }
+}
+
 module.exports = mongoose.model('Book', bookSchema)

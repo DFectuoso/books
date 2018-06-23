@@ -76,7 +76,7 @@ class LogIn extends Component {
     tree.set('loggedIn', true)
     tree.commit()
 
-    this.props.history.push('/app', {})
+    this.props.history.push('/', {})
   }
 
   render () {

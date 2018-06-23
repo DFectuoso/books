@@ -14,21 +14,13 @@ module.exports = new Route({
     var data = ctx.request.body
 
     const book = await Book.create({
-
       title: data.title,
-
       description: data.description,
-
       dateCreated: data.dateCreated,
-
       uuid: data.uuid,
-
       isDeleted: data.isDeleted,
-
       _id: data._id,
-
       __v: data.__v
-
     })
 
     ctx.body = {
